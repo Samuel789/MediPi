@@ -128,24 +128,24 @@ The MediPi project is a software project but is dependent on hardware for use in
 The Patient device requires 2 certificates:
 	* Patient Certificate - The JKS password controls the authentication of the patient device. The cert is used to encrypt and sign the patient measurement data in the EncryptedAndSignedUploadDO data object.
 	* Device Certificate - The JKS is unlocked using the MAC address of the host computer at start up and will not allow operation unless the MAC address of the system unlocks the device certificate. The provided test certificate will not work on your system, however for test purposes the following line can be amended in org.medpi.MediPi class to allow it to work:
-	
-	for the device cert 24b73cb7-934d-49d5-bf11-1e63ee9d26b3.jks 
-	
-	Linux:
 
-    ```
+For the device cert 24b73cb7-934d-49d5-bf11-1e63ee9d26b3.jks 
+
+Linux:
+
+```
 	350 String addr = "24b73cb7-934d-49d5-bf11-1e63ee9d26b3"
-	```
+```
 
-	non-Linux:
+non-Linux:
 
-    ```
+```
 	397 macAddress = "24b73cb7-934d-49d5-bf11-1e63ee9d26b3";
-	```
+```
 
-	The Device Certificate is also used for 2-Way SSl/TLSMA encryption on the data in transit.
+The Device Certificate is also used for 2-Way SSl/TLSMA encryption on the data in transit.
 	
-The certs used for the MediPi Patient are published here as java key stores and should allow testing of the MediPiPatient with the MediPi Concentrator. The certs are for testing purposes and not suitable for use in any other circumstance.
+The certs for MediPi Patient software are published here (and are intended to work out-of-the-box) as java key stores and should allow testing of the MediPiPatient with the MediPi Concentrator. **The certs are for testing purposes and not suitable for use in any other circumstance**
 
 ##Licence
 
@@ -226,6 +226,7 @@ Guide for building OpenJFX: https://wiki.openjdk.java.net/display/OpenJFX/Buildi
 
 10. Copy the `{medipi-repo-directory}/MediPi/MediPiPatient/target/MediPi.jar` file to /home/{user}/MediPi/ directory
 
-11. Execute MediPi using:
+11. Upgrade the Java Cryptography Extention. Download from http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html and follow the README.txt instructions included in the package. The certs included for demonstration purposes require greater strength binaries in the JRE than are present by default.
+12. Execute MediPi using:
         
         java -Djava.library.path=/usr/lib/jni -jar /home/{user}/MediPi/MediPi.jar --propertiesFile=/home/{user}/MediPi/config/MediPi.properties
