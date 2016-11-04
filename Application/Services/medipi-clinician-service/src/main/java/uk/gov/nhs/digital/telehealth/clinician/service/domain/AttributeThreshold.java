@@ -19,6 +19,11 @@ package uk.gov.nhs.digital.telehealth.clinician.service.domain;
 
 import java.sql.Timestamp;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Length;
+
 public class AttributeThreshold {
 
 	private Integer attributeThresholdId;
@@ -27,18 +32,29 @@ public class AttributeThreshold {
 
 	private Timestamp effectiveDate;
 
+	@NotNull
+	@Pattern(regexp = "^[+-]?(\\d*\\.)?\\d+$", message = "{Pattern.attributeThreshold.thresholdHighValue}")
+	@Length(min = 1, max = 10, message = "{Length.attributeThreshold.thresholdHighValue}")
 	private String thresholdHighValue;
 
+	@NotNull
+	@Pattern(regexp = "^[+-]?(\\d*\\.)?\\d+$", message = "{Pattern.attributeThreshold.thresholdLowValue}")
+	@Length(min = 1, max = 10, message = "{Length.attributeThreshold.thresholdLowValue}")
 	private String thresholdLowValue;
 
+	@NotNull
+	@Length(min = 36, max = 36, message = "{Length.attributeThreshold.patientUUID}")
 	private String patientUUID;
 
 	private Integer attributeId;
 
+	@NotNull
+	private String attributeName;
+
 	public AttributeThreshold() {
 	}
 
-	public AttributeThreshold(final Integer attributeThresholdId, final String thresholdType, final Timestamp effectiveDate, final String thresholdHighValue, final String thresholdLowValue, final String patientUUID, final Integer attributeId) {
+	public AttributeThreshold(final Integer attributeThresholdId, final String thresholdType, final Timestamp effectiveDate, final String thresholdHighValue, final String thresholdLowValue, final String patientUUID, final Integer attributeId, final String attributeName) {
 		this();
 		this.attributeThresholdId = attributeThresholdId;
 		this.thresholdType = thresholdType;
@@ -47,6 +63,7 @@ public class AttributeThreshold {
 		this.thresholdLowValue = thresholdLowValue;
 		this.patientUUID = patientUUID;
 		this.attributeId = attributeId;
+		this.attributeName = attributeName;
 	}
 
 	public Integer getAttributeThresholdId() {
@@ -105,6 +122,14 @@ public class AttributeThreshold {
 		this.attributeId = attributeId;
 	}
 
+	public String getAttributeName() {
+		return attributeName;
+	}
+
+	public void setAttributeName(final String attributeName) {
+		this.attributeName = attributeName;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -153,6 +178,6 @@ public class AttributeThreshold {
 
 	@Override
 	public String toString() {
-		return "AttributeThreshold [attributeThresholdId=" + attributeThresholdId + ", thresholdType=" + thresholdType + ", effectiveDate=" + effectiveDate + ", thresholdHighValue=" + thresholdHighValue + ", thresholdLowValue=" + thresholdLowValue + ", patientUUID=" + patientUUID + ", attributeId=" + attributeId + "]";
+		return "AttributeThreshold [attributeThresholdId=" + attributeThresholdId + ", thresholdType=" + thresholdType + ", effectiveDate=" + effectiveDate + ", thresholdHighValue=" + thresholdHighValue + ", thresholdLowValue=" + thresholdLowValue + ", patientUUID=" + patientUUID + ", attributeId=" + attributeId + ", attributeName=" + attributeName + "]";
 	}
 }
