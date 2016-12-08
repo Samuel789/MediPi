@@ -46,14 +46,16 @@ var measurement = {
                     borderColor: 'rgba(255,89,89,1)',
                     backgroundColor: 'rgba(255,89,89,1)',
                     data: jsonData.mapValue('minValue'),
-                    borderDash: [10, 7]
+                    borderDash: [10, 7],
+                    lineTension: 0
                 },
                 {
                     label: includeObject.chartHeader,
                     borderColor: 'rgba(53,94,142,1)',
                     backgroundColor: 'rgba(53,94,142,1)',
                     fill: false,
-                    data: jsonData.mapValue('value')
+                    data: jsonData.mapValue('value'),
+                    lineTension: 0
                 },
                 {
                     label: "Max",
@@ -61,7 +63,8 @@ var measurement = {
                     borderColor: 'rgba(196,0,0,1)',
                     backgroundColor: 'rgba(196,0,0,1)',
                     data: jsonData.mapValue('maxValue'),
-                    borderDash: [10, 5]
+                    borderDash: [10, 5],
+                    lineTension: 0
                 }
             ]
         };
@@ -74,6 +77,11 @@ var measurement = {
             data: chartData,
             options: {
                 responsive: true,
+            	elements: {
+                    point:{
+                        radius: 0
+                    }
+                },
                 scales: {
                 	xAxes: [{
                 		type: "time",
