@@ -904,6 +904,10 @@ public class MediPi extends Application implements UnlockConsumer {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("FATAL: MediPi Patient requires 1 argument: --propertiesFile=");
+            System.exit(1);
+        }
         if (args[0].toLowerCase().trim().equals("-version")) {
             System.out.println(MEDIPINAME + " " + VERSION + "-" + VERSIONNAME);
         } else {
