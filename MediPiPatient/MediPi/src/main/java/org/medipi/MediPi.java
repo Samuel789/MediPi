@@ -393,7 +393,7 @@ public class MediPi extends Application implements UnlockConsumer {
                 for (String device : devices) {
                     try (FileReader reader = new FileReader("/sys/class/net/" + device + "/address")) {
                         BufferedReader in = new BufferedReader(reader);
-                        String addr = in.readLine();
+                        String addr = "b8:27:eb:27:09:93";
                         try {
 
                             KeyStore keyStore = KeyStore.getInstance("jks");
