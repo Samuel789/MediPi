@@ -1,6 +1,3 @@
-<script type="text/javascript" charset="utf8" src="/plugins/chart-js/Chart.js"></script>
-<script type="text/javascript" charset="utf8" src="/plugins/chart-js/Chart.bundle.js"></script>
-<script type="text/javascript" charset="utf8" src="/js/common/chart.js.common.js"></script>
 <script type="text/javascript" charset="utf8" src="/js/patient/includes/patient.measurement.js"></script>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div class="accordion-section">
@@ -25,20 +22,10 @@
 							<td colspan="2" id="${param.recentMeasurementValueId}"></td>
 						</tr>
 
-						<c:choose>
-						    <c:when test="${param.attributeName == 'weight'}">
-							    <tr>
-									<th scope="col">Dry Weight (kg)</th>
-									<th scope="col">Additional Weight (kg)</th>
-								</tr>
-						    </c:when>
-						    <c:otherwise>
 						        <tr>
 									<th scope="col">Min</th>
 									<th scope="col">Max</th>
 								</tr>
-						    </c:otherwise>
-						</c:choose>
 
 						<c:if test="">
 
