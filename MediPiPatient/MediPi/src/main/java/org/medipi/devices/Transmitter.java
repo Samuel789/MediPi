@@ -45,7 +45,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -491,10 +490,10 @@ public abstract class Transmitter extends Element {
     }
 
     @Override
-    public BorderPane getDashboardTile() throws Exception {
+    public DashboardTile getDashboardTile() throws Exception {
         DashboardTile dashComponent = new DashboardTile(this, showTile);
         dashComponent.addTitle(NAME);
-        return dashComponent.getTile();
+        return dashComponent;
     }
 
     /**

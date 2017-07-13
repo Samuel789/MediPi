@@ -15,11 +15,9 @@
  */
 package org.medipi;
 
-import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import org.medipi.authentication.MediPiWindow;
 import org.medipi.devices.Element;
@@ -71,7 +69,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -85,6 +82,7 @@ import org.medipi.downloadable.handlers.DownloadableHandlerManager;
 import org.medipi.downloadable.handlers.HardwareHandler;
 import org.medipi.logging.MediPiLogger;
 import org.medipi.messaging.vpn.VPNServiceManager;
+import org.medipi.ui.CentralScreen;
 import org.medipi.utilities.ConfigurationStringTokeniser;
 import org.medipi.utilities.Utilities;
 
@@ -715,6 +713,7 @@ public class MediPi extends Application implements UnlockConsumer {
                 while (cst.hasMoreTokens()) {
                     String classToken = cst.nextToken();
                     String elementClass = properties.getProperty(ELEMENTNAMESPACESTEM + classToken + ".class");
+                    System.out.println(elementClass);
                     try {
                         Element elem = (Element) Class.forName(elementClass).newInstance();
                         elem.setMediPi(this);
@@ -1010,92 +1009,3 @@ public class MediPi extends Application implements UnlockConsumer {
 
 }
 
-class MainMenu extends Group {
-    private TilePane dashTile;
-    private ScrollPane contents;
-    private final int targetWidth;
-    private final int targetHeight;
-
-    public MainMenu(CentralScreen screen) {
-        // Set up the Dashboard view
-        targetHeight = screen.getTargetHeight();
-        targetWidth = screen.getTargetWidth();
-        contents = new ScrollPane();
-        this.getChildren().add(contents);
-        contents.setFitToWidth(true);
-        contents.setMinHeight(targetHeight);
-        contents.setMaxHeight(targetHeight);
-        contents.setMinWidth(targetWidth);
-        contents.setMaxWidth(targetWidth);
-        contents.setId("mainwindow-dashboard-scroll");
-        contents.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        contents.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        dashTile = new TilePane();
-        dashTile.setMinWidth(targetWidth);
-        dashTile.setId("mainwindow-dashboard");
-        contents.setContent(dashTile);
-        //bind the visibility property so that when not visible the panel doesnt take any space
-        this.managedProperty().bind(this.visibleProperty());
-
-    }
-    public void addElementMenuEntry(Element element) throws Exception {
-        dashTile.getChildren().add(element.getDashboardTile());
-    }
-}
-
-class CentralScreen extends Group {
-    private VBox contents;
-
-    private int targetWidth = 800;
-    private int targetHeight = 380;
-
-    public MainMenu getDashboard() {
-        return dashboard;
-    }
-    private MainMenu dashboard;
-    private ArrayList<Element> elements = new ArrayList<>();
-
-
-    public CentralScreen() {
-        contents = new VBox();
-        dashboard = new MainMenu(this);
-        contents.getChildren().add(dashboard);
-        this.getChildren().add(contents);
-        contents.setMinHeight(targetHeight);
-        contents.setMaxHeight(targetHeight);
-        contents.setMinWidth(targetWidth);
-        contents.setMaxWidth(targetWidth);
-    }
-    public void addElement(Element element) throws Exception {
-        elements.add(element);
-        contents.getChildren().add(element.getWindowComponent());
-        dashboard.addElementMenuEntry(element);
-    }
-    /**
-     * Method to call the mainwindow back to the dashboard
-     *
-     */
-    public void callDashboard() {
-        hideAllWindows();
-        dashboard.setVisible(true);
-    }
-
-    /**
-     * Method to hide all the element windows from the MediPi mainwindow
-     */
-    public void hideAllWindows() {
-        dashboard.setVisible(false);
-        for (Element e : elements) {
-            e.hideDeviceWindow();
-        }
-    }
-
-    public int getTargetWidth() {
-        return targetWidth;
-    }
-
-    public int getTargetHeight() {
-        return targetHeight;
-    }
-
-}

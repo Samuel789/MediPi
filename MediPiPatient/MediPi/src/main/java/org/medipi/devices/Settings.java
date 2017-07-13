@@ -17,7 +17,6 @@ package org.medipi.devices;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
@@ -27,12 +26,10 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-import javafx.beans.binding.Bindings;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -70,7 +67,6 @@ import org.medipi.PatientDetailsDO;
 import org.medipi.PatientDetailsService;
 import org.medipi.devices.drivers.service.BluetoothPropertiesDO;
 import org.medipi.devices.drivers.service.BluetoothPropertiesService;
-import org.medipi.utilities.Utilities;
 import org.medipi.devices.drivers.domain.DeviceTimestampUpdateInterface;
 import org.medipi.devices.drivers.domain.DeviceModeUpdateInterface;
 
@@ -869,10 +865,10 @@ public class Settings extends Element {
      * @return @throws Exception
      */
     @Override
-    public BorderPane getDashboardTile() throws Exception {
+    public DashboardTile getDashboardTile() throws Exception {
         DashboardTile dashComponent = new DashboardTile(this, showTile);
         dashComponent.addTitle(getSpecificDeviceDisplayName());
-        return dashComponent.getTile();
+        return dashComponent;
     }
 
     class ChoiceBoxElementLabel extends StringConverter<Element> {

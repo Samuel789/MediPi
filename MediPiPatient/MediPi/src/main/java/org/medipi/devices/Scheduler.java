@@ -713,12 +713,12 @@ public class Scheduler extends Device {
     }
 
     @Override
-    public BorderPane getDashboardTile() throws Exception {
+    public DashboardTile getDashboardTile() throws Exception {
         DashboardTile dashComponent = new DashboardTile(this, showTile);
         dashComponent.addTitle(NAME);
         dashComponent.addOverlay(new SimpleObjectProperty<>(alertImage), alertBooleanProperty);
         dashComponent.addOverlay(Color.LIGHTPINK, alertBooleanProperty);
-        return dashComponent.getTile();
+        return dashComponent;
     }
 
     @Override

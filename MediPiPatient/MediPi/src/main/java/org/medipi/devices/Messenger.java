@@ -35,23 +35,18 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import org.medipi.DashboardTile;
-import org.medipi.MediPi;
-import org.medipi.MediPiMessageBox;
+import org.medipi.*;
 import org.medipi.downloadable.handlers.DownloadableHandlerManager;
 import org.medipi.downloadable.handlers.MessageHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
-import javafx.beans.property.ObjectProperty;
+
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.TableCell;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import org.medipi.AlertBanner;
-import org.medipi.MediPiProperties;
 import org.medipi.authentication.UnlockConsumer;
 import org.medipi.logging.MediPiLogger;
 import org.medipi.model.AlertListDO;
@@ -360,12 +355,12 @@ public class Messenger extends Element implements UnlockConsumer, MessageReceive
      * @return @throws Exception
      */
     @Override
-    public BorderPane getDashboardTile() throws Exception {
+    public DashboardTile getDashboardTile() throws Exception {
         DashboardTile dashComponent = new DashboardTile(this, showTile);
         dashComponent.addTitle(NAME);
         dashComponent.addOverlay(new SimpleObjectProperty<>(notificationImageView), notificationBooleanProperty);
         dashComponent.addOverlay(Color.LIGHTPINK, notificationBooleanProperty);
-        return dashComponent.getTile();
+        return dashComponent;
     }
 
     /**

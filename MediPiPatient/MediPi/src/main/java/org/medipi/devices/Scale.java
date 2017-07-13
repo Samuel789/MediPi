@@ -15,8 +15,6 @@
  */
 package org.medipi.devices;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -342,12 +340,12 @@ public abstract class Scale extends Device {
      * @return @throws Exception
      */
     @Override
-    public BorderPane getDashboardTile() throws Exception {
+    public DashboardTile getDashboardTile() throws Exception {
         DashboardTile dashComponent = new DashboardTile(this, showTile);
         dashComponent.addTitle(getGenericDeviceDisplayName());
         dashComponent.addOverlay(weightDB, "kg");
         dashComponent.addOverlay(Color.LIGHTGREEN, hasDataProperty());
-        return dashComponent.getTile();
+        return dashComponent;
     }
 
     @Override

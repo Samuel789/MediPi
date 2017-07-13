@@ -403,14 +403,14 @@ public abstract class BloodPressure extends Device {
      * @return @throws Exception
      */
     @Override
-    public BorderPane getDashboardTile() throws Exception {
+    public DashboardTile getDashboardTile() throws Exception {
         DashboardTile dashComponent = new DashboardTile(this, showTile);
         dashComponent.addTitle(getGenericDeviceDisplayName());
         dashComponent.addOverlay(lastSystolDB, "mmHg");
         dashComponent.addOverlay(lastDiastolDB, "mmHg");
         dashComponent.addOverlay(lastPulseDB, "BPM");
         dashComponent.addOverlay(Color.LIGHTGREEN, hasDataProperty());
-        return dashComponent.getTile();
+        return dashComponent;
     }
 
     @Override

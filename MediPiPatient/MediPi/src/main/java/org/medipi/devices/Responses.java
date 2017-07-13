@@ -34,26 +34,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
-import javafx.event.ActionEvent;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
@@ -63,12 +52,9 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import org.medipi.AlertBanner;
 import org.medipi.MediPiProperties;
 import org.medipi.authentication.UnlockConsumer;
-import static org.medipi.devices.Scheduler.TRANSMITTED;
 import org.medipi.downloadable.handlers.DownloadableHandlerManager;
 import org.medipi.downloadable.handlers.MessageHandler;
 import org.medipi.logging.MediPiLogger;
@@ -557,11 +543,11 @@ public class Responses extends Element implements UnlockConsumer, MessageReceive
      * @return @throws Exception
      */
     @Override
-    public BorderPane getDashboardTile() throws Exception {
+    public DashboardTile getDashboardTile() throws Exception {
         DashboardTile dashComponent = new DashboardTile(this, showTile);
         dashComponent.addTitle(NAME);
         dashComponent.addOverlay(notificationImageView, notificationBooleanProperty);
-        return dashComponent.getTile();
+        return dashComponent;
     }
 
     /**

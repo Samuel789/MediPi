@@ -380,13 +380,13 @@ public abstract class Oximeter extends Device {
      * @return @throws Exception
      */
     @Override
-    public BorderPane getDashboardTile() throws Exception {
+    public DashboardTile getDashboardTile() throws Exception {
         DashboardTile dashComponent = new DashboardTile(this, showTile);
         dashComponent.addTitle(getGenericDeviceDisplayName());
         dashComponent.addOverlay(meanPulseDB, "BPM");
         dashComponent.addOverlay(meanSpO2DB, "SpO2");
         dashComponent.addOverlay(Color.LIGHTGREEN, hasDataProperty());
-        return dashComponent.getTile();
+        return dashComponent;
     }
 
     @Override

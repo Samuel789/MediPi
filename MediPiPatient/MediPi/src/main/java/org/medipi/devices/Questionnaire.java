@@ -502,11 +502,11 @@ public class Questionnaire extends Device {
     }
 
     @Override
-    public BorderPane getDashboardTile() throws Exception {
+    public DashboardTile getDashboardTile() throws Exception {
         DashboardTile dashComponent = new DashboardTile(this, showTile);
         dashComponent.addTitle(getSpecificDeviceDisplayName());
         dashComponent.addOverlay(Color.LIGHTGREEN, hasDataProperty());
-        return dashComponent.getTile();
+        return dashComponent;
     }
 
     /**

@@ -35,6 +35,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import org.medipi.DashboardTile;
 import org.medipi.MediPi;
 
 /**
@@ -446,7 +447,7 @@ public abstract class Element {
      * @return the tile for inserting in the home Dashboard view
      * @throws Exception
      */
-    public abstract BorderPane getDashboardTile() throws Exception;
+    public abstract DashboardTile getDashboardTile() throws Exception;
 
     /**
      * method to get the generic Type of the device e.g."Blood Pressure"

@@ -379,12 +379,12 @@ public abstract class Thermometer extends Device {
      * @return @throws Exception
      */
     @Override
-    public BorderPane getDashboardTile() throws Exception {
+    public DashboardTile getDashboardTile() throws Exception {
         DashboardTile dashComponent = new DashboardTile(this, showTile);
         dashComponent.addTitle(getGenericDeviceDisplayName());
         dashComponent.addOverlay(tempDB, (char) 176 + "C");
         dashComponent.addOverlay(Color.LIGHTGREEN, hasDataProperty());
-        return dashComponent.getTile();
+        return dashComponent;
     }
 
     /**

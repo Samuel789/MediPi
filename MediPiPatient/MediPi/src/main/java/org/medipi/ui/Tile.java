@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.medipi;
+package org.medipi.ui;
 
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -58,19 +58,22 @@ public class Tile {
     private ImageView backgroundImage;
     private ImageView foregroundImage = new ImageView();
     private ArrayList<Label[]> labels = new ArrayList<>();
+    private int widthUnits;
+    private int heightUnits;
 
     /**
      * Constructor
      *
      */
     public Tile(BooleanProperty bprop, int widthUnits, int heightUnits) {
+        this.widthUnits = widthUnits;
+        this.heightUnits = heightUnits;
         if(bprop!=null){
             component.visibleProperty().bind(bprop);
             component.managedProperty().bind(bprop);
         }
         component.setId("mainwindow-dashboard-component");
         component.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY)));
-        component.setPrefSize(190*widthUnits, 170*heightUnits);
 
         content.setPadding(new Insets(5, 5, 5, 5));
         content.setAlignment(Pos.CENTER);
@@ -183,9 +186,15 @@ public class Tile {
      *
      * @return Dashboard Tile component back to the main MediPi class
      */
-    public BorderPane getTile() {
-
-        content.getChildren().add(backgroundImage);
+    public BorderPane getNode(int unitWidth, int unitHeight) {
+        int width = unitWidth*widthUnits;
+        int height = unitHeight*heightUnits;
+        component.setPrefSize(width, height);
+        component.setMaxSize(width, height);
+        component.setMinSize(width, height);
+        if (backgroundImage != null) {
+            content.getChildren().add(backgroundImage);
+        }
         if (foregroundImage != null) {
             content.getChildren().add(foregroundImage);
         }
@@ -205,7 +214,7 @@ public class Tile {
         return component;
     }
 
-    protected void setOnMouseClicked(EventHandler<? super javafx.scene.input.MouseEvent> event) {
+    public void setOnMouseClicked(EventHandler<? super javafx.scene.input.MouseEvent> event) {
         component.setOnMouseClicked(event);
     }
 }
