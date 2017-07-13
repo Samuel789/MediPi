@@ -15,6 +15,7 @@
  */
 package org.medipi;
 
+import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -1009,22 +1010,30 @@ public class MediPi extends Application implements UnlockConsumer {
 
 }
 
-class MainMenu extends VBox {
+class MainMenu extends Group {
     private TilePane dashTile;
     private ScrollPane contents;
+    private final int targetWidth;
+    private final int targetHeight;
 
     public MainMenu(CentralScreen screen) {
         // Set up the Dashboard view
+        targetHeight = screen.getTargetHeight();
+        targetWidth = screen.getTargetWidth();
         contents = new ScrollPane();
         this.getChildren().add(contents);
         contents.setFitToWidth(true);
-        dashTile = new TilePane();
-        dashTile.setMinWidth(screen.getTargetWidth());
-        dashTile.setId("mainwindow-dashboard");
-        contents.setContent(dashTile);
+        contents.setMinHeight(targetHeight);
+        contents.setMaxHeight(targetHeight);
+        contents.setMinWidth(targetWidth);
+        contents.setMaxWidth(targetWidth);
         contents.setId("mainwindow-dashboard-scroll");
         contents.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         contents.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        dashTile = new TilePane();
+        dashTile.setMinWidth(targetWidth);
+        dashTile.setId("mainwindow-dashboard");
+        contents.setContent(dashTile);
         //bind the visibility property so that when not visible the panel doesnt take any space
         this.managedProperty().bind(this.visibleProperty());
 
@@ -1034,33 +1043,33 @@ class MainMenu extends VBox {
     }
 }
 
-class CentralScreen extends VBox {
+class CentralScreen extends Group {
     private VBox contents;
-    private MainMenu dashboard;
-    private ArrayList<Element> elements = new ArrayList<>();
 
     private int targetWidth = 800;
     private int targetHeight = 380;
+
+    public MainMenu getDashboard() {
+        return dashboard;
+    }
+    private MainMenu dashboard;
+    private ArrayList<Element> elements = new ArrayList<>();
+
+
     public CentralScreen() {
         contents = new VBox();
         dashboard = new MainMenu(this);
-        this.getChildren().addAll(contents);
         contents.getChildren().add(dashboard);
-        this.setMinHeight(targetHeight);
-        this.setMaxHeight(targetHeight);
-        this.setMinWidth(targetWidth);
-        this.setMaxWidth(targetWidth);
+        this.getChildren().add(contents);
+        contents.setMinHeight(targetHeight);
+        contents.setMaxHeight(targetHeight);
+        contents.setMinWidth(targetWidth);
+        contents.setMaxWidth(targetWidth);
     }
     public void addElement(Element element) throws Exception {
         elements.add(element);
         contents.getChildren().add(element.getWindowComponent());
         dashboard.addElementMenuEntry(element);
-    }
-    public int getTargetWidth() {
-        return targetWidth;
-    }
-    public int getTargetHeight() {
-        return targetHeight;
     }
     /**
      * Method to call the mainwindow back to the dashboard
@@ -1080,4 +1089,13 @@ class CentralScreen extends VBox {
             e.hideDeviceWindow();
         }
     }
+
+    public int getTargetWidth() {
+        return targetWidth;
+    }
+
+    public int getTargetHeight() {
+        return targetHeight;
+    }
+
 }
