@@ -261,7 +261,7 @@ public abstract class Element {
                 previousDevices.add(getClassTokenName());
                 Element e = medipi.getElement(nextDevice);
                 e.callDeviceWindow(previousDevices, remainingDevices);
-                //NEED TO DO SOMETHING TO RE_IMPLEMENT ADDITION OF SCHEDIULER METADATA MEASURED
+                //NEED TO DO SOMETHING TO RE_IMPLEMENT ADDITION OF SCHEDULER METADATA MEASURED
                 if (Device.class.isAssignableFrom(Element.this.getClass())) {
                     Device d = (Device) Element.this;
                     if (d.hasDataProperty().get()) {
