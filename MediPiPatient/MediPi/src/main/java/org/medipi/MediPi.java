@@ -165,7 +165,7 @@ public class MediPi extends Application implements UnlockConsumer {
 
     private Stage primaryStage;
     private final ArrayList<Element> elements = new ArrayList<>();
-    private final ScrollPane dashTileSc = new ScrollPane();
+    private ScrollPane dashTileSc;
     private VBox subWindow;
     // Fatal error flag to stop use of MediPi - one way there is no set back to false
     private boolean fatalError = false;
@@ -202,7 +202,6 @@ public class MediPi extends Application implements UnlockConsumer {
 
     // Instantiation of the download handler 
     private DownloadableHandlerManager dhm = new DownloadableHandlerManager();
-
     /**
      * allows access to scene to allow the cursor to be set
      */
@@ -666,21 +665,7 @@ public class MediPi extends Application implements UnlockConsumer {
 
             lowerBanner.setRight(connectionLEDs);
             // Set up the Dashboard view
-            TilePane dashTile;
-            dashTile = new TilePane();
-            dashTile.setMinWidth(800);
-            dashTile.setId("mainwindow-dashboard");
-            dashTileSc.setContent(dashTile);
-            dashTileSc.setFitToWidth(true);
-            dashTileSc.setFitToHeight(true);
-            dashTileSc.setMinHeight(380);
-            dashTileSc.setMaxHeight(380);
-            dashTileSc.setMinWidth(800);
-            dashTileSc.setId("mainwindow-dashboard-scroll");
-            dashTileSc.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            dashTileSc.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-            //bind the visibility property so that when not visible the panel doesnt take any space
-            dashTileSc.managedProperty().bind(dashTileSc.visibleProperty());
+
             subWindow = new VBox();
             subWindow.setId("subwindow");
             subWindow.setAlignment(Pos.TOP_CENTER);
@@ -722,41 +707,10 @@ public class MediPi extends Application implements UnlockConsumer {
             primaryStage.setMinWidth(screenwidth);
             primaryStage.setMinHeight(screenheight);
             primaryStage.show();
-
+            dashTileSc = new TitleScreen(properties);
             // register this class as an implementor of the locked/unlocked interface 
             // in order to hide the NHS NUmber and DOB when not authenticated
             mediPiWindow.registerForAuthenticationCallback(this);
-            // Basic structure is now created and ready to display any errors that
-            // occur when sub elements are called
-            // loop through all the element class tokens defined in the properties file and instantiate
-            // Add dashboard Tiles to the initial GUI structure
-            String e = properties.getProperty(ELEMENTS);
-            if (e != null && e.trim().length() != 0) {
-                ConfigurationStringTokeniser cst = new ConfigurationStringTokeniser(e);
-                while (cst.hasMoreTokens()) {
-                    String classToken = cst.nextToken();
-                    String elementClass = properties.getProperty(ELEMENTNAMESPACESTEM + classToken + ".class");
-                    try {
-                        Element elem = (Element) Class.forName(elementClass).newInstance();
-                        elem.setMediPi(this);
-                        elem.setClassToken(classToken);
-                        String initError = elem.init();
-                        elem.setElementTitle();
-                        if (initError == null) {
-                            dashTile.getChildren().add(elem.getDashboardTile());
-                            elements.add(elem);
-                            subWindow.getChildren().add(elem.getWindowComponent());
-                        } else {
-                            MediPiMessageBox.getInstance().makeErrorMessage("Cannot instantiate an element: \n" + classToken + " - " + elementClass + " - " + initError, null);
-                        }
-                    } catch (Exception ex) {
-                        MediPiMessageBox.getInstance().makeErrorMessage("Cannot instantiate an element: \n" + classToken + " - " + elementClass, ex);
-                    }
-                }
-            } else {
-                makeFatalErrorMessage("No Elements have been defined", null);
-                return;
-            }
 
             //show the tiled dashboard view
             callDashboard();
@@ -814,6 +768,7 @@ public class MediPi extends Application implements UnlockConsumer {
             makeFatalErrorMessage("A fatal and fundamental error occurred at bootup", e);
             return;
         }
+        mediPiWindow = new MediPiWindow()
     }
 
     /**
@@ -1038,4 +993,58 @@ public class MediPi extends Application implements UnlockConsumer {
         unlocked.set(false);
     }
 
+}
+
+class TitleScreen extends ScrollPane {
+    public TitleScreen(Properties properties) throws Exception{
+        TilePane dashTile;
+        dashTile = new TilePane();
+        dashTile.setMinWidth(800);
+        dashTile.setId("mainwindow-dashboard");
+
+        this.setContent(dashTile);
+        this.setFitToWidth(true);
+        this.setFitToHeight(true);
+        this.setMinHeight(380);
+        this.setMaxHeight(380);
+        this.setMinWidth(800);
+        this.setId("mainwindow-dashboard-scroll");
+        this.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        this.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        //bind the visibility property so that when not visible the panel doesnt take any space
+        this.managedProperty().bind(this.visibleProperty());
+
+        // Basic structure is now created and ready to display any errors that
+        // occur when sub elements are called
+        // loop through all the element class tokens defined in the properties file and instantiate
+        // Add dashboard Tiles to the initial GUI structure
+        String e = properties.getProperty(ELEMENTS);
+        if (e != null && e.trim().length() != 0) {
+            ConfigurationStringTokeniser cst = new ConfigurationStringTokeniser(e);
+            while (cst.hasMoreTokens()) {
+                String classToken = cst.nextToken();
+                String elementClass = properties.getProperty(ELEMENTNAMESPACESTEM + classToken + ".class");
+                try {
+                    Element elem = (Element) Class.forName(elementClass).newInstance();
+                    elem.setMediPi(this);
+                    elem.setClassToken(classToken);
+                    String initError = elem.init();
+                    elem.setElementTitle();
+                    if (initError == null) {
+                        dashTile.getChildren().add(elem.getDashboardTile());
+                        elements.add(elem);
+                        subWindow.getChildren().add(elem.getWindowComponent());
+                    } else {
+                        MediPiMessageBox.getInstance().makeErrorMessage("Cannot instantiate an element: \n" + classToken + " - " + elementClass + " - " + initError, null);
+                    }
+                } catch (Exception ex) {
+                    MediPiMessageBox.getInstance().makeErrorMessage("Cannot instantiate an element: \n" + classToken + " - " + elementClass, ex);
+                }
+            }
+        } else {
+            makeFatalErrorMessage("No Elements have been defined", null);
+            return;
+        }
+
+    }
 }
