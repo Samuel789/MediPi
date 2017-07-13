@@ -15,9 +15,15 @@
  */
 package org.medipi;
 
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import org.medipi.authentication.MediPiWindow;
 import org.medipi.devices.Element;
-import java.awt.SplashScreen;
+
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,13 +63,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -165,8 +164,7 @@ public class MediPi extends Application implements UnlockConsumer {
 
     private Stage primaryStage;
     private final ArrayList<Element> elements = new ArrayList<>();
-    private ScrollPane dashTileSc;
-    private VBox subWindow;
+    private CentralScreen subWindow;
     // Fatal error flag to stop use of MediPi - one way there is no set back to false
     private boolean fatalError = false;
     private final StringBuilder fatalErrorLog = new StringBuilder("There has been a fatal error: \n");
@@ -200,8 +198,9 @@ public class MediPi extends Application implements UnlockConsumer {
      */
     private boolean debugMode = false;
 
-    // Instantiation of the download handler 
+    // Instantiation of the download handler
     private DownloadableHandlerManager dhm = new DownloadableHandlerManager();
+
     /**
      * allows access to scene to allow the cursor to be set
      */
@@ -364,9 +363,9 @@ public class MediPi extends Application implements UnlockConsumer {
                 dataSeparator = "^";
             }
 
-            // It has been difficult to access all the Mac address/IP Addresses (whether they 
+            // It has been difficult to access all the Mac address/IP Addresses (whether they
             // are up or not) using NetworkInterface on Linux machines. This method does work on Linux
-            // I'm not sure if the alternative method (i.e. the non Linux method) works for all 
+            // I'm not sure if the alternative method (i.e. the non Linux method) works for all
             // other OS MACAddresses/IPs whether they are up or not
             if (System.getProperty("os.name").equals("Linux")) {
 
@@ -420,7 +419,7 @@ public class MediPi extends Application implements UnlockConsumer {
                 }
 
             } else {
-                // for all other non Linux OS systems 
+                // for all other non Linux OS systems
                 String ip;
                 try {
                     // try to find the MAC address
@@ -591,17 +590,17 @@ public class MediPi extends Application implements UnlockConsumer {
             }
             Path dir = Paths.get(messageDir);
             TimeServerWatcher tsw = new TimeServerWatcher(dir, this);
-            // a shell script which calls the MediPi Patient application also currently 
+            // a shell script which calls the MediPi Patient application also currently
             // calls the synchronisation of the time server. The output of which is saved
             // to file and monitored by the TimeServerWatcher class
 
-            //instnatiate the VPN Manager            
+            //instnatiate the VPN Manager
             VPNServiceManager vpnm = VPNServiceManager.getInstance();
             if (vpnm.isEnabled()) {
                 vpnConnectionIndicatorProperty.addListener(new ChangeListener<Number>() {
                     @Override
                     public void changed(ObservableValue<? extends Number> observableValue, Number oldValue,
-                            Number newValue) {
+                                        Number newValue) {
                         switch (newValue.intValue()) {
                             case VPNFAILED:
                                 vpnled.blink(Color.RED, Color.GREY, 1000);
@@ -641,7 +640,7 @@ public class MediPi extends Application implements UnlockConsumer {
                 wifiConnectionIndicatorProperty.addListener(new ChangeListener<Number>() {
                     @Override
                     public void changed(ObservableValue<? extends Number> observableValue, Number oldValue,
-                            Number newValue) {
+                                        Number newValue) {
                         switch (newValue.intValue()) {
                             case WIFINOTCONNECTED:
                                 wifiled.blink(Color.RED, Color.GREY, 1000);
@@ -664,14 +663,8 @@ public class MediPi extends Application implements UnlockConsumer {
             }
 
             lowerBanner.setRight(connectionLEDs);
-            // Set up the Dashboard view
 
-            subWindow = new VBox();
-            subWindow.setId("subwindow");
-            subWindow.setAlignment(Pos.TOP_CENTER);
-            subWindow.getChildren().addAll(
-                    dashTileSc
-            );
+            subWindow = new CentralScreen();
             try {
                 mediPiWindow = new MediPiWindow(subWindow);
                 mainWindow.getChildren().addAll(titleBP,
@@ -707,10 +700,40 @@ public class MediPi extends Application implements UnlockConsumer {
             primaryStage.setMinWidth(screenwidth);
             primaryStage.setMinHeight(screenheight);
             primaryStage.show();
-            dashTileSc = new TitleScreen(properties);
-            // register this class as an implementor of the locked/unlocked interface 
+
+            // register this class as an implementor of the locked/unlocked interface
             // in order to hide the NHS NUmber and DOB when not authenticated
             mediPiWindow.registerForAuthenticationCallback(this);
+            // Basic structure is now created and ready to display any errors that
+            // occur when sub elements are called
+            // loop through all the element class tokens defined in the properties file and instantiate
+            // Add dashboard Tiles to the initial GUI structure
+            String e = properties.getProperty(ELEMENTS);
+            if (e != null && e.trim().length() != 0) {
+                ConfigurationStringTokeniser cst = new ConfigurationStringTokeniser(e);
+                while (cst.hasMoreTokens()) {
+                    String classToken = cst.nextToken();
+                    String elementClass = properties.getProperty(ELEMENTNAMESPACESTEM + classToken + ".class");
+                    try {
+                        Element elem = (Element) Class.forName(elementClass).newInstance();
+                        elem.setMediPi(this);
+                        elem.setClassToken(classToken);
+                        String initError = elem.init();
+                        elem.setElementTitle();
+                        if (initError == null) {
+                            elements.add(elem);
+                            subWindow.addElement(elem);
+                        } else {
+                            MediPiMessageBox.getInstance().makeErrorMessage("Cannot instantiate an element: \n" + classToken + " - " + elementClass + " - " + initError, null);
+                        }
+                    } catch (Exception ex) {
+                        MediPiMessageBox.getInstance().makeErrorMessage("Cannot instantiate an element: \n" + classToken + " - " + elementClass, ex);
+                    }
+                }
+            } else {
+                makeFatalErrorMessage("No Elements have been defined", null);
+                return;
+            }
 
             //show the tiled dashboard view
             callDashboard();
@@ -735,7 +758,7 @@ public class MediPi extends Application implements UnlockConsumer {
             }
 
             if (dhm.hasHandlers()) {
-                // Start the downloadable timer. This wakes up every definable period (default set to 30s) 
+                // Start the downloadable timer. This wakes up every definable period (default set to 30s)
                 // and performs functions to send restful messages to retreive the downloadable entities - Hardware and Patient Messages
                 try {
                     String time = getProperties().getProperty(MEDIPIDOWNLOADPOLLPERIOD);
@@ -768,7 +791,6 @@ public class MediPi extends Application implements UnlockConsumer {
             makeFatalErrorMessage("A fatal and fundamental error occurred at bootup", e);
             return;
         }
-        mediPiWindow = new MediPiWindow()
     }
 
     /**
@@ -859,10 +881,6 @@ public class MediPi extends Application implements UnlockConsumer {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        if (args.length != 1) {
-            System.out.println("FATAL: MediPi Patient requires 1 argument: --propertiesFile=");
-            System.exit(1);
-        }
         if (args[0].toLowerCase().trim().equals("-version")) {
             System.out.println(MEDIPINAME + " " + VERSION + "-" + VERSIONNAME);
         } else {
@@ -875,18 +893,14 @@ public class MediPi extends Application implements UnlockConsumer {
      *
      */
     public void callDashboard() {
-        hideAllWindows();
-        dashTileSc.setVisible(true);
+        subWindow.callDashboard();
     }
 
     /**
      * Method to hide all the element windows from the MediPi mainwindow
      */
     public void hideAllWindows() {
-        dashTileSc.setVisible(false);
-        for (Element e : elements) {
-            e.hideDeviceWindow();
-        }
+        subWindow.hideAllWindows();
     }
 
     /**
@@ -951,7 +965,7 @@ public class MediPi extends Application implements UnlockConsumer {
         fatalErrorLog.append(errorMessage).append("\n").append(exString);
         MediPiLogger
                 .getInstance().log(MediPi.class
-                        .getName() + ".initialisation", "Fatal Error:" + errorMessage + exString);
+                .getName() + ".initialisation", "Fatal Error:" + errorMessage + exString);
         primaryStage.setTitle(VERSION);
         HBox hbox = new HBox();
         hbox.setStyle("-fx-background-color: lightblue;");
@@ -995,56 +1009,75 @@ public class MediPi extends Application implements UnlockConsumer {
 
 }
 
-class TitleScreen extends ScrollPane {
-    public TitleScreen(Properties properties) throws Exception{
-        TilePane dashTile;
-        dashTile = new TilePane();
-        dashTile.setMinWidth(800);
-        dashTile.setId("mainwindow-dashboard");
+class MainMenu extends VBox {
+    private TilePane dashTile;
+    private ScrollPane contents;
 
-        this.setContent(dashTile);
-        this.setFitToWidth(true);
-        this.setFitToHeight(true);
-        this.setMinHeight(380);
-        this.setMaxHeight(380);
-        this.setMinWidth(800);
-        this.setId("mainwindow-dashboard-scroll");
-        this.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        this.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+    public MainMenu(CentralScreen screen) {
+        // Set up the Dashboard view
+        contents = new ScrollPane();
+        this.getChildren().add(contents);
+        contents.setFitToWidth(true);
+        dashTile = new TilePane();
+        dashTile.setMinWidth(screen.getTargetWidth());
+        dashTile.setId("mainwindow-dashboard");
+        contents.setContent(dashTile);
+        contents.setId("mainwindow-dashboard-scroll");
+        contents.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        contents.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         //bind the visibility property so that when not visible the panel doesnt take any space
         this.managedProperty().bind(this.visibleProperty());
 
-        // Basic structure is now created and ready to display any errors that
-        // occur when sub elements are called
-        // loop through all the element class tokens defined in the properties file and instantiate
-        // Add dashboard Tiles to the initial GUI structure
-        String e = properties.getProperty(ELEMENTS);
-        if (e != null && e.trim().length() != 0) {
-            ConfigurationStringTokeniser cst = new ConfigurationStringTokeniser(e);
-            while (cst.hasMoreTokens()) {
-                String classToken = cst.nextToken();
-                String elementClass = properties.getProperty(ELEMENTNAMESPACESTEM + classToken + ".class");
-                try {
-                    Element elem = (Element) Class.forName(elementClass).newInstance();
-                    elem.setMediPi(this);
-                    elem.setClassToken(classToken);
-                    String initError = elem.init();
-                    elem.setElementTitle();
-                    if (initError == null) {
-                        dashTile.getChildren().add(elem.getDashboardTile());
-                        elements.add(elem);
-                        subWindow.getChildren().add(elem.getWindowComponent());
-                    } else {
-                        MediPiMessageBox.getInstance().makeErrorMessage("Cannot instantiate an element: \n" + classToken + " - " + elementClass + " - " + initError, null);
-                    }
-                } catch (Exception ex) {
-                    MediPiMessageBox.getInstance().makeErrorMessage("Cannot instantiate an element: \n" + classToken + " - " + elementClass, ex);
-                }
-            }
-        } else {
-            makeFatalErrorMessage("No Elements have been defined", null);
-            return;
-        }
+    }
+    public void addElementMenuEntry(Element element) throws Exception {
+        dashTile.getChildren().add(element.getDashboardTile());
+    }
+}
 
+class CentralScreen extends VBox {
+    private VBox contents;
+    private MainMenu dashboard;
+    private ArrayList<Element> elements = new ArrayList<>();
+
+    private int targetWidth = 800;
+    private int targetHeight = 380;
+    public CentralScreen() {
+        contents = new VBox();
+        dashboard = new MainMenu(this);
+        this.getChildren().addAll(contents);
+        contents.getChildren().add(dashboard);
+        this.setMinHeight(targetHeight);
+        this.setMaxHeight(targetHeight);
+        this.setMinWidth(targetWidth);
+        this.setMaxWidth(targetWidth);
+    }
+    public void addElement(Element element) throws Exception {
+        elements.add(element);
+        contents.getChildren().add(element.getWindowComponent());
+        dashboard.addElementMenuEntry(element);
+    }
+    public int getTargetWidth() {
+        return targetWidth;
+    }
+    public int getTargetHeight() {
+        return targetHeight;
+    }
+    /**
+     * Method to call the mainwindow back to the dashboard
+     *
+     */
+    public void callDashboard() {
+        hideAllWindows();
+        dashboard.setVisible(true);
+    }
+
+    /**
+     * Method to hide all the element windows from the MediPi mainwindow
+     */
+    public void hideAllWindows() {
+        dashboard.setVisible(false);
+        for (Element e : elements) {
+            e.hideDeviceWindow();
+        }
     }
 }
