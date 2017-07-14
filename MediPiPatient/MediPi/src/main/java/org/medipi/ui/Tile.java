@@ -22,6 +22,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -67,13 +68,12 @@ public class Tile {
      *
      * @return Dashboard ButtonTile component back to the main MediPi class
      */
-    public BorderPane getNode(int unitWidth, int unitHeight) {
+    public Pane getNode(int unitWidth, int unitHeight) {
         int width = unitWidth*widthUnits;
         int height = unitHeight*heightUnits;
         component.setPrefSize(width, height);
         component.setMaxSize(width, height);
         component.setMinSize(width, height);
-
         return component;
     }
 
