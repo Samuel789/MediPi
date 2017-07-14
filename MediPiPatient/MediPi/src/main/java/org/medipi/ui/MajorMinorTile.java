@@ -15,23 +15,13 @@
  */
 package org.medipi.ui;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-
-import java.util.ArrayList;
+import javafx.scene.layout.BorderPane;
 
 /**
  * Class to encapsulate a Dashboard Component node which is placed in the
@@ -43,23 +33,20 @@ import java.util.ArrayList;
  *
  * @author rick@robinsonhq.com
  */
-public class Tile {
+public class MajorMinorTile extends Tile {
 
-    protected BorderPane component = new BorderPane();
-    protected int widthUnits;
-    protected int heightUnits;
+    Button majorButton = new Button();
+    Button minorButton = new Button();
+    int buttonPadding = 25;
 
-    /**
-     * Constructor
-     *
-     */
-    public Tile(BooleanProperty bprop, int widthUnits, int heightUnits) {
-        this.widthUnits = widthUnits;
-        this.heightUnits = heightUnits;
-        if(bprop!=null){
-            component.visibleProperty().bind(bprop);
-            component.managedProperty().bind(bprop);
-        }
+    public MajorMinorTile(BooleanProperty bprop, int widthUnits, int heightUnits) {
+        super(bprop, widthUnits, heightUnits);
+        component.setTop(majorButton);
+        component.setBottom(minorButton);
+        component.setMargin(majorButton, new Insets(buttonPadding, buttonPadding, buttonPadding/2, buttonPadding));
+        component.setMargin(minorButton, new Insets(buttonPadding/2, buttonPadding, buttonPadding, buttonPadding));
+        component.setAlignment(majorButton, Pos.CENTER);
+        component.setAlignment(minorButton, Pos.CENTER);
     }
 
     /**
@@ -67,17 +54,44 @@ public class Tile {
      *
      * @return Dashboard ButtonTile component back to the main MediPi class
      */
+    @Override
     public BorderPane getNode(int unitWidth, int unitHeight) {
         int width = unitWidth*widthUnits;
         int height = unitHeight*heightUnits;
         component.setPrefSize(width, height);
         component.setMaxSize(width, height);
         component.setMinSize(width, height);
+        majorButton.setId("mainwindow-dashboard-component-title");
+        minorButton.setId("mainwindow-dashboard-component-title");
+        majorButton.setPrefWidth(width - 2*buttonPadding);
+        minorButton.setPrefWidth((width - 2*buttonPadding)*0.7);
+        majorButton.setPrefHeight((height - 2*buttonPadding)/2);
+        minorButton.setPrefHeight((height - 2*buttonPadding)/2);
 
         return component;
     }
 
-    public void setOnTileClick(EventHandler<? super MouseEvent> event) {
-        component.setOnMouseClicked(event);
+    public void setMajorText(String text) {
+        majorButton.setText(text);
+    }
+
+    public String getMajorText() {
+        return majorButton.getText();
+    }
+
+    public void setMinorText(String text) {
+        minorButton.setText(text);
+    }
+
+    public String getMinorText() {
+        return minorButton.getText();
+    }
+
+    public void setOnMajorClick(EventHandler<? super MouseEvent> event) {
+        majorButton.setOnMouseClicked(event);
+    }
+
+    public void setOnMinorClick(EventHandler<? super MouseEvent> event) {
+        minorButton.setOnMouseClicked(event);
     }
 }

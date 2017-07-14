@@ -18,11 +18,11 @@ package org.medipi;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.input.MouseEvent;
 import org.medipi.devices.Element;
-import org.medipi.ui.Tile;
+import org.medipi.ui.ButtonTile;
 
 /**
  * Class to encapsulate a Dashboard Component node which is placed in the
- * dashboard. This class creates and handles the dashboard Tile and its
+ * dashboard. This class creates and handles the dashboard ButtonTile and its
  * contents, allowing the tile to be clicked and the Element to be called.
  * Overlays can be added to the tile so that dynamically changing data can be
  * displayed or an alert when actions are required in the related Element.
@@ -30,7 +30,7 @@ import org.medipi.ui.Tile;
  *
  * @author rick@robinsonhq.com
  */
-public class DashboardTile extends Tile {
+public class DashboardTile extends ButtonTile {
     /**
      * Constructor
      *
@@ -39,7 +39,7 @@ public class DashboardTile extends Tile {
     public DashboardTile(Element elem, BooleanProperty bprop) {
         super(bprop, 1, 1);
         this.setBackgroundImage(elem.getImage());
-        this.setOnMouseClicked((MouseEvent event) -> {
+        this.setOnTileClick((MouseEvent event) -> {
             elem.callDeviceWindow();
         });
     }

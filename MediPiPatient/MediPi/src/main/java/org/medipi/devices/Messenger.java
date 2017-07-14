@@ -65,7 +65,7 @@ import org.medipi.utilities.Utilities;
  * the selected message. As MediPi does not expose any inbound ports, incoming
  * messaging is achieved through periodic polling of a secure location. Any new
  * messages received are digested and the UI is updated. A new unread message
- * alerts the dashboard Tile class to superimpose an notification image. All
+ * alerts the dashboard ButtonTile class to superimpose an notification image. All
  * messages are persisted locally to a configurable file location.
  *
  * The messages are encrypted using each patient's certificate and must be

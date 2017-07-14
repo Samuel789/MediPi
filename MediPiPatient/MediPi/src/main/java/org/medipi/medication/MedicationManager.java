@@ -3,12 +3,11 @@ package org.medipi.medication;
 import javafx.scene.Node;
 import org.medipi.DashboardTile;
 import org.medipi.devices.Element;
-import org.medipi.ui.Tile;
 
 
 public class MedicationManager extends Element {
     private static final String NAME = "Medication";
-    private static final String DISPLAYNAME = "MediPi Medication Manager";
+    private static final String DISPLAYNAME = "Medication";
     private static final String MEDIPIIMAGESEXCLAIM = "medipi.images.exclaim";
     private static final String MEDIPIIMAGESALLINTHRESHOLD = "medipi.images.allinthreshold";
     private static final String MEDIPIIMAGESHIGHESTERROROUTOFTHRESHOLD = "medipi.images.highesterror.outofthreshold";

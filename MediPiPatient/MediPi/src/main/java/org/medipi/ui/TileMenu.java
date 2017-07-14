@@ -3,7 +3,6 @@ package org.medipi.ui;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.TilePane;
 
 public class TileMenu extends Group {
     private FlowPane dashTile;
