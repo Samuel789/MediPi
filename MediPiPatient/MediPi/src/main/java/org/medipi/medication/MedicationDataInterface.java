@@ -46,6 +46,4 @@ public class MedicationDataInterface {
             System.out.println("Failed to make connection!");
         }
     }
-
-    
 }
