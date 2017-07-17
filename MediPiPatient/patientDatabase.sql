@@ -47,4 +47,44 @@ create table medication_adherence
 )
 ;
 
+create table medication_scheduled_dose
+(
+	id serial not null
+		constraint medication_scheduled_dose_pkey
+			primary key,
+	schedule integer not null
+		constraint medication_scheduled_dose_medication_schedule_id_fk
+			references medication_schedule,
+	value double precision not null,
+	startday date not null,
+	repeatinterval integer,
+	endday date,
+	windowstarttime time not null,
+	windowendtime time not null,
+	defaultremindertime time not null,
+	remindertime time not null
+)
+;
+
+create unique index medication_scheduled_dose_id_uindex
+	on medication_scheduled_dose (id)
+;
+
+create table medication_recorded_dose
+(
+	id serial not null
+		constraint medication_recorded_dose_pkey
+			primary key,
+	value double precision not null,
+	timetaken timestamp not null,
+	schedule integer not null
+		constraint medication_recorded_dose_medication_schedule_id_fk
+			references medication_schedule
+)
+;
+
+create unique index medication_recorded_dose_id_uindex
+	on medication_recorded_dose (id)
+;
+
 
