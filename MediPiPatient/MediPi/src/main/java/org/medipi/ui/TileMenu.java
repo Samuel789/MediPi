@@ -1,7 +1,12 @@
 package org.medipi.ui;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.FlowPane;
 
 import java.util.Vector;
@@ -24,6 +29,19 @@ public class TileMenu extends Group {
     private boolean scrollBarShowing = false;
     private int columns;
 
+    int position = 0;
+
+    public int getMargin() {
+        return margin;
+    }
+
+    public void setMargin(int margin) {
+        this.margin = margin;
+    }
+
+    private int margin;
+    private Node overlayWindow = null;
+
     public int getColumns() {
         return columns;
     }
@@ -44,13 +62,18 @@ public class TileMenu extends Group {
 
     private double visibleRows;
 
-    public TileMenu(WindowManager screen, int columns, double visibleRows) {
+    public TileMenu(WindowManager windowManager,  int columns, double visibleRows, TileMenu upperMenu) {
+        this(windowManager.getTargetWidth(), windowManager.getTargetHeight(), columns, visibleRows, upperMenu);
+    }
+
+    public TileMenu(int targetWidth, int targetHeight, int columns, double visibleRows, TileMenu upperMenu) {
         // Set up the Dashboard view
         tiles = new Vector<Tile>();
         this.columns = columns;
+        margin = 15;
         this.visibleRows = visibleRows;
-        targetHeight = screen.getTargetHeight();
-        targetWidth = screen.getTargetWidth();
+        this.targetWidth = targetWidth;
+        this.targetHeight = targetHeight;
         contents = new ScrollPane();
         this.getChildren().add(contents);
         contents.setFitToWidth(true);
@@ -64,21 +87,73 @@ public class TileMenu extends Group {
         dashTile = new FlowPane();
         dashTile.setMinWidth(targetWidth);
         dashTile.setHgap(0);
+        dashTile.setAlignment(Pos.TOP_LEFT);
+        dashTile.setPadding(new Insets(0));
+        dashTile.setOrientation(Orientation.HORIZONTAL);
+        dashTile.setPrefWrapLength(targetWidth);
         dashTile.setId("mainwindow-dashboard");
         contents.setContent(dashTile);
+        contents.addEventFilter(ScrollEvent.ANY, (x) -> {
+            updateScrollPosition();});
         //bind the visibility property so that when not visible the panel doesnt take any space
         this.managedProperty().bind(this.visibleProperty());
 
     }
     public void addTile(Tile tile) {
         tiles.add(tile);
-        dashTile.getChildren().add(tile.getNode((targetWidth - 15) / columns, (int) (targetHeight / visibleRows)));
+        dashTile.getChildren().add(tile.getNode(getUnitWidth(), getUnitHeight(), columns));
     }
 
     private void updateDisplay() {
         dashTile.getChildren().clear();
         for (Tile tile: tiles) {
-            dashTile.getChildren().add(tile.getNode((targetWidth - 15) / columns, (int) (targetHeight / visibleRows)));
+            dashTile.getChildren().add(tile.getNode(getUnitWidth(), getUnitHeight(), columns));
         }
+    }
+
+    public int getUnitWidth() {
+        return (int) ((targetWidth - margin) / columns);
+    }
+
+    public int getUnitHeight() {
+        return (int) (targetHeight / visibleRows);
+    }
+
+    public void setOverlayWindow(Node window) {
+        overlayWindow = window;
+    }
+
+    public void hideOverlayWindow() {
+        this.getChildren().clear();
+        this.getChildren().add(dashTile);
+    }
+
+    public void showOverlayWindow() {
+        this.getChildren().clear();
+        this.getChildren().add(overlayWindow);
+    }
+
+    private void updateScrollPosition() {
+        int unitHeight = getUnitHeight();
+        int vSpace = (int) (dashTile.getHeight() - Math.round(visibleRows)*unitHeight);
+        int numRows = vSpace/unitHeight;
+        position = (int) (contents.getVvalue()*numRows);
+
+    }
+
+    public void closeOverlayWindow() {
+        hideOverlayWindow();
+        overlayWindow = null;
+    }
+
+    public void scrollDown() {
+        contents.setVvalue(Math.min(((position + 1)*getUnitHeight()/(dashTile.getHeight()-visibleRows*getUnitHeight())), 1));
+        updateScrollPosition();
+
+    }
+
+    public void scrollUp() {
+        contents.setVvalue(Math.max(((position - 1)*getUnitHeight()/(dashTile.getHeight()-visibleRows*getUnitHeight())), 0));
+        updateScrollPosition();
     }
 }

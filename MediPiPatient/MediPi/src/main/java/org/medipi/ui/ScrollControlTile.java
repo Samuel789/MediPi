@@ -17,8 +17,11 @@ package org.medipi.ui;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
 
 /**
  * Class to encapsulate a Dashboard Component node which is placed in the
@@ -30,44 +33,21 @@ import javafx.scene.layout.*;
  *
  * @author rick@robinsonhq.com
  */
-public class Tile {
+public class ScrollControlTile extends Tile {
 
-    public void setContent(BorderPane content) {
-        this.content = content;
-    }
+    Button upButton = new Button();
+    Button downButton = new Button();
 
-    protected BorderPane content = new BorderPane();
-
-    public int getWidthUnits() {
-        return widthUnits;
-    }
-
-    public void setWidthUnits(int widthUnits) {
-        this.widthUnits = widthUnits;
-    }
-
-    public int getHeightUnits() {
-        return heightUnits;
-    }
-
-    public void setHeightUnits(int heightUnits) {
-        this.heightUnits = heightUnits;
-    }
-
-    protected int widthUnits;
-    protected int heightUnits;
-
-    /**
-     * Constructor
-     *
-     */
-    public Tile(BooleanProperty bprop, int widthUnits, int heightUnits) {
-        this.widthUnits = widthUnits;
-        this.heightUnits = heightUnits;
-        if(bprop!=null){
-            content.visibleProperty().bind(bprop);
-            content.managedProperty().bind(bprop);
-        }
+    public ScrollControlTile(BooleanProperty bprop, int widthUnits, int heightUnits) {
+        super(bprop, widthUnits, heightUnits);
+        content.setTop(upButton);
+        content.setBottom(downButton);
+        content.setMargin(upButton, new Insets(10));
+        content.setMargin(downButton, new Insets(10));
+        content.setAlignment(upButton, Pos.CENTER);
+        content.setAlignment(downButton, Pos.CENTER);
+        upButton.setText("Up");
+        downButton.setText("Down");
     }
 
     /**
@@ -75,7 +55,8 @@ public class Tile {
      *
      * @return Dashboard ButtonTile content back to the main MediPi class
      */
-    public Pane getNode(int unitWidth, int unitHeight, int availableWidthUnits) {
+    @Override
+    public BorderPane getNode(int unitWidth, int unitHeight, int availableWidthUnits) {
         int widthUnitsToUse;
         if (widthUnits > availableWidthUnits) {
             widthUnitsToUse = availableWidthUnits;
@@ -87,14 +68,20 @@ public class Tile {
         content.setPrefSize(width, height);
         content.setMaxSize(width, height);
         content.setMinSize(width, height);
+        upButton.setId("mainwindow-dashboard-content-title");
+        downButton.setId("mainwindow-dashboard-content-title");
+        upButton.setPrefWidth(width - 20);
+        downButton.setPrefWidth(width - 20);
+        upButton.setPrefHeight((height - 30)/2);
+        downButton.setPrefHeight((height - 30)/2);
         return content;
     }
 
-    public void setOnTileClick(EventHandler<? super MouseEvent> event) {
-        content.setOnMouseClicked(event);
+    public void setOnUpClick(EventHandler<? super MouseEvent> event) {
+        upButton.setOnMouseClicked(event);
     }
 
-    public BorderPane getContent() {
-        return content;
+    public void setOnDownClick(EventHandler<? super MouseEvent> event) {
+        downButton.setOnMouseClicked(event);
     }
 }

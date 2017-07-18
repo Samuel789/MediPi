@@ -208,8 +208,14 @@ public class ButtonTile extends Tile {
      * @return Dashboard ButtonTile content back to the main MediPi class
      */
     @Override
-    public BorderPane getNode(int unitWidth, int unitHeight) {
-        int width = unitWidth*widthUnits;
+    public BorderPane getNode(int unitWidth, int unitHeight, int availableWidthUnits) {
+        int widthUnitsToUse;
+        if (widthUnits > availableWidthUnits) {
+            widthUnitsToUse = availableWidthUnits;
+        } else {
+            widthUnitsToUse = widthUnits;
+        }
+        int width = unitWidth*widthUnitsToUse;
         int height = unitHeight*heightUnits;
         content.setPrefSize(width, height);
         content.setMaxSize(width, height);

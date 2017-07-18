@@ -22,7 +22,7 @@ public class WindowManager extends Group {
 
     public WindowManager() {
         contents = new VBox();
-        dashboard = new MainMenu(this);
+        dashboard = new MainMenu(this, null);
         contents.getChildren().add(dashboard);
         this.getChildren().add(contents);
         contents.setMinHeight(targetHeight);

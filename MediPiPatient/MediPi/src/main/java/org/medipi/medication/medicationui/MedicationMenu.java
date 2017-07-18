@@ -16,8 +16,8 @@ import org.medipi.ui.*;
 
 public class MedicationMenu extends TileMenu {
     double adherenceRate =0.8;
-    public MedicationMenu(MediPi medipi) {
-        super(new WindowManager(), 3, 2.15);
+    public MedicationMenu(MediPi medipi, TileMenu upperMenu) {
+        super(new WindowManager(), 3, 2.15, upperMenu);
         MajorMinorTile medTile1 = new MajorMinorTile(new SimpleBooleanProperty(true), 1, 1);
         medTile1.setMajorText("Back");
         medTile1.setMinorText("Settings");
@@ -33,6 +33,7 @@ public class MedicationMenu extends TileMenu {
         viewScheduleTile.addTitle("View Schedule");
         recordDoseTile.setOnTileClick((MouseEvent event) -> {this.setColumns(this.getColumns() + 1);});
         viewScheduleTile.setOnTileClick((MouseEvent event) -> {this.setColumns(this.getColumns() - 1);});
+        showMedicationsTile.setOnTileClick((MouseEvent event) -> {this.setOverlayWindow(new ShowMedicationsMenu(medipi, this)); this.showOverlayWindow();});
 
         this.addTile(recordDoseTile);
         this.addTile(showMedicationsTile);
@@ -47,17 +48,16 @@ public class MedicationMenu extends TileMenu {
         Label titleLabel = new Label("Medication Manager");
         titleLabel.setId("mainwindow-dashboard-component-title");
         tileContent.setTop(titleLabel);
-        tileContent.setAlignment(titleLabel, Pos.CENTER);
+        tileContent.setAlignment(titleLabel, Pos.TOP_CENTER);
+        titleLabel.setPadding(new Insets(0, 0, 10, 0));
+        tileContent.setAlignment(titleLabel, Pos.TOP_CENTER);
         AdherenceBar adherenceBar = new AdherenceBar();
         tileContent.setCenter(adherenceBar);
-        adherenceBar.setPrefWidth(400);
-        adherenceBar.setPrefHeight(40);
+        tileContent.setAlignment(adherenceBar, Pos.CENTER);
         adherenceBar.setProgress(adherenceRate);
-        adherenceBar.setStyle("-fx-accent: yellow;");
-        Label adherenceText = new Label(String.format("%d%% overall adherence in the last 7 days", (int) (adherenceRate*100)));
-        adherenceText.setId("mainwindow-dashboard-component-title");
-        tileContent.setBottom(adherenceText);
-        tileContent.setAlignment(adherenceText, Pos.CENTER);
+        adherenceBar.setWidth(450);
+        adherenceBar.setLongForm(true);
+
         return tile;
     }
 }

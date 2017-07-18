@@ -16,7 +16,7 @@ public class MedicationManager extends Element {
 
     private MedicationMenu menu;
     public String init() {
-        menu = new MedicationMenu(medipi);
+        menu = new MedicationMenu(medipi, null);
         MedicationDataInterface dbInterface = new MedicationDataInterface();
         return null;
     }
