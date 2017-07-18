@@ -395,7 +395,7 @@ public class Responses extends Element implements UnlockConsumer, MessageReceive
                     image.setFitWidth(30);
                     BorderPane imagePane = new BorderPane(image);
                     imagePane.setMinSize(35, 35);
-                    imagePane.setId("transmitter-component");
+                    imagePane.setId("transmitter-content");
                     Button detailsButton = new Button("Details");
                     detailsButton.setId("button-back");
                     counter.add(d.getGenericDeviceDisplayName());
@@ -538,7 +538,7 @@ public class Responses extends Element implements UnlockConsumer, MessageReceive
     }
 
     /**
-     * method to return the component to the dashboard
+     * method to return the content to the dashboard
      *
      * @return @throws Exception
      */

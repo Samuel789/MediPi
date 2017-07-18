@@ -16,19 +16,16 @@
 package org.medipi.ui;
 
 import java.util.ArrayList;
-import java.util.function.Function;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -39,7 +36,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import org.medipi.devices.Element;
 
 /**
  * Class to encapsulate a Dashboard Component node which is placed in the
@@ -53,7 +49,7 @@ import org.medipi.devices.Element;
  */
 public class ButtonTile extends Tile {
 
-    private StackPane content = new StackPane();
+    private StackPane contentStack = new StackPane();
     private ImageView backgroundImage;
     private ImageView foregroundImage = new ImageView();
     private ArrayList<Label[]> labels = new ArrayList<>();
@@ -64,17 +60,32 @@ public class ButtonTile extends Tile {
      */
     public ButtonTile(BooleanProperty bprop, int widthUnits, int heightUnits) {
         super(bprop, widthUnits, heightUnits);
-        component.setId("mainwindow-dashboard-component");
-        component.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY)));
+        content.setId("mainwindow-dashboard-component");
+        content.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY)));
 
-        content.setPadding(new Insets(5, 5, 5, 5));
-        content.setAlignment(Pos.CENTER);
+        contentStack.setPadding(new Insets(5, 5, 5, 5));
+        contentStack.setAlignment(Pos.CENTER);
+
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        for (Label[] l : labels) {
+            HBox h = new HBox();
+            h.setAlignment(Pos.CENTER);
+            h.getChildren().addAll(
+                    l[0],
+                    l[1]);
+            vbox.getChildren().add(h);
+        }
+        contentStack.getChildren().add(vbox);
+        content.setCenter(contentStack);
     }
 
     protected void setBackgroundImage(ImageView image) {
         backgroundImage = image;
         backgroundImage.setFitHeight(80);
         backgroundImage.setFitWidth(80);
+        contentStack.getChildren().add(backgroundImage);
+
     }
 
     /**
@@ -90,7 +101,7 @@ public class ButtonTile extends Tile {
         t.setTextAlignment(TextAlignment.CENTER);
         HBox h = new HBox(t);
         h.setAlignment(Pos.CENTER);
-        component.setTop(h);
+        content.setTop(h);
 
     }
 
@@ -116,7 +127,24 @@ public class ButtonTile extends Tile {
             if (!newValue.equals("")) {
                 backgroundImage.setStyle("-fx-opacity:0.2;");
                 units.setVisible(true);
-            } else {
+            } else {if (backgroundImage != null) {
+            contentStack.getChildren().add(backgroundImage);
+        }
+        if (foregroundImage != null) {
+            contentStack.getChildren().add(foregroundImage);
+        }
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        for (Label[] l : labels) {
+            HBox h = new HBox();
+            h.setAlignment(Pos.CENTER);
+            h.getChildren().addAll(
+                    l[0],
+                    l[1]);
+            vbox.getChildren().add(h);
+        }
+        contentStack.getChildren().add(vbox);
+        content.setCenter(contentStack);
                 backgroundImage.setStyle("-fx-opacity:1.0;");
                 units.setVisible(false);
             }
@@ -156,6 +184,7 @@ public class ButtonTile extends Tile {
                 backgroundImage.setStyle("-fx-opacity:1.0;");
             }
         });
+        contentStack.getChildren().add(foregroundImage);
     }
 
     /**
@@ -168,7 +197,7 @@ public class ButtonTile extends Tile {
      */
     public void addOverlay(Color colour, BooleanProperty bp) {
         
-        component.backgroundProperty().bind(Bindings.when(bp)
+        content.backgroundProperty().bind(Bindings.when(bp)
                 .then(new Background(new BackgroundFill(colour, new CornerRadii(10), Insets.EMPTY)))
                 .otherwise(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY))));
     }
@@ -176,35 +205,18 @@ public class ButtonTile extends Tile {
     /**
      * Method to return the Dashboard ButtonTile
      *
-     * @return Dashboard ButtonTile component back to the main MediPi class
+     * @return Dashboard ButtonTile content back to the main MediPi class
      */
     @Override
     public BorderPane getNode(int unitWidth, int unitHeight) {
         int width = unitWidth*widthUnits;
         int height = unitHeight*heightUnits;
-        component.setPrefSize(width, height);
-        component.setMaxSize(width, height);
-        component.setMinSize(width, height);
-        if (backgroundImage != null) {
-            content.getChildren().add(backgroundImage);
-        }
-        if (foregroundImage != null) {
-            content.getChildren().add(foregroundImage);
-        }
-        VBox vbox = new VBox();
-        vbox.setAlignment(Pos.CENTER);
-        for (Label[] l : labels) {
-            HBox h = new HBox();
-            h.setAlignment(Pos.CENTER);
-            h.getChildren().addAll(
-                    l[0],
-                    l[1]);
-            vbox.getChildren().add(h);
-        }
-        content.getChildren().add(vbox);
-        component.setCenter(content);
+        content.setPrefSize(width, height);
+        content.setMaxSize(width, height);
+        content.setMinSize(width, height);
 
-        return component;
+
+        return content;
     }
 
 }

@@ -170,7 +170,7 @@ public class Settings extends Element {
 
 // ----------- PATIENT SETTINGS CODE ------------------ 
         Text patientTitleLabel = new Text("Patient Demographic Settings");
-        patientTitleLabel.setId("mainwindow-dashboard-component-title");
+        patientTitleLabel.setId("mainwindow-dashboard-content-title");
         Text forenameLabel = new Text("Forename:");
         forenameLabel.setId("button-closemedipi");
         TextField forenameTF = new TextField();
@@ -330,7 +330,7 @@ public class Settings extends Element {
 
 // ----------- Time Sync code ---------------
         Text timesetTitleLabel = new Text("Set Internal Physiological Device Time");
-        timesetTitleLabel.setId("mainwindow-dashboard-component-title");
+        timesetTitleLabel.setId("mainwindow-dashboard-content-title");
         VBox timesetVBox = new VBox();
         timesetVBox.setSpacing(5);
         timesetVBox.getChildren().add(timesetTitleLabel);
@@ -436,7 +436,7 @@ public class Settings extends Element {
 
 // ----------- Bluetooth maintainance code ---------------
         Text bluetoothTitleLabel = new Text("Bluetooth Settings");
-        bluetoothTitleLabel.setId("mainwindow-dashboard-component-title");
+        bluetoothTitleLabel.setId("mainwindow-dashboard-content-title");
         HBox btHBox = new HBox();
         btHBox.setAlignment(Pos.CENTER_LEFT);
         btHBox.setSpacing(10);
@@ -512,7 +512,7 @@ public class Settings extends Element {
 
 // ----------- SCHEDULE SETTINGS CODE ------------------ 
         Text scheduleTitleLabel = new Text("Schedule Settings");
-        scheduleTitleLabel.setId("mainwindow-dashboard-component-title");
+        scheduleTitleLabel.setId("mainwindow-dashboard-content-title");
         VBox scheduleDataBox;
         scheduleDataBox = new VBox();
         scheduleDataBox.setId("transmitter-text");
@@ -548,7 +548,7 @@ public class Settings extends Element {
                 image.setFitWidth(25);
                 BorderPane imagePane = new BorderPane(image);
                 imagePane.setMinSize(30, 30);
-                imagePane.setId("transmitter-component");
+                imagePane.setId("transmitter-content");
                 CheckBox tcb = new CheckBox();
                 tcb.setMinWidth(600);
                 tcb.setId("transmitter-text");
@@ -860,7 +860,7 @@ public class Settings extends Element {
     }
 
     /**
-     * method to return the component to the dashboard
+     * method to return the content to the dashboard
      *
      * @return @throws Exception
      */

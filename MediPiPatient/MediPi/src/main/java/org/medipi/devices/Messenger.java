@@ -350,7 +350,7 @@ public class Messenger extends Element implements UnlockConsumer, MessageReceive
     }
 
     /**
-     * method to return the component to the dashboard
+     * method to return the content to the dashboard
      *
      * @return @throws Exception
      */

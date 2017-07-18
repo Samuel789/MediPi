@@ -3,6 +3,7 @@ package org.medipi.medication;
 import javafx.scene.Node;
 import org.medipi.DashboardTile;
 import org.medipi.devices.Element;
+import org.medipi.medication.medicationui.MedicationMenu;
 
 
 public class MedicationManager extends Element {

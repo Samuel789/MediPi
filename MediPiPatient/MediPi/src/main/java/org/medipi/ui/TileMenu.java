@@ -4,17 +4,49 @@ import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 
+import java.util.Vector;
+
 public class TileMenu extends Group {
     private FlowPane dashTile;
     private ScrollPane contents;
+    private Vector<Tile> tiles;
+
+    public int getTargetWidth() {
+        return targetWidth;
+    }
+
+    public int getTargetHeight() {
+        return targetHeight;
+    }
+
     private final int targetWidth;
     private final int targetHeight;
     private boolean scrollBarShowing = false;
     private int columns;
+
+    public int getColumns() {
+        return columns;
+    }
+
+    public void setColumns(int columns) {
+        this.columns = columns;
+        updateDisplay();
+    }
+
+    public double getVisibleRows() {
+        return visibleRows;
+    }
+
+    public void setVisibleRows(double visibleRows) {
+        this.visibleRows = visibleRows;
+        updateDisplay();
+    }
+
     private double visibleRows;
 
-    public TileMenu(CentralScreen screen, int columns, double visibleRows) {
+    public TileMenu(WindowManager screen, int columns, double visibleRows) {
         // Set up the Dashboard view
+        tiles = new Vector<Tile>();
         this.columns = columns;
         this.visibleRows = visibleRows;
         targetHeight = screen.getTargetHeight();
@@ -39,6 +71,14 @@ public class TileMenu extends Group {
 
     }
     public void addTile(Tile tile) {
-        dashTile.getChildren().add(tile.getNode((targetWidth-15)/columns, (int) (targetHeight/visibleRows)));
+        tiles.add(tile);
+        dashTile.getChildren().add(tile.getNode((targetWidth - 15) / columns, (int) (targetHeight / visibleRows)));
+    }
+
+    private void updateDisplay() {
+        dashTile.getChildren().clear();
+        for (Tile tile: tiles) {
+            dashTile.getChildren().add(tile.getNode((targetWidth - 15) / columns, (int) (targetHeight / visibleRows)));
+        }
     }
 }

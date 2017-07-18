@@ -82,7 +82,7 @@ import org.medipi.downloadable.handlers.DownloadableHandlerManager;
 import org.medipi.downloadable.handlers.HardwareHandler;
 import org.medipi.logging.MediPiLogger;
 import org.medipi.messaging.vpn.VPNServiceManager;
-import org.medipi.ui.CentralScreen;
+import org.medipi.ui.WindowManager;
 import org.medipi.utilities.ConfigurationStringTokeniser;
 import org.medipi.utilities.Utilities;
 
@@ -163,7 +163,7 @@ public class MediPi extends Application implements UnlockConsumer {
 
     private Stage primaryStage;
     private final ArrayList<Element> elements = new ArrayList<>();
-    private CentralScreen subWindow;
+    private WindowManager subWindow;
     // Fatal error flag to stop use of MediPi - one way there is no set back to false
     private boolean fatalError = false;
     private final StringBuilder fatalErrorLog = new StringBuilder("There has been a fatal error: \n");
@@ -663,7 +663,7 @@ public class MediPi extends Application implements UnlockConsumer {
 
             lowerBanner.setRight(connectionLEDs);
 
-            subWindow = new CentralScreen();
+            subWindow = new WindowManager();
             try {
                 mediPiWindow = new MediPiWindow(subWindow);
                 mainWindow.getChildren().addAll(titleBP,

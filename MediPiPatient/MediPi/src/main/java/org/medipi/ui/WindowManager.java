@@ -7,7 +7,7 @@ import org.medipi.devices.Element;
 
 import java.util.ArrayList;
 
-public class CentralScreen extends Group {
+public class WindowManager extends Group {
     private VBox contents;
 
     private int targetWidth = 800;
@@ -20,7 +20,7 @@ public class CentralScreen extends Group {
     private ArrayList<Element> elements = new ArrayList<>();
 
 
-    public CentralScreen() {
+    public WindowManager() {
         contents = new VBox();
         dashboard = new MainMenu(this);
         contents.getChildren().add(dashboard);

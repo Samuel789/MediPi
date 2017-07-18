@@ -179,7 +179,7 @@ public abstract class Transmitter extends Element {
                 image.setFitWidth(45);
                 BorderPane imagePane = new BorderPane(image);
                 imagePane.setMinSize(50, 50);
-                imagePane.setId("transmitter-component");
+                imagePane.setId("transmitter-content");
                 CheckBox tcb = new CheckBox();
                 tcb.setMinWidth(600);
                 tcb.setId("transmitter-text");

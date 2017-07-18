@@ -1,4 +1,4 @@
-package org.medipi.medication;
+package org.medipi.medication.medicationui;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
@@ -14,14 +14,14 @@ import org.medipi.MediPi;
 import org.medipi.ui.*;
 
 
-class MedicationMenu extends TileMenu {
+public class MedicationMenu extends TileMenu {
     double adherenceRate =0.8;
     public MedicationMenu(MediPi medipi) {
-        super(new CentralScreen(), 3, 2.15);
+        super(new WindowManager(), 3, 2.15);
         MajorMinorTile medTile1 = new MajorMinorTile(new SimpleBooleanProperty(true), 1, 1);
         medTile1.setMajorText("Back");
         medTile1.setMinorText("Settings");
-        CustomTile medTile2 = createMedicationTile();
+        Tile medTile2 = createAdherenceSummaryTile();
         medTile1.setOnMajorClick((MouseEvent event) -> {medipi.callDashboard();});
         this.addTile(medTile1);
         this.addTile(medTile2);
@@ -31,14 +31,17 @@ class MedicationMenu extends TileMenu {
         recordDoseTile.addTitle("Record a Dose");
         showMedicationsTile.addTitle("Show Medications");
         viewScheduleTile.addTitle("View Schedule");
+        recordDoseTile.setOnTileClick((MouseEvent event) -> {this.setColumns(this.getColumns() + 1);});
+        viewScheduleTile.setOnTileClick((MouseEvent event) -> {this.setColumns(this.getColumns() - 1);});
+
         this.addTile(recordDoseTile);
         this.addTile(showMedicationsTile);
         this.addTile(viewScheduleTile);
     }
 
-    private CustomTile createMedicationTile() {
-        CustomTile tile = new CustomTile(new SimpleBooleanProperty(true), 2, 1);
-        BorderPane tileContent = tile.getTileContent();
+    private Tile createAdherenceSummaryTile() {
+        Tile tile = new Tile(new SimpleBooleanProperty(true), 2, 1);
+        BorderPane tileContent = tile.getContent();
         tileContent.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(5), new Insets(15))));
         tileContent.setPadding(new Insets(30));
         Label titleLabel = new Label("Medication Manager");

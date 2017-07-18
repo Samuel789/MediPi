@@ -15,24 +15,10 @@
  */
 package org.medipi.ui;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-
-import java.util.ArrayList;
 
 /**
  * Class to encapsulate a Dashboard Component node which is placed in the
@@ -46,7 +32,28 @@ import java.util.ArrayList;
  */
 public class Tile {
 
-    protected BorderPane component = new BorderPane();
+    public void setContent(BorderPane content) {
+        this.content = content;
+    }
+
+    protected BorderPane content = new BorderPane();
+
+    public int getWidthUnits() {
+        return widthUnits;
+    }
+
+    public void setWidthUnits(int widthUnits) {
+        this.widthUnits = widthUnits;
+    }
+
+    public int getHeightUnits() {
+        return heightUnits;
+    }
+
+    public void setHeightUnits(int heightUnits) {
+        this.heightUnits = heightUnits;
+    }
+
     protected int widthUnits;
     protected int heightUnits;
 
@@ -58,26 +65,30 @@ public class Tile {
         this.widthUnits = widthUnits;
         this.heightUnits = heightUnits;
         if(bprop!=null){
-            component.visibleProperty().bind(bprop);
-            component.managedProperty().bind(bprop);
+            content.visibleProperty().bind(bprop);
+            content.managedProperty().bind(bprop);
         }
     }
 
     /**
      * Method to return the Dashboard ButtonTile
      *
-     * @return Dashboard ButtonTile component back to the main MediPi class
+     * @return Dashboard ButtonTile content back to the main MediPi class
      */
     public Pane getNode(int unitWidth, int unitHeight) {
         int width = unitWidth*widthUnits;
         int height = unitHeight*heightUnits;
-        component.setPrefSize(width, height);
-        component.setMaxSize(width, height);
-        component.setMinSize(width, height);
-        return component;
+        content.setPrefSize(width, height);
+        content.setMaxSize(width, height);
+        content.setMinSize(width, height);
+        return content;
     }
 
     public void setOnTileClick(EventHandler<? super MouseEvent> event) {
-        component.setOnMouseClicked(event);
+        content.setOnMouseClicked(event);
+    }
+
+    public BorderPane getContent() {
+        return content;
     }
 }

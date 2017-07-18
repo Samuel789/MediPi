@@ -1,4 +1,4 @@
-package org.medipi.medication;
+package org.medipi.medication.medicationui;
 
 import javafx.scene.control.ProgressBar;
 
