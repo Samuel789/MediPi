@@ -1,15 +1,7 @@
 package org.medipi.medication.medicationui;
 
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 import org.medipi.MediPi;
 import org.medipi.ui.*;
 
@@ -25,13 +17,13 @@ public class MedicationMenu extends TileMenu {
         medTile1.setOnMajorClick((MouseEvent event) -> {medipi.callDashboard();});
         this.addTile(medTile1);
         this.addTile(medTile2);
-        ButtonTile recordDoseTile = new ButtonTile(new SimpleBooleanProperty(true), 1, 1);
-        ButtonTile viewScheduleTile = new ButtonTile(new SimpleBooleanProperty(true), 1, 1);
-        ButtonTile showMedicationsTile = new ButtonTile(new SimpleBooleanProperty(true), 1 ,1);
+        EntityTile recordDoseTile = new EntityTile(new SimpleBooleanProperty(true), 1, 1);
+        EntityTile viewScheduleTile = new EntityTile(new SimpleBooleanProperty(true), 1, 1);
+        EntityTile showMedicationsTile = new EntityTile(new SimpleBooleanProperty(true), 1 ,1);
         recordDoseTile.addTitle("Record a Dose");
         showMedicationsTile.addTitle("Show Medications");
         viewScheduleTile.addTitle("View Schedule");
-        recordDoseTile.setOnTileClick((MouseEvent event) -> {this.setColumns(this.getColumns() + 1);});
+        recordDoseTile.setOnTileClick((MouseEvent event) -> {this.setOverlayWindow(new MedicationChooserMenu(medipi, this)); this.showOverlayWindow();});
         viewScheduleTile.setOnTileClick((MouseEvent event) -> {this.setColumns(this.getColumns() - 1);});
         showMedicationsTile.setOnTileClick((MouseEvent event) -> {this.setOverlayWindow(new ShowMedicationsMenu(medipi, this)); this.showOverlayWindow();});
 
@@ -41,19 +33,11 @@ public class MedicationMenu extends TileMenu {
     }
 
     private Tile createAdherenceSummaryTile() {
-        Tile tile = new Tile(new SimpleBooleanProperty(true), 2, 1);
-        BorderPane tileContent = tile.getContent();
-        tileContent.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(5), new Insets(15))));
-        tileContent.setPadding(new Insets(30));
-        Label titleLabel = new Label("Medication Manager");
-        titleLabel.setId("mainwindow-dashboard-component-title");
-        tileContent.setTop(titleLabel);
-        tileContent.setAlignment(titleLabel, Pos.TOP_CENTER);
-        titleLabel.setPadding(new Insets(0, 0, 10, 0));
-        tileContent.setAlignment(titleLabel, Pos.TOP_CENTER);
+        HeaderTile tile = new HeaderTile(new SimpleBooleanProperty(true), 2, 1);
+
         AdherenceBar adherenceBar = new AdherenceBar();
-        tileContent.setCenter(adherenceBar);
-        tileContent.setAlignment(adherenceBar, Pos.CENTER);
+        tile.setMainContent(adherenceBar);
+        tile.setTitleText("Medication Manager");
         adherenceBar.setProgress(adherenceRate);
         adherenceBar.setWidth(450);
         adherenceBar.setLongForm(true);

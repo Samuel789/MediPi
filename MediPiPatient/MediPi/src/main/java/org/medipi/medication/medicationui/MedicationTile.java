@@ -3,16 +3,16 @@ package org.medipi.medication.medicationui;
 import javafx.beans.property.BooleanProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.medipi.medication.Schedule;
-import org.medipi.ui.ButtonTile;
 import org.medipi.ui.Tile;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class MedicationTile extends Tile {
@@ -50,12 +50,24 @@ public class MedicationTile extends Tile {
         content.setAlignment(adherenceBar, Pos.CENTER);
         adherenceBar.setWidth(200);
 
+
         setMedicationSchedule(medicationSchedule);
     }
 
     public void setMedicationSchedule(Schedule schedule) {
         adherenceBar.setProgress(new Random().nextDouble() % 1);
         adherenceBar.setStreakLength((int) ((new Random().nextDouble() % 1)*20));
+        this.setOnTileClick((MouseEvent event) -> {
+            Stage popupWindow = new Stage();
+            MedicationInformation popupContents = new MedicationInformation(schedule);
+            Scene scene = new Scene(popupContents);
+            scene.getStylesheets().addAll(content.getScene().getStylesheets());
+            popupWindow.setScene(scene);
+            popupWindow.setTitle("Medication Information");
+            popupWindow.initModality(Modality.WINDOW_MODAL);
+            popupWindow.initOwner(content.getScene().getWindow());
+            popupWindow.showAndWait();
+        });
     }
 
 }
