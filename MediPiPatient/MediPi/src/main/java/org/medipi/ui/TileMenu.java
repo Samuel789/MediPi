@@ -1,5 +1,6 @@
 package org.medipi.ui;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -146,14 +147,22 @@ public class TileMenu extends Group {
         overlayWindow = null;
     }
 
+    public static Tile getNewBufferTile(int widthUnits, int heightUnits) {
+        return new Tile(new SimpleBooleanProperty(true), widthUnits, heightUnits);
+    }
+
     public void scrollDown() {
+        System.out.println("Scrolling Down");
         contents.setVvalue(Math.min(((position + 1)*getUnitHeight()/(dashTile.getHeight()-visibleRows*getUnitHeight())), 1));
         updateScrollPosition();
-
     }
 
     public void scrollUp() {
         contents.setVvalue(Math.max(((position - 1)*getUnitHeight()/(dashTile.getHeight()-visibleRows*getUnitHeight())), 0));
         updateScrollPosition();
+    }
+
+    public void addBufferTile(int widthUnits, int heightUnits) {
+        addTile(getNewBufferTile(widthUnits, heightUnits));
     }
 }

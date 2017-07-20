@@ -23,8 +23,7 @@ public class MedicationMenu extends TileMenu {
         recordDoseTile.addTitle("Record a Dose");
         showMedicationsTile.addTitle("Show Medications");
         viewScheduleTile.addTitle("View Schedule");
-        recordDoseTile.setOnTileClick((MouseEvent event) -> {this.setOverlayWindow(new MedicationChooserMenu(medipi, this)); this.showOverlayWindow();});
-        viewScheduleTile.setOnTileClick((MouseEvent event) -> {this.setColumns(this.getColumns() - 1);});
+        recordDoseTile.setOnTileClick((MouseEvent event) -> {this.setOverlayWindow(new RecordDoseMenu(medipi, this)); this.showOverlayWindow();});
         showMedicationsTile.setOnTileClick((MouseEvent event) -> {this.setOverlayWindow(new ShowMedicationsMenu(medipi, this)); this.showOverlayWindow();});
 
         this.addTile(recordDoseTile);

@@ -56,7 +56,7 @@ public class Tile {
 
     protected int widthUnits;
     protected int heightUnits;
-
+    protected EventHandler<? super MouseEvent> mouseClickEvent;
     /**
      * Constructor
      *
@@ -91,7 +91,11 @@ public class Tile {
     }
 
     public void setOnTileClick(EventHandler<? super MouseEvent> event) {
+        if (mouseClickEvent != null) {
+            content.removeEventFilter(MouseEvent.MOUSE_CLICKED, mouseClickEvent);
+        }
         content.addEventFilter(MouseEvent.MOUSE_CLICKED, event);
+        mouseClickEvent = event;
     }
 
     public BorderPane getContent() {

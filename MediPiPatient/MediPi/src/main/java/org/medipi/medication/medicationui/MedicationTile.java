@@ -20,9 +20,28 @@ public class MedicationTile extends Tile {
     Label titleLabel;
     Label purposeLabel;
     AdherenceBar adherenceBar;
+    public enum DisplayType {ADHERENCE, DUESTATUS};
+
+    public DisplayType getDisplayType() {
+        return displayType;
+    }
+
+    public void setDisplayType(DisplayType displayType) {
+        this.displayType = displayType;
+        updateLayout();
+    }
+
+    DisplayType displayType = DisplayType.ADHERENCE;
+
+    public Schedule getMedicationSchedule() {
+        return medicationSchedule;
+    }
+
+    Schedule medicationSchedule;
 
     public MedicationTile(BooleanProperty bprop, int widthUnits, int heightUnits, Schedule medicationSchedule) {
         super(bprop, widthUnits, heightUnits);
+
         content.setId("mainwindow-dashboard-component");
         content.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY)));
 
@@ -36,30 +55,56 @@ public class MedicationTile extends Tile {
         content.setAlignment(vbox, Pos.CENTER_LEFT);
 
         titleLabel = new Label("No title set");
+        purposeLabel = new Label("No purpose set");
+
         //titleLabel.setPrefSize(content.getWidth(), 30);
         titleLabel.setId("mainwindow-dashboard-component-title");
+        adherenceBar = new AdherenceBar();
+        adherenceBar.setWidth(200);
+        vbox.getChildren().add(titleLabel);
+        vbox.getChildren().add(purposeLabel);
+        updateLayout();
 
+        setMedicationSchedule(medicationSchedule);
+        setShowInfoOnClick();
+    }
+
+    private void updateLayout() {
+        content.setCenter(null);
+        content.setBottom(null);
+        if (displayType == DisplayType.ADHERENCE) {
+            setAdherenceView();
+        } else if (displayType == DisplayType.DUESTATUS) {
+            setDoseStatusView();
+        }
+    }
+
+    private void setAdherenceView() {
+
+        content.setCenter(adherenceBar);
+        content.setAlignment(adherenceBar, Pos.CENTER);
+    }
+
+    private void setDoseStatusView() {
         purposeLabel = new Label("No purpose set");
         //purposeLabel.setPrefSize(content.getWidth(), 30);
 
-        adherenceBar = new AdherenceBar();
-
-        vbox.getChildren().add(titleLabel);
-        vbox.getChildren().add(purposeLabel);
-        content.setCenter(adherenceBar);
-        content.setAlignment(adherenceBar, Pos.CENTER);
-        adherenceBar.setWidth(200);
-
-
-        setMedicationSchedule(medicationSchedule);
     }
 
     public void setMedicationSchedule(Schedule schedule) {
         adherenceBar.setProgress(new Random().nextDouble() % 1);
         adherenceBar.setStreakLength((int) ((new Random().nextDouble() % 1)*20));
+        this.medicationSchedule = schedule;
+    }
+
+    protected void setBackgroundColour(Color color) {
+        content.setBackground(new Background(new BackgroundFill(color, new CornerRadii(10), Insets.EMPTY)));
+    }
+
+    public void setShowInfoOnClick() {
         this.setOnTileClick((MouseEvent event) -> {
             Stage popupWindow = new Stage();
-            MedicationInformation popupContents = new MedicationInformation(schedule);
+            MedicationInformation popupContents = new MedicationInformation(medicationSchedule);
             Scene scene = new Scene(popupContents);
             scene.getStylesheets().addAll(content.getScene().getStylesheets());
             popupWindow.setScene(scene);
