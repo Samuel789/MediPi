@@ -44,6 +44,8 @@ public class MedicationInformation extends Group {
         try {
             iconImage = new Image(new File("/home/sam/Pictures/0ymgub.jpg").toURL().toString());
             iconImageView = new ImageView(iconImage);
+            iconImageView.setFitWidth(100);
+            iconImageView.setFitHeight(100);
         } catch (Exception e) {
             System.out.println("Couldn't load icon");
         }
@@ -70,8 +72,7 @@ public class MedicationInformation extends Group {
         HBox iconAdvisoryBox = new HBox();
         iconAdvisoryBox.getChildren().add(advisoryTextArea);
         iconAdvisoryBox.getChildren().add(iconImageView);
-        iconImageView.setFitWidth(100);
-        iconImageView.setFitHeight(100);
+
         advisoryTextArea.setEditable(false);
         iconAdvisoryBox.setAlignment(Pos.CENTER);
         centre.getChildren().add(iconAdvisoryBox);

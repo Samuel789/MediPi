@@ -81,6 +81,7 @@ import org.medipi.devices.Scheduler;
 import org.medipi.downloadable.handlers.DownloadableHandlerManager;
 import org.medipi.downloadable.handlers.HardwareHandler;
 import org.medipi.logging.MediPiLogger;
+import org.medipi.medication.MedicationReminderService;
 import org.medipi.messaging.vpn.VPNServiceManager;
 import org.medipi.ui.WindowManager;
 import org.medipi.utilities.ConfigurationStringTokeniser;
@@ -173,6 +174,7 @@ public class MediPi extends Application implements UnlockConsumer {
     private MediPiWindow mediPiWindow;
     private final IntegerProperty vpnConnectionIndicatorProperty = new SimpleIntegerProperty(0);
     private IntegerProperty wifiConnectionIndicatorProperty = new SimpleIntegerProperty(0);
+
     public static final int VPNFAILED = -1;
     public static final int VPNNOTCONNECTED = 0;
     public static final int VPNCONNECTING = 1;
@@ -386,6 +388,7 @@ public class MediPi extends Application implements UnlockConsumer {
                 }
 
                 String ksf = MediPiProperties.getInstance().getProperties().getProperty(MEDIPIDEVICECERTLOCATION);
+
                 // read the hardware address for each device
                 for (String device : devices) {
                     try (FileReader reader = new FileReader("/sys/class/net/" + device + "/address")) {

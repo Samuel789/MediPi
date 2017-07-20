@@ -15,9 +15,16 @@ public class MedicationManager extends Element {
     private static final String MEDIPIIMAGESHIGHESTERRORCANTCALCULATE = "medipi.images.highesterror.cantcalculate";
 
     private MedicationMenu menu;
+
+    public MedicationReminderService getMedicationReminderService() {
+        return medicationReminderService;
+    }
+
+    private MedicationReminderService medicationReminderService;
     public String init() {
         menu = new MedicationMenu(medipi, null);
         MedicationDataInterface dbInterface = new MedicationDataInterface();
+        medicationReminderService = new MedicationReminderService(medipi);
         return null;
     }
 
@@ -84,5 +91,9 @@ public class MedicationManager extends Element {
 
     public String getName() {
         return NAME;
+    }
+
+    public void recordMedicationDose(ScheduledDose dose) {
+        menu.recordMedicationDose(dose);
     }
 }

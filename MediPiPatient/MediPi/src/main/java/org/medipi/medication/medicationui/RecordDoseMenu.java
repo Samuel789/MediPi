@@ -14,6 +14,7 @@ import javafx.scene.paint.Paint;
 import org.medipi.MediPi;
 import org.medipi.medication.DoseUnit;
 import org.medipi.medication.Schedule;
+import org.medipi.medication.ScheduledDose;
 import org.medipi.ui.*;
 
 import java.time.LocalDate;
@@ -27,6 +28,11 @@ public class RecordDoseMenu extends TileMenu {
     TileMenu mainPane;
     Vector<Schedule> schedules;
     MediPi mediPi;
+    public RecordDoseMenu(MediPi mediPi, TileMenu upperMenu, ScheduledDose dose) {
+        super(new WindowManager(), 5, 3.15, upperMenu);
+        setOverlayWindow(new DoseDetailsScreen(mediPi, upperMenu, dose));
+        showOverlayWindow();
+    }
     public RecordDoseMenu(MediPi medipi, TileMenu upperMenu) {
         super(new WindowManager(), 5, 3.15, upperMenu);
         this.mediPi = medipi;
@@ -85,6 +91,12 @@ class DoseDetailsScreen extends TileMenu {
     DoseUnit doseUnit;
     String medicationName;
 
+    public DoseDetailsScreen(MediPi mediPi, TileMenu upperMenu, ScheduledDose dose) {
+        this(mediPi, upperMenu, dose.getSchedule());
+        doseValue = dose.getDoseValue();
+        generateDoseString();
+    }
+
     public DoseDetailsScreen(MediPi medipi, TileMenu upperMenu, Schedule medicationSchedule) {
         super(new WindowManager(), 8, 3.15, upperMenu);
         HeaderTile header = new HeaderTile(new SimpleBooleanProperty(true), 5, 1);
@@ -99,7 +111,7 @@ class DoseDetailsScreen extends TileMenu {
         medicationName = medicationSchedule.getDisplayName();
         doseDay = LocalDate.now();
         doseTime = LocalTime.now();
-        doseValue = 0.1;
+        doseValue = 0;
         doseDescriptor = new Label();
         generateDoseString();
 

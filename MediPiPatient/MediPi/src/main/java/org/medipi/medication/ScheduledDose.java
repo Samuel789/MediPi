@@ -4,6 +4,38 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class ScheduledDose {
+    public double getDoseValue() {
+        return doseValue;
+    }
+
+    public LocalDate getStartDay() {
+        return startDay;
+    }
+
+    public LocalDate getEndDay() {
+        return endDay;
+    }
+
+    public int getRepeatInterval() {
+        return repeatInterval;
+    }
+
+    public LocalTime getWindowStartTime() {
+        return windowStartTime;
+    }
+
+    public LocalTime getWindowEndTime() {
+        return windowEndTime;
+    }
+
+    public LocalTime getReminderTime() {
+        return reminderTime;
+    }
+
+    public Schedule getSchedule() {
+        return schedule;
+    }
+
     private double doseValue;
     private LocalDate startDay;
     private LocalDate endDay;
@@ -11,4 +43,11 @@ public class ScheduledDose {
     private LocalTime windowStartTime;
     private LocalTime windowEndTime;
     private LocalTime reminderTime;
+    private Schedule schedule;
+
+    public ScheduledDose() {
+        schedule = new Schedule();
+        doseValue = 5;
+        startDay = LocalDate.now();
+    }
 }
