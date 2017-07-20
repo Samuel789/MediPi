@@ -42,7 +42,7 @@ public class MedicationInformation extends Group {
         adherenceBar.setProgress(0.4);
         adherenceBar.setStreakLength(12);
         try {
-            iconImage = new Image(new File("/home/sam/Pictures/0ymgub.jpg").toURL().toString());
+            iconImage = new Image(new File("/home/sam/Pictures/TommyWHead.png").toURL().toString());
             iconImageView = new ImageView(iconImage);
             iconImageView.setFitWidth(100);
             iconImageView.setFitHeight(100);

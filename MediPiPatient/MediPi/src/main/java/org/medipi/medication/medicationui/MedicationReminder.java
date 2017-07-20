@@ -37,14 +37,6 @@ public class MedicationReminder extends Group {
         Button dismissButton = new Button("Dismiss");
         Image iconImage;
         ImageView iconImageView;
-        try {
-            iconImage = new Image(new File("/home/sam/Pictures/0ymgub.jpg").toURL().toString());
-            iconImageView = new ImageView(iconImage);
-            iconImageView.setFitWidth(100);
-            iconImageView.setFitHeight(100);
-        } catch (Exception e) {
-            System.out.println("Couldn't load icon");
-        }
 
         HBox iconSeparator = new HBox();
         VBox topVBox = new VBox();
@@ -69,7 +61,7 @@ public class MedicationReminder extends Group {
         content.getChildren().add(buttonBox);
 
         try {
-            iconImage = new Image(new File("/home/sam/Pictures/0ymgub.jpg").toURL().toString());
+            iconImage = new Image(new File("/home/sam/Pictures/TommyWHead.png").toURL().toString());
             iconImageView = new ImageView(iconImage);
             iconFullNameVBox.getChildren().add(iconImageView);
             iconImageView.setFitWidth(100);
