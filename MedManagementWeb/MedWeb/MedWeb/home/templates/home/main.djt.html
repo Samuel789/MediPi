@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
     <link rel="stylesheet" href="{% static "css/site.css" %}">
     <title>{{ title }}</title>
+    {% block extra_head %}{% endblock %}
 </head>
 <body id="master">
 
@@ -14,26 +15,23 @@
         <div class="alert-danger" id="topText">This is {{ title }} running on Django {{ version }}.</div>
 
         <ul class="navbar-nav nav nav-tabs">
-            <li>
-                <a>Browse Patients</a>
-            </li>
-            <li>
-                <a>System Status</a></li>
-            <li><a>About</a></li>
-
+            {% for section in sections %}
+                <li><a href="{{ site_url }}/{{ section.url }}" {% if section.name == active_section %}class="nav-tab-selected"{% endif %}>{{ section.display_name }}</a></li>
+            {% endfor %}
         </ul>
     </div>
     <ul class="navbar-nav nav navbar-right">
         <li>
             <span style="display: inline-block;" id="logos">
-            <img src="{% static "images/MediPiLogo.png" %}">
-            <img src="{% static "images/yorklogo.svg" %}">
-            <img src="{% static "images/NHS Digital logo_WEB_LEFT.svg" %}">
+            <a href="https://rprobinson.github.io/MediPi/"><img src="{% static "images/MediPiLogo.png" %}"></a>
+            <a href="https://www.york.ac.uk"><img src="{% static "images/yorklogo.svg" %}"></a>
+            <a href="https://digital.nhs.uk"> <img src="{% static "images/NHS Digital logo_WEB_LEFT.svg" %}"></a>
             </span>
         </li>
     </ul>
 </div>
 
+{% block content %}{% endblock %}
 
 <script src="{% static "js/jquery-3.2.1.js" %}"></script>
 <script src="{% static "js/bootstrap.js" %}"></script>

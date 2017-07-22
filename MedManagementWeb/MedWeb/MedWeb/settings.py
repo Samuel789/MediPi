@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from MedWeb.section import Section
 
 SITE_NAME = "MediPi MedWeb"
 STATIC_ROOT = "MedWeb/static"
@@ -41,7 +42,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'MedWeb.home',
+'MedWeb.medication',
 ]
+
+SECTIONS = [Section("patients", "Browse Patients", "patients"),
+            Section("status", "System Status", "status"),
+            Section("about", "About", "about")]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,6 +89,8 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+SITE_URL = "http://127.0.0.1:8000"
 
 
 # Password validation

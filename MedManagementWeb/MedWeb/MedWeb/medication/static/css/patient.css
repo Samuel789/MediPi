@@ -1,0 +1,17 @@
+.sidebar {
+    background-color: #D6EBF5 !important;
+    float: left;
+    width: 250px;
+    height: 100%;
+}
+
+.page-body {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.main-pane {
+    background-color: white;
+        float: left;
+    width: calc(100% - 250px)
+}
