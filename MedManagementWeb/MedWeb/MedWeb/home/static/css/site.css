@@ -1,0 +1,44 @@
+#master {
+    background-image: url("/static/images/joanne-background-3.png");
+    background-size: 100%;
+
+}
+
+ .transparent {
+   border-width: 0px;
+    -webkit-box-shadow: 0px 0px;
+    box-shadow: 0px 0px;
+    background-color: rgba(255, 255, 255,0.46);
+     height: 60px;
+     width: 100%;
+}
+
+ #logos {
+   padding-right: 20px;
+ }
+ #logos, img {
+     height: 60px;
+ }
+
+ .nav-tabs {
+     margin-top: auto;
+ }
+.nav-tabs > li > a
+{
+    /* adjust padding for height*/
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+ .nav-tabs > li >a:hover {
+     background-color: blue !important;
+ }
+
+ img {
+     max-width: 100%;
+    max-height: 100%;
+ }
+
+ #leftBox {
+     float: left;
+     vertical-align: 100%;
+ }

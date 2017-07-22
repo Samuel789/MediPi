@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+    <link rel="stylesheet" href="{% static "css/site.css" %}">
+    <title>{{ title }}</title>
+</head>
+<body id="master">
+
+<div class="navbar transparent navbar-default">
+    <div id="leftBox">
+        <div class="alert-danger" id="topText">This is {{ title }} running on Django {{ version }}.</div>
+
+        <ul class="navbar-nav nav nav-tabs">
+            <li>
+                <a>Browse Patients</a>
+            </li>
+            <li>
+                <a>System Status</a></li>
+            <li><a>About</a></li>
+
+        </ul>
+    </div>
+    <ul class="navbar-nav nav navbar-right">
+        <li>
+            <span style="display: inline-block;" id="logos">
+            <img src="{% static "images/MediPiLogo.png" %}">
+            <img src="{% static "images/yorklogo.svg" %}">
+            <img src="{% static "images/NHS Digital logo_WEB_LEFT.svg" %}">
+            </span>
+        </li>
+    </ul>
+</div>
+
+
+<script src="{% static "js/jquery-3.2.1.js" %}"></script>
+<script src="{% static "js/bootstrap.js" %}"></script>
+</body>
+</html>
