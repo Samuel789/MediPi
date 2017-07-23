@@ -13,5 +13,102 @@
 .main-pane {
     background-color: white;
         float: left;
-    width: calc(100% - 250px)
+    width: calc(100% - 250px);
+    height: 1000px;
+}
+
+#patient-search {
+   margin : 0 auto;
+    display:block;
+}
+.sidebar {padding: 5px 0px}
+
+.sidebar div {
+    padding: 5px 0px;
+}
+
+.sidebar input{
+             display: block;
+             margin : 5px auto;
+        }
+
+.sidebar p{
+             display: block;
+             margin : 0px 5px;
+    font-family: "Droid Sans Mono", "monospace";
+        }
+
+.nav-pills a {
+    background-color: #5F7E9F;
+    color: white;
+    font-size: 20px;
+    border-radius: 0px !important;
+    padding: 10px !important;
+}
+
+.nav-pills li:not(.active) a:hover {
+    background-color: #A1D3EB !important;
+}
+
+
+.active a {
+    background-color: white !important;
+    color: black !important;
+}
+
+.patient-summary-box {
+    overflow: auto;
+    width: 240px;
+    margin: 10px;
+    border-color: #2aabd2;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.patient-summary-widebox {
+    width: 100%;
+    border-color: #2aabd2;
+    border-width: 1px;
+    text-align: center;
+    font-weight: bold;
+    border-style: solid;
+    float: left;
+    margin: 0px;
+}
+
+.patient-summary-largebox {
+    width: 60%;
+    border-color: #2aabd2;
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+    padding: 0px;
+    height: 50px;
+    float: left;
+    vertical-align: middle;
+    margin: 0px;
+}
+
+
+.patient-summary-largebox span {
+    vertical-align: middle;
+    margin: 0px;
+}
+
+.patient-summary-adherencerate {
+    font-size: 25px;
+    line-height: 25px;
+}
+
+.patient-summary-smallbox {
+    width: 40%;
+    border-color: #2aabd2;
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+    padding: 0px;
+    height: 25px;
+    float: left;
+    vertical-align: middle;
+    margin: 0px;
 }

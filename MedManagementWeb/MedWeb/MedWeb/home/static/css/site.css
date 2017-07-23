@@ -24,6 +24,7 @@
      height: 60px;
  }
 
+
  .nav-tabs {
      position: absolute;
     bottom: 0;
@@ -47,7 +48,6 @@
   .nav-tabs > li >a:hover {
       border-color: #8FCBE7;
   }
-
 
  img {
      max-width: 100%;
