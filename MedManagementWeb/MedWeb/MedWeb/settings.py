@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+
+import django
+
 from MedWeb.section import Section
 
 SITE_NAME = "MediPi MedWeb"
@@ -45,7 +48,7 @@ INSTALLED_APPS = [
 'MedWeb.medication',
 ]
 
-SECTIONS = [Section("patients", "Browse Patients", "patients"),
+SECTIONS = [Section("patients", "Medication Management", "patients"),
             Section("status", "System Status", "status"),
             Section("about", "About", "about")]
 
@@ -131,3 +134,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+version_string = "%d.%d.%d %s" % django.VERSION[0:4]

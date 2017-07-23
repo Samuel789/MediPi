@@ -1,4 +1,5 @@
 {% extends 'home/main.djt.html' %}
+{% load dict_utils %}
 
 {% block extra_head %}
     {% load static %}
@@ -10,26 +11,30 @@
 <div class="page-body">
 <div class="sidebar">
     {% if active_patient == None %}
+    <table>
+            <tr><th>Patients: </th><th class="clinical-value">10</th></tr>
+        <tr><th>Warnings: </th><th class="clinical-value">2</th></tr>
+    </table>
     <div>
-    <p>Patients: 10</p>
-        <p>Warnings: 3</p>
-    </div>
-    <div>
-    <form id="patient-search">
-    <input type="text" title="Search" placeholder="Search">
-    </form>
+    <input id="patient-search" oninput="search_patients()" class="form-control" type="text" title="Search" placeholder="Search">
+        </div>
+        <div id="search-results">
+
         </div>
             {% else %}
-        <div>
-    <p>Patient: {{ active_patient.name }}</p>
-        <p>DOB: {{ active_patient.dob }}</p>
-        <p>NHS#: {{ active_patient.nhs_number }}</p>
-    </div>
+        <div class="container">
+        <a type="button" class="btn btn-primary" href="{{ site_url }}/patients">Back to All Patients</a>
+        </div>
+        <table>
+            <tr><th>Patient: </th><th class="clinical-value">{{ active_patient.name }}</th></tr>
+        <tr><th>DOB: </th><th class="clinical-value">{{ active_patient.dob }}</th></tr>
+        <tr><th>NHS#: </th><th class="clinical-value">{{ active_patient.nhs_number }}</th></tr>
+    </table>
     <div>
     <ul class="nav nav-pills nav-stacked" style="max-width: 300px;">
-        <li class="active"><a href="#">Medications</a></li>
-        <li><a href="#">Schedule & History</a></li>
-        <li><a href="#">Add Medication</a></li>
+        {% for entry in sidebar_menu_entries %}
+        <li {% if entry == active_sidebar_entry %}class="active"{% endif %}><a href="{{ siteurl }}/patients{{ sidebar_menu_urls|get_dict_value:entry }}?pid={{ active_patient.id }}">{{ entry }}</a></li>
+        {% endfor %}
       </ul>
     </div>
     {%  endif %}
@@ -38,4 +43,33 @@
         {% block main-pane %}{% endblock %}
     </div>
 </div>
+
+    <script>
+    var patients = [];
+    var patient_search_box = document.getElementById("patient-search");
+    var search_results = document.getElementById("search-results");
+    {% for patient in patients %}
+    patients.push({name:"{{patient.name|safe}}", dob:"{{patient.dob|safe}}", nhsnumber:"{{patient.nhs_number|safe}}", id:{{patient.id|safe}}});
+    {% endfor %}
+    function search_patients() {
+        var text = patient_search_box.value;
+        search_results.innerHTML = "";
+        if (text.length === 0) {
+            return
+        }
+        var match = false;
+        for (var i = 0; i < patients.length; i += 1) {
+            if (patients[i].name.toLowerCase().includes(text.toLowerCase())) {
+                search_results.insertAdjacentHTML('beforeend', "<div  class=\"search-result\"><a href=\"{{ siteurl }}/patients/viewpatient?pid=" + patients[i].id + "\"> " + patients[i].name + "</a></div>");
+                match = true;
+            }
+        }
+        if (!match) {
+              search_results.insertAdjacentHTML('beforeend',"No Results");
+
+        }
+    }
+
+    </script>
+
 {% endblock %}

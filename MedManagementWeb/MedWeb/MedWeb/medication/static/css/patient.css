@@ -15,13 +15,34 @@
         float: left;
     width: calc(100% - 250px);
     height: 1000px;
+    padding: 10px;
+}
+
+.title {
+    margin-bottom: 10px;
+
+    margin-top: 0px;
+    width: 100%;
+    align-content: center;
+    font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+
+}
+
+.title h3 {
+     border-bottom-style: solid;
+    border-bottom-color: #5e5e5e;
+    border-bottom-width: 1px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+    padding-bottom: 10px;
 }
 
 #patient-search {
    margin : 0 auto;
     display:block;
 }
-.sidebar {padding: 5px 0px}
+.sidebar {padding: 2.5px 0px}
 
 .sidebar div {
     padding: 5px 0px;
@@ -32,16 +53,39 @@
              margin : 5px auto;
         }
 
-.sidebar p{
+.sidebar table{
              display: block;
-             margin : 0px 5px;
+             margin : 2.5px 5px;
     font-family: "Droid Sans Mono", "monospace";
+
         }
+
+.sidebar th {
+    padding: 0px 2px;
+}
+
+.sidebar input {
+    width: 80%;
+}
+
+.nav-pills {
+    margin: 2.5px 0;
+}
+
+.sidebar #search-results {
+    width: 100%;
+}
+
+.sidebar .search-result {
+    text-align: left;
+    margin-left: 10px;
+}
 
 .nav-pills a {
     background-color: #5F7E9F;
     color: white;
     font-size: 20px;
+    margin: 0px 0px !important;
     border-radius: 0px !important;
     padding: 10px !important;
 }
@@ -50,10 +94,18 @@
     background-color: #A1D3EB !important;
 }
 
+.nav-pills li:not(.active) {
+    margin: 0px 0px !important;
+}
+
 
 .active a {
     background-color: white !important;
     color: black !important;
+}
+
+.main-pane table {
+    width: 80% ;
 }
 
 .patient-summary-box {
@@ -63,6 +115,7 @@
     border-color: #2aabd2;
     border-width: 1px;
     border-style: solid;
+    float:left
 }
 
 .patient-summary-widebox {
@@ -111,4 +164,20 @@
     float: left;
     vertical-align: middle;
     margin: 0px;
+}
+
+.sidebar .clinical-value {
+    background-color: white;
+    color: black;
+    padding-right: 5px;
+}
+
+.sidebar .btn {
+    margin: 2.5px 5px;
+    width: 95%;
+}
+
+.sidebar .container {
+    align-content: center;
+    width: 100%;
 }

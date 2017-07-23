@@ -1,22 +1,27 @@
 {% extends 'medication/patient_template.djt.html' %}
 
 {% block main-pane %}
-<h1>Browse Patients</h1>
-    <a href="{{ site_url }}/patients/viewpatient">
+    <div class="title">
+<h3>All Patients</h3>
+    </div>
+    {% for patient in patients %}
+    <a href="{{ site_url }}/patients/viewpatient?pid={{ patient.id }}">
     <div class="patient-summary-box" >
-    <p class="patient-summary-widebox">Mr John Smith</p>
+    <p class="patient-summary-widebox">{{ patient.name }}</p>
+        <p class="patient-summary-widebox">{{ patient.dob }}</p>
     <div class="patient-summary-largebox">
-        <span class="patient-summary-adherencerate">70%</span>
+        <span class="patient-summary-adherencerate">{{ patient.adherence_percentage }}%</span>
         <br/>
         <span class="patient-summary-adherencetext">Adherence</span>
     </div>
     <div class="patient-summary-smallbox">
-        5
+        {{ patient.schedules|length }}
     </div>
     <div class="patient-summary-smallbox">
-        2
+        {{ patient.adherence_streak }}
     </div>
-    <p class="patient-summary-widebox">0 Warnings</p>
+    <p class="patient-summary-widebox">{{ patient.warnings|length }} Warnings</p>
     </div>
     </a>
+    {% endfor %}
 {% endblock %}
