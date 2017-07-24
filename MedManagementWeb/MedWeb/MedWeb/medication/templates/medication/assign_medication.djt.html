@@ -2,6 +2,54 @@
 
 {% block main-pane %}
 <div class="title">
-<h3>Assign New Medication: {{ active_patient.name }}</h3>
+    <h3>Assign New Medication: {{ active_patient.name }}</h3>
+</div>
+    <div class="container" id="assign-medication-search">
+    <input title="search-medications" placeholder="Search medications" id="medication-search-field" oninput="search_medications(this)">
+    <div id="medication-search-results" class="list-group"></div>
     </div>
+
+    <div id="medication-info-bar">
+    <div id="medication-info-section"></div>
+        <a class="button btn btn-lg btn-primary" id="continue-button">Continue</a>
+    </div>
+
+    <script>
+    // Search medications:
+    var medications = [];
+    var medication_search_results = document.getElementById("medication-search-results");
+    console.log(medication_search_results);
+    {% for medication in medications %}
+    medications.push({full_name:"{{medication.full_name|safe}}", id:{{medication.id|safe}}});
+    {% endfor %}
+    function search_medications(medication_search_field) {
+        var text = medication_search_field.value;
+                console.log( medication_search_results);
+        medication_search_results.innerHTML = "";
+        if (text.length === 0) {
+            return
+        }
+        var match = false;
+        for (var i = 0; i < medications.length; i += 1) {
+            if (medications[i].full_name.toLowerCase().includes(text.toLowerCase())) {
+                var result = document.createElement("a");
+                result.setAttribute("onclick", "select_medication(this)");
+                result.setAttribute("med_id", medications[i].id);
+                result.innerHTML = medications[i].full_name;
+                result.setAttribute("class", "list-group-item");
+                medication_search_results.appendChild(result);
+                match = true;
+            }
+        }
+        if (!match) {
+              medication_search_results.insertAdjacentHTML('beforeend',"No Results");
+
+        }
+    }
+    // Medication selection
+    function select_medication(element) {
+        var medication_id = element.getAttribute("med_id");
+        
+    }
+    </script>
 {% endblock %}

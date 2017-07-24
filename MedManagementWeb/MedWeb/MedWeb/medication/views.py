@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 
 from MedWeb import settings
-from MedWeb.medication.data_placeholders import Patient, patients
+from MedWeb.medication.data_placeholders import Patient, patients, medications
 
 from datetime import date
 
@@ -59,5 +59,6 @@ def assign_medication(request):
                               "sidebar_menu_urls": sidebar_menu_urls,
                               "active_sidebar_entry": "Add Medication",
                               "active_section": "patients",
-                              "active_patient": patients[patient_id]})
+                              "active_patient": patients[patient_id],
+                              "medications": medications.values()})
     return HttpResponse(output)
