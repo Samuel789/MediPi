@@ -181,3 +181,31 @@
     align-content: center;
     width: 100%;
 }
+
+#assign-medication-search {
+    width: 60%;
+    margin-left: 10px;
+    align-content: center;
+    height: 60%;
+    overflow: scroll;
+    background-color: ;
+    border-radius: 10px;
+    float: left;
+}
+
+#assign-medication-search #medication-search-field {
+    margin: 10px;
+    width: 80%;
+}
+
+#medication-info-bar {
+    float: left;
+}
+
+#medication-info-section {
+    height: 400px;
+}
+
+#continue-button {
+    margin-left: 10px;
+}
