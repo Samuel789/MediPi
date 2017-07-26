@@ -11,10 +11,12 @@
 <div class="page-body">
 <div class="sidebar">
     {% if active_patient == None %}
-    <table>
-            <tr><th>Patients: </th><th class="clinical-value">10</th></tr>
-        <tr><th>Warnings: </th><th class="clinical-value">2</th></tr>
+        <div style="margin-left: 10px">
+    <table >
+            <tr><th>Patients: </th><th style="padding-left: 10px">10</th></tr>
+        <tr><th>Warnings: </th><th style="padding-left: 10px">2</th></tr>
     </table>
+        </div>
     <div>
     <input id="patient-search" oninput="search_patients()" class="form-control" type="text" title="Search" placeholder="Search">
         </div>
@@ -25,7 +27,7 @@
         <div class="container">
         <a type="button" class="btn btn-primary" href="{{ site_url }}/patients">Back to All Patients</a>
         </div>
-        <table>
+        <table class="clinical-table">
             <tr><th>Patient: </th><th class="clinical-value">{{ active_patient.name }}</th></tr>
         <tr><th>DOB: </th><th class="clinical-value">{{ active_patient.dob }}</th></tr>
         <tr><th>NHS#: </th><th class="clinical-value">{{ active_patient.nhs_number }}</th></tr>

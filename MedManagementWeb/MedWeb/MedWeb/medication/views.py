@@ -3,6 +3,7 @@ import random
 
 import django
 from django.http import HttpResponse
+from django.template import RequestContext
 from django.template.loader import get_template
 
 from MedWeb import settings
@@ -60,5 +61,6 @@ def assign_medication(request):
                               "active_sidebar_entry": "Add Medication",
                               "active_section": "patients",
                               "active_patient": patients[patient_id],
-                              "medications": medications.values()})
+                              "medications": medications.values(),
+                              }, request)
     return HttpResponse(output)
