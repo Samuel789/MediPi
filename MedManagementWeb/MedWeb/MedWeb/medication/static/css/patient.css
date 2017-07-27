@@ -37,6 +37,13 @@
     width: 95%;
     padding-bottom: 10px;
 }
+.title h4 {
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+    padding-bottom: 10px;
+}
+
 
 #patient-search {
    margin : 0 auto;
@@ -212,4 +219,20 @@
 
 #continue-button {
     margin: 10px;
+}
+
+#save-button {
+    margin-left: 20px;
+}
+
+.option-pane {
+    background-color: #D1EBF4;
+    border-radius: 10px;
+    width: 800px;
+    padding:5px 15px;
+    margin: 10px;
+}
+
+.button-row {
+    margin: 10px 10px;
 }

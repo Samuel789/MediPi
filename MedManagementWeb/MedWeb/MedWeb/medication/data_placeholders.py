@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime, time
 
 from copy import copy
 def get_medication_by_name(full_name):
@@ -45,7 +45,7 @@ class Medication:
 class Schedule:
     schedule_count = 0
 
-    def __init__(self, start_date, end_date, alternate_name, purpose_statement, patient, medication):
+    def __init__(self, start_date, end_date, alternate_name, purpose_statement, patient, medication, doses=set()):
         self.start_date = start_date
         self.end_date = end_date
         self.alternate_name = alternate_name
@@ -54,8 +54,23 @@ class Schedule:
         self.adherence_percentage = 30
         self.adherence_streak = 4
         self.medication = medication
+        self.doses = set(doses)
         self.id = copy(Schedule.schedule_count)
         Schedule.schedule_count += 1
+
+class Dose:
+    dose_count = 0
+
+    def __init__(self, value, start_day, repeat_interval, end_day, start_time, end_time, default_reminder_time):
+        self.value = value
+        self.start_day = start_day
+        self.repeat_interval = repeat_interval
+        self.end_day = end_day
+        self.start_time = start_time
+        self.end_time = end_time
+        self.default_reminder_time = default_reminder_time
+        self.id = copy(Dose.dose_count)
+        Dose.dose_count += 1
 
 patients_set = {Patient("Mr John Smith", date(1974, 1, 23), "FBJTEK2353"),
             Patient("Miss Karen Brady", date(1988, 6, 21), "FBJTEK2353"),
@@ -67,16 +82,20 @@ patients = {}
 for patient in patients_set:
     patients[patient.id] = patient
 
-medications_set = {Medication("Mycophenolate 360mg tablets", "Mycophenolate", "", "tablet"),
-                   Medication("Docusate 100mg capsules", "Docusate", "", "capsule"),
-                   Medication("Sulfamethoxazole 80mg tablets", "Sulfamethoxazole", "", "tablet"),
-                   Medication("Tacrolimus 1mg capsules", "Tacrolimus", "", "capsule"),
-                   Medication("Prednisone 1mg capsules", "Prednisone", "", "tablet")}
+medications_set = {Medication("Mycophenolate 360mg tablets", "Mycophenolate", "", "tablet(s)"),
+                   Medication("Docusate 100mg capsules", "Docusate", "", "capsule(s)"),
+                   Medication("Sulfamethoxazole 80mg tablets", "Sulfamethoxazole", "", "tablet(s)"),
+                   Medication("Tacrolimus 1mg capsules", "Tacrolimus", "", "capsule(s)"),
+                   Medication("Prednisone 1mg capsules", "Prednisone", "", "tablet(s)")}
 medications = {}
 for medication in medications_set:
     medications[medication.id] = medication
 
-schedules_set = {Schedule(date(2017, 5, 21), date(2017, 9, 21), "Myfortic", "To prevent rejection", get_patient_by_name("Mr Tim Orphen"), get_medication_by_name("Mycophenolate 360mg tablets")),
+toms_first_dose = Dose(5, 0, 1, 10, time(9, 30), time(12, 30), time(11,0))
+toms_second_dose = Dose(5, 0, 1, 10, time(16, 30), time(20, 30), time(18,20))
+
+
+schedules_set = {Schedule(date(2017, 5, 21), date(2017, 9, 21), "Myfortic", "To prevent rejection", get_patient_by_name("Mr Tim Orphen"), get_medication_by_name("Mycophenolate 360mg tablets"), [toms_first_dose, toms_second_dose]),
                  Schedule(date(2017, 5, 23), date(2017, 9, 23), None, "To prevent rejection", get_patient_by_name("Mr Tim Orphen"), get_medication_by_name("Tacrolimus 1mg capsules"))}
 schedules = {}
 for schedule in schedules_set:

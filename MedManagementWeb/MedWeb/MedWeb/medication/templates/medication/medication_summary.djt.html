@@ -28,7 +28,7 @@
         <td>{{ schedule.adherence_percentage  }}%</td>
         <td>{{ schedule.adherence_streak }}</td>
           <td>{% if schedule.alternate_name is None %}<i>None</i>{% else %}{{ schedule.alternate_name }}{% endif %}</td>
-          <td><a class="btn btn-default">View</a></td>
+          <td><a class="btn btn-default" href="{{ siteurl }}/patients/modifyschedule?sid={{ schedule.id }}">View</a></td>
       </tr>
     {% endfor %}
 

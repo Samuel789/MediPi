@@ -18,13 +18,14 @@
     <div id="medication-info-section"class="clinical-table">
 
 </div>
-     <a class="button btn btn-lg btn-primary disabled" id="continue-button">Continue</a>
+     <a class="button btn btn-lg btn-primary disabled" id="continue-button" onclick="continue_pressed()">Continue</a>
     </div>
     <script>
     // Search medications:
     var medications = [];
     var medication_search_results = document.getElementById("medication-search-results");
         var medicaton_info_section = document.getElementById("medication-info-section");
+        var active_patient_medication_ids = {{ active_patient_medication_ids }};
 var continue_button = document.getElementById("continue-button");
     var alert_space = document.getElementById("alert-space");
     console.log(medication_search_results);
@@ -57,7 +58,19 @@ var continue_button = document.getElementById("continue-button");
     }
     // Medication selection
     function select_medication(element) {
-        var medication_id = element.getAttribute("med_id");
+        var medication_id = Number(element.getAttribute("med_id"));
+        console.log(active_patient_medication_ids);
+        console.log(medication_id);
+        console.log(active_patient_medication_ids.indexOf(medication_id));
+        if(active_patient_medication_ids.indexOf(medication_id) !== -1) {
+            alert_space.innerHTML = "";
+            error_message = document.createElement("div");
+            error_message.setAttribute("class", "alert alert-danger");
+            error_message.innerHTML = "<strong>Error!</strong> This medication has already been assigned to the patient";
+            alert_space.appendChild(error_message);
+            hide_medication_details();
+            return;
+        }
         var promise = $.post({
             url:"{{ siteurl }}/patients/api/get_medication_information",
             data: {
@@ -73,9 +86,11 @@ var continue_button = document.getElementById("continue-button");
                     alert_space.innerHTML = "";
                     error_message = document.createElement("div");
                     error_message.setAttribute("class", "alert alert-danger");
-                    error_message.innerHTML = "<strong>Error!</strong> There was an error downloading medication data"
-                    alert_space.appendChild(error_message)});
-                    hide_medication_details();
+                    error_message.innerHTML = "<strong>Error!</strong> There was an error downloading medication data";
+                    alert_space.appendChild(error_message);
+                    hide_medication_details();}
+                    );
+
 
     }
     function show_medication_details(medication) {
@@ -84,6 +99,7 @@ var continue_button = document.getElementById("continue-button");
         medicaton_info_section.innerHTML +="<p>Full Name:<br/><span class=\"clinical-value\">" + medication.full_name + "</span></p>";
         medicaton_info_section.innerHTML +="<p>Dose Unit:<br/><span class=\"clinical-value\">" + medication.dose_unit + "</span></p>";
         medicaton_info_section.innerHTML +="<p>ID:<br/><span class=\"clinical-value\">" + medication.id + "</span></p>";
+        continue_button.setAttribute("href", "{{ siteurl }}/patients/addschedule?pid={{ active_patient.id }}&mid=" + medication.id);
         continue_button.classList.remove("disabled");
     }
     function hide_medication_details() {

@@ -1,0 +1,88 @@
+{% extends 'medication/patient_template.djt.html' %}
+
+{% block main-pane %}
+<div class="title">
+{% if mode == "modify" %}
+    <h3>Modify Medication Schedule: {{ active_patient.name }}</h3>
+    <h4>{{ active_schedule.medication.full_name }}</h4>
+{% elif mode == "create" %}
+    <h3>Create Medication Schedule: {{ active_patient.name }}</h3>
+    <h4>{{ active_medication.full_name }}</h4>
+{% endif %}
+
+</div>
+    <div class="container">
+    <div class="option-pane" id="asneeded_pane">
+     <div class="radio">
+  <label><input type="radio" name="optradio" id="asneeded-radio" onchange="optradio_onchange()">Medication is to be taken as needed</label>
+</div>
+    </div>
+    <div class="option-pane" id="scheduled-pane">
+<div class="radio">
+  <label><input type="radio" name="optradio" id="scheduled-radio" onchange="optradio_onchange()">Schedule doses for this medication</label>
+</div>
+        <div class="button-row">
+            <a class="btn btn-default" id="add-dose-button">Add Dose</a>
+            <a class="btn btn-default" disabled id="edit-dose-button">Edit Dose</a>
+            <a class="btn btn-default" disabled id="remove-dose-button">Remove Dose</a>
+        </div>
+        <div class="list-group" id="doses">
+
+</div>
+    </div>
+    <a class="btn btn-lg btn-primary" id="save-button">Save</a>
+    </div>
+    <script>
+        var asneeded_radio = document.getElementById("asneeded-radio");
+        var scheduled_radio = document.getElementById("scheduled-radio");
+        var asneeded_pane = document.getElementById("asneeded-pane");
+        var scheduled_pane = document.getElementById("scheduled-pane");
+        var add_dose_button = document.getElementById("add-dose-button");
+        var edit_dose_button = document.getElementById("edit-dose-button");
+        var remove_dose_button = document.getElementById("remove-dose-button");
+        var doses_list = document.getElementById("doses");
+        var doses = {};
+        {% if mode == "modify" %}
+        {% for dose in active_schedule.doses %}
+        doses[{{ dose.id|safe }}] = {id: {{dose.id|safe}}, value: {{dose.value|safe}}, start_day: {{dose.start_day|safe}}, end_day: {{dose.end_day|safe}}, repeat_interval: {{dose.repeat_interval|safe}}, window_start_time: "{{dose.start_time|time:"H:i"}}", window_end_time: "{{dose.end_time|time:"H:i"}}", default_reminder_time: "{{dose.default_reminder_time|time:"H:i"}}"};
+        {% endfor %}
+        {% endif %}
+        scheduled_radio.checked = true;
+        var selected_dose = null;
+        for (var dose_id in doses) {
+            add_dose_entry(doses[dose_id])
+        }
+        function optradio_onchange() {
+            if (asneeded_radio.checked) {
+                $(scheduled_pane).find('* ').not('#scheduled-radio').attr('disabled', true);
+                $(asneeded_pane).find('* ').attr('disabled', false);
+            } else {
+                $(scheduled_pane).find('* ').attr('disabled', false);
+                $(asneeded_pane).find('* ').not('#asneeded-radio').attr('disabled', true);
+                if (selected_dose === null) {
+                    edit_dose_button.setAttribute("disabled", true);
+                    remove_dose_button.setAttribute("disabled", true);
+                }
+            }
+        }
+        function change_selected_dose(schedule_element) {
+            if (schedule_element.getAttribute("disabled")) {
+                return;
+            }
+            edit_dose_button.removeAttribute("disabled");
+            remove_dose_button.removeAttribute("disabled");
+            selected_dose = Number(schedule_element.getAttribute("dose_id"));
+            $(doses_list).find('* ').removeClass("active");
+            $(schedule_element).addClass("active");
+        }
+        function add_dose_entry(dose) {
+            dose_entry = document.createElement("a");
+            dose_entry.setAttribute("class", "list-group-item");
+            dose_entry.setAttribute("dose_id", dose.id);
+            dose_entry.setAttribute("onclick", "change_selected_dose(this)");
+            dose_entry.innerHTML = "<h4 class=\"list-group-item-heading\">" + dose.value + " " + "{{ active_medication.dose_unit|safe }}" + "</h4><p class=\"list-group-item-text\">" + dose.window_start_time + " - " + dose.window_end_time + "</p>";
+            doses_list.appendChild(dose_entry)
+        }
+
+    </script>
+{% endblock %}

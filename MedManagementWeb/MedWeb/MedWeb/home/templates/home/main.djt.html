@@ -9,7 +9,8 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body id="master">
-
+<script src="{% static "js/jquery-3.2.1.js" %}"></script>
+<script src="{% static "js/bootstrap.js" %}"></script>
 <div class="navbar transparent navbar-default">
     <div id="leftBox">
         <div class="alert-danger" id="topText">This is {{ title }} running on Django {{ version }}.</div>
@@ -33,7 +34,6 @@
 
 {% block content %}{% endblock %}
 
-<script src="{% static "js/jquery-3.2.1.js" %}"></script>
-<script src="{% static "js/bootstrap.js" %}"></script>
+
 </body>
 </html>
