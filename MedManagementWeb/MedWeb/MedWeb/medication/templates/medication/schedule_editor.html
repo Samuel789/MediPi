@@ -1,37 +1,91 @@
 {% extends 'medication/patient_template.djt.html' %}
 
 {% block main-pane %}
-<div class="title">
-{% if mode == "modify" %}
-    <h3>Modify Medication Schedule: {{ active_patient.name }}</h3>
-    <h4>{{ active_schedule.medication.full_name }}</h4>
-{% elif mode == "create" %}
-    <h3>Create Medication Schedule: {{ active_patient.name }}</h3>
-    <h4>{{ active_medication.full_name }}</h4>
-{% endif %}
+    <div class="title">
+        {% if mode == "modify" %}
+            <h3>Modify Medication Schedule: {{ active_patient.name }}</h3>
+            <h4>{{ active_schedule.medication.full_name }}</h4>
+        {% elif mode == "create" %}
+            <h3>Create Medication Schedule: {{ active_patient.name }}</h3>
+            <h4>{{ active_medication.full_name }}</h4>
+        {% endif %}
 
-</div>
-    <div class="container">
-    <div class="option-pane" id="asneeded_pane">
-     <div class="radio">
-  <label><input type="radio" name="optradio" id="asneeded-radio" onchange="optradio_onchange()">Medication is to be taken as needed</label>
-</div>
     </div>
-    <div class="option-pane" id="scheduled-pane">
-<div class="radio">
-  <label><input type="radio" name="optradio" id="scheduled-radio" onchange="optradio_onchange()">Schedule doses for this medication</label>
-</div>
-        <div class="button-row">
-            <a class="btn btn-default" id="add-dose-button">Add Dose</a>
-            <a class="btn btn-default" disabled id="edit-dose-button">Edit Dose</a>
-            <a class="btn btn-default" disabled id="remove-dose-button">Remove Dose</a>
+    <div class="container">
+        <div class="option-pane" id="asneeded_pane">
+            <div class="radio">
+                <label><input type="radio" name="optradio" id="asneeded-radio" onchange="optradio_onchange()">Medication
+                    is to be taken as needed</label>
+            </div>
         </div>
-        <div class="list-group" id="doses">
+        <div class="option-pane" id="scheduled-pane">
+            <div class="radio">
+                <label><input type="radio" name="optradio" id="scheduled-radio" onchange="optradio_onchange()">Schedule
+                    doses for this medication</label>
+            </div>
+            <div class="button-row">
+                <a class="btn btn-default" id="add-dose-button" onclick="create_dose()">Add Dose</a>
+                <a class="btn btn-default" disabled id="edit-dose-button" onclick="edit_dose()">Edit Dose</a>
+                <a class="btn btn-default" disabled id="remove-dose-button">Remove Dose</a>
+            </div>
+            <div id="doses">
+            </div>
 
-</div>
+        </div>
     </div>
     <a class="btn btn-lg btn-primary" id="save-button">Save</a>
     </div>
+    <!--Edit dose modal dialog-->
+    <div class="modal fade" id="dose-editor-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Edit Dose</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="panel-group">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">Dose</div>
+                                Take <input type="number" id="dose-value-input"
+                                       placeholder="Dose Value">{{ active_medication.dose_unit }}<br/>
+                                between <input type="time" id="start-time-input" placeholder="Start Time"> and
+                                <input type="time" id="end-time-input" placeholder="End Time"><br/>
+                                Default reminder time: <input type="time" id="reminder-time-input" placeholder="Default Reminder Time"><br/>
+                                Starting on day: <input type="number" id="start-day-input" onchange="recalculate_clarifiers()"
+                                       placeholder="Start Day"> (<span id="start-day-clarifier"></span>)
+                            </div>
+                            <div class="panel panel-info">
+                                <div class="panel-heading">Repeat Information</div>
+                                <div class="option-pane" id="asneeded_pane">
+                                    <div class="radio">
+                                        <label><input type="radio" name="optradio" id="asneeded-radio"
+                                                      onchange="optradio_onchange()">One day only (do not
+                                            repeat)</label>
+                                    </div>
+                                </div>
+                                <div class="option-pane" id="scheduled-pane">
+                                    <div class="radio">
+                                        <label><input type="radio" name="optradio" id="scheduled-radio"
+                                                      onchange="optradio_onchange()">Repeat every <input type="number" id="repeat-interval-input" placeholder="Repeat Interval"> days<br/>
+                                            up to (and not including) day <input type="number" id="end-day-input" onchange="recalculate_clarifiers()"
+                                           placeholder="End Day"> (<span id="end-day-clarifier"></span>). </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Discard Changes</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         var asneeded_radio = document.getElementById("asneeded-radio");
         var scheduled_radio = document.getElementById("scheduled-radio");
@@ -40,17 +94,41 @@
         var add_dose_button = document.getElementById("add-dose-button");
         var edit_dose_button = document.getElementById("edit-dose-button");
         var remove_dose_button = document.getElementById("remove-dose-button");
+
+
+        var modinp_start_day = document.getElementById("start-day-input");
+        var modinp_end_day = document.getElementById("end-day-input");
+        var modinp_start_time = document.getElementById("start-time-input");
+        var modinp_end_time = document.getElementById("end-time-input");
+        var modinp_dose_value = document.getElementById("dose-value-input");
+        var modinp_reminder_time = document.getElementById("reminder-time-input");
+        var modinp_repeat_interval = document.getElementById("repeat-interval-input");
+        var modinp_start_day_clarifier = document.getElementById("start-day-clarifier");
+        var modinp_end_day_clarifier = document.getElementById("end-day-clarifier");
         var doses_list = document.getElementById("doses");
         var doses = {};
+        var dose_date_panels = [];
         {% if mode == "modify" %}
-        {% for dose in active_schedule.doses %}
-        doses[{{ dose.id|safe }}] = {id: {{dose.id|safe}}, value: {{dose.value|safe}}, start_day: {{dose.start_day|safe}}, end_day: {{dose.end_day|safe}}, repeat_interval: {{dose.repeat_interval|safe}}, window_start_time: "{{dose.start_time|time:"H:i"}}", window_end_time: "{{dose.end_time|time:"H:i"}}", default_reminder_time: "{{dose.default_reminder_time|time:"H:i"}}"};
-        {% endfor %}
+            var schedule_start_day = new Date("{{ active_schedule.start_date|date:"Y-m-d" }}");
+            {% for dose in active_schedule.doses %}
+                doses[{{ dose.id|safe }}] = {
+                    id: {{dose.id|safe}},
+                    value: {{dose.value|safe}},
+                    start_day: {{dose.start_day|safe}},
+                    end_day: {{dose.end_day|safe}},
+                    repeat_interval: {{dose.repeat_interval|safe}},
+                    window_start_time: "{{dose.start_time|time:"H:i"}}",
+                    window_end_time: "{{dose.end_time|time:"H:i"}}",
+                    default_reminder_time: "{{dose.default_reminder_time|time:"H:i"}}"
+                };
+            {% endfor %}
+        {% else %}
+            var schedule_start_day = null;
         {% endif %}
         scheduled_radio.checked = true;
         var selected_dose = null;
         for (var dose_id in doses) {
-            add_dose_entry(doses[dose_id])
+            append_dose_entry(doses[dose_id])
         }
         function optradio_onchange() {
             if (asneeded_radio.checked) {
@@ -75,13 +153,66 @@
             $(doses_list).find('* ').removeClass("active");
             $(schedule_element).addClass("active");
         }
-        function add_dose_entry(dose) {
-            dose_entry = document.createElement("a");
+        function append_dose_entry(dose) {
+            var dose_entry = document.createElement("a");
+            var panel_header = document.createElement("div");
+            var dose_list_group = document.createElement("div");
+            if (dose.start_day === null || dose.end_day === null) {
+                panel_header_text = "INSERT"
+            } else {
+                if (dose.repeat_interval === 1) {
+                    var panel_header_text = "Every day from Day " + dose.start_day + " to Day " + dose.end_day;
+                } else if (dose.repeat_interval === 0 || dose.repeat_interval === null) {
+                    var panel_header_text = "Day " + dose.start_day + " only";
+                } else {
+                    var panel_header_text = "Every " + dose.repeat_interval + " days from Day " + dose.start_day + " to Day " + dose.end_day;
+                }
+            }
+            var panel = dose_date_panels[panel_header_text];
+            if (panel === undefined) {
+                panel = document.createElement("div");
+                panel_header.setAttribute("class", "panel-heading");
+                panel_header.innerHTML = panel_header_text;
+
+                panel.setAttribute("class", "panel panel-default");
+                panel.appendChild(panel_header);
+                doses_list.appendChild(panel);
+                dose_date_panels[panel_header_text] = panel;
+            }
+            dose_list_group.setAttribute("class", "list-group");
             dose_entry.setAttribute("class", "list-group-item");
             dose_entry.setAttribute("dose_id", dose.id);
             dose_entry.setAttribute("onclick", "change_selected_dose(this)");
-            dose_entry.innerHTML = "<h4 class=\"list-group-item-heading\">" + dose.value + " " + "{{ active_medication.dose_unit|safe }}" + "</h4><p class=\"list-group-item-text\">" + dose.window_start_time + " - " + dose.window_end_time + "</p>";
-            doses_list.appendChild(dose_entry)
+            dose_entry.innerHTML = "<h4 class=\"list-group-item-heading\">" + dose.window_start_time + " - " + dose.window_end_time + "</h4><p class=\"list-group-item-text\">" + dose.value + " " + "{{ active_medication.dose_unit|safe }}" + "</p>";
+            dose_list_group.appendChild(dose_entry);
+            panel.appendChild(dose_list_group);
+        }
+        function edit_dose() {
+            populate_modal_dialogue(doses[selected_dose]);
+            $('#dose-editor-modal').modal({backdrop: 'static', keyboard: false});
+        }
+        function create_dose() {
+            $('#dose-editor-modal').modal({backdrop: 'static', keyboard: false});
+        }
+        function populate_modal_dialogue(dose) {
+            modinp_dose_value.value = dose.value;
+            modinp_start_time.value = dose.window_start_time;
+            modinp_end_time.value = dose.window_end_time;
+            modinp_start_day.value = dose.start_day;
+            modinp_end_day.value = dose.end_day;
+            modinp_repeat_interval.value = dose.repeat_interval;
+            modinp_reminder_time.value = dose.default_reminder_time;
+            recalculate_clarifiers();
+        }
+        function recalculate_clarifiers() {
+            var start_date = new Date(schedule_start_day.getTime());
+            var end_date = new Date(schedule_start_day.getTime());
+            start_date.setDate(start_date.getDate() + Number(modinp_start_day.value));
+            end_date.setDate(end_date.getDate() + Number(modinp_end_day.value));
+            modinp_start_day_clarifier.innerHTML = start_date.toISOString().substring(0, 10);
+            modinp_end_day_clarifier.innerHTML = end_date.toISOString().substring(0, 10);
+
+
         }
 
     </script>

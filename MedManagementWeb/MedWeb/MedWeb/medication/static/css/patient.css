@@ -228,9 +228,13 @@
 .option-pane {
     background-color: #D1EBF4;
     border-radius: 10px;
+
+    padding:5px 5px;
+    margin: 10px;
+}
+.main-pane .option-pane {
     width: 800px;
     padding:5px 15px;
-    margin: 10px;
 }
 
 .button-row {
