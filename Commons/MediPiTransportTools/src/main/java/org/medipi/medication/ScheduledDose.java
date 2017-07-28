@@ -1,9 +1,10 @@
 package org.medipi.medication;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class ScheduledDose {
+public class ScheduledDose implements Serializable {
     public double getDoseValue() {
         return doseValue;
     }

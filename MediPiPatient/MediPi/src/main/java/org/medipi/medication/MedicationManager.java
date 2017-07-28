@@ -20,11 +20,23 @@ public class MedicationManager extends Element {
         return medicationReminderService;
     }
 
+
     private MedicationReminderService medicationReminderService;
+
+    public Synchronizer getSynchronizer() {
+        return synchronizer;
+    }
+
+    private Synchronizer synchronizer;
     public String init() {
         menu = new MedicationMenu(medipi, null);
         MedicationDataInterface dbInterface = new MedicationDataInterface();
         medicationReminderService = new MedicationReminderService(medipi);
+        try{
+        synchronizer = new Synchronizer(medipi);} catch (Exception e) {
+            System.out.println("Unable to create Medication synchronizer - synchronization will not be available");
+            System.out.println(e.getMessage());
+        }
         return null;
     }
 

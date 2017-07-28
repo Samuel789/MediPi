@@ -2,7 +2,9 @@ package org.medipi.medication;
 
 import javafx.scene.image.Image;
 
-public class Medication {
+import java.io.Serializable;
+
+public class Medication implements Serializable{
     private String shortName;
     private String fullName;
     private String cautionaryText;

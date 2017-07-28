@@ -1,9 +1,10 @@
 package org.medipi.medication;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Schedule {
+public class Schedule implements Serializable {
     private LocalDate startDate;
     private LocalDate endDate;
     private String alternateName;

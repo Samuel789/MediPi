@@ -5,12 +5,20 @@ import org.medipi.MediPiProperties;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 public class MedicationDataInterface {
 
     Connection connection;
     Properties properties;
+
+    Set<Schedule> schedules = new HashSet<>();
+    Set<ScheduledDose> scheduledDoses = new HashSet<>();
+    Set<RecordedDose> recordedDoses = new HashSet<>();
+    Set<Medication> medications = new HashSet<>();
+
 
     public MedicationDataInterface() {
         properties = MediPiProperties.getInstance().getProperties();

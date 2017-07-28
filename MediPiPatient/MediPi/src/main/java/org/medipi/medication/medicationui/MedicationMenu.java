@@ -5,6 +5,7 @@ import javafx.scene.input.MouseEvent;
 import org.medipi.MediPi;
 import org.medipi.medication.MedicationManager;
 import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.Synchronizer;
 import org.medipi.ui.*;
 
 
@@ -16,9 +17,10 @@ public class MedicationMenu extends TileMenu {
         this.mediPi = mediPi;
         MajorMinorTile medTile1 = new MajorMinorTile(new SimpleBooleanProperty(true), 1, 1);
         medTile1.setMajorText("Back");
-        medTile1.setMinorText("Settings");
+        medTile1.setMinorText("<- Synchronize ->");
         Tile medTile2 = createAdherenceSummaryTile();
         medTile1.setOnMajorClick((MouseEvent event) -> {mediPi.callDashboard();});
+        medTile1.setOnMinorClick((MouseEvent event) -> {((MedicationManager) mediPi.getElement("Medication")).getSynchronizer().run();});
         this.addTile(medTile1);
         this.addTile(medTile2);
         EntityTile recordDoseTile = new EntityTile(new SimpleBooleanProperty(true), 1, 1);

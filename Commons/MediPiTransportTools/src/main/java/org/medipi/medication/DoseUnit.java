@@ -1,6 +1,8 @@
 package org.medipi.medication;
 
-public class DoseUnit {
+import java.io.Serializable;
+
+public class DoseUnit implements Serializable{
     public String getName() {
         return name;
     }
