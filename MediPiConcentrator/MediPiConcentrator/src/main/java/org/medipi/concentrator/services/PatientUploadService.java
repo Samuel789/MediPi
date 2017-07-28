@@ -101,6 +101,7 @@ public class PatientUploadService {
 
             }
         }
+        // TODO - is this a bug, to return a 500 error?
         return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
