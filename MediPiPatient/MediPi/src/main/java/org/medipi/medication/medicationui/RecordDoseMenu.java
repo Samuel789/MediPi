@@ -2,7 +2,6 @@ package org.medipi.medication.medicationui;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -10,7 +9,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import org.medipi.MediPi;
 import org.medipi.medication.DoseUnit;
 import org.medipi.medication.Schedule;
@@ -18,7 +16,6 @@ import org.medipi.medication.ScheduledDose;
 import org.medipi.ui.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Vector;
 
@@ -107,7 +104,7 @@ class DoseDetailsScreen extends TileMenu {
             upperMenu.closeOverlayWindow();
         });
         header.setMainContent(new Label("Now, make sure the dose and time are correct"));
-        doseUnit = medicationSchedule.getMedication().getDoseUnit();
+        doseUnit = (DoseUnit) medicationSchedule.getMedication().getDoseUnit();
         medicationName = medicationSchedule.getDisplayName();
         doseDay = LocalDate.now();
         doseTime = LocalTime.now();

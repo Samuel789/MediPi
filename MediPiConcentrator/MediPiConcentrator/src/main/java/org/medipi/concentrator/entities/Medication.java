@@ -15,14 +15,11 @@
  */
 package org.medipi.concentrator.entities;
 
-import org.medipi.medication.DoseUnit;
+import org.medipi.medication.DoseUnitInterface;
+import org.medipi.medication.MedicationInterface;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.util.Collection;
 
 /**
  * Entity Class to manage DB access for patient
@@ -31,42 +28,42 @@ import java.util.Collection;
 @Entity
 @Table(name = "medication")
 @NamedQueries({
-    @NamedQuery(name = "Medication.findAll", query = "SELECT m FROM medication m"),
-    @NamedQuery(name = "Medication.findByMedicationId", query = "SELECT m FROM medication m WHERE m.id = :id")})
-public class Medication implements Serializable {
-
-    @JoinColumn(name = "dose_unit", referencedColumnName = "id")
-    private Collection<DoseUnit> doseUnit;
+    @NamedQuery(name = "Medication.findAll", query = "SELECT m FROM Medication m"),
+    @NamedQuery(name = "Medication.findByMedicationId", query = "SELECT m FROM Medication m WHERE m.id = :id")})
+public class Medication implements Serializable, MedicationInterface {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "id")
+    @Column(name = "id", unique = true, nullable = false, updatable = false)
     private int id;
 
-    @Column(name = "display_name")
+    @Column(name = "display_name", nullable = false)
     private String shortName;
 
-    @Column(name = "unique_name")
+    @Column(name = "unique_name", nullable = false, unique = true)
     private String fullName;
 
     @Column(name = "advisory_stmt")
-    private String advisoryStmt;
+    private String cautionaryText;
 
-    @Column(name = "icon")
-    private String icon;
+    @Column(name = "icon_name")
+    private String iconName;
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = DoseUnit.class)
+    @JoinColumn(name = "dose_unit", referencedColumnName = "id")
+    private DoseUnitInterface doseUnit;
 
     public Medication() {
     }
 
-    public Medication(int id, String fullName, String shortName, String advisoryStmt, DoseUnit doseUnit) {
+    public Medication(int id, String fullName, String shortName, String cautionaryText, DoseUnitInterface doseUnit) {
         this.id = id;
         this.fullName = fullName;
         this.shortName = shortName;
-        this.advisoryStmt = advisoryStmt;
-        this.doseUnits
+        this.cautionaryText = cautionaryText;
+        this.doseUnit = doseUnit;
     }
 
     @Override
@@ -84,9 +81,62 @@ public class Medication implements Serializable {
         return this.id == other.id;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getShortName() {
+        return shortName;
+    }
+
+    @Override
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
+
+    @Override
+    public String getFullName() {
+        return fullName;
+    }
+
+    @Override
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getCautionaryText() {
+        return cautionaryText;
+    }
+
+    public void setCautionaryText(String cautionaryText) {
+        this.cautionaryText = cautionaryText;
+    }
+
+    @Override
+    public String getIconName() {
+        return iconName;
+    }
+
+    public void setIconName(String iconName) {
+        this.iconName = iconName;
+    }
+
+    public DoseUnitInterface getDoseUnit() {
+        return doseUnit;
+    }
+
+    public void setDoseUnit(DoseUnitInterface doseUnit) {
+        this.doseUnit = doseUnit;
+    }
+
     @Override
     public String toString() {
-        return "org.medipi.concentrator.entities.Medication[ id=" + id + " full_name = " + full_name + " ]";
+        return "org.medipi.concentrator.entities.Medication[ id=" + id + " full_name = " + fullName + " ]";
     }
 
 

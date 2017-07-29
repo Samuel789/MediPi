@@ -15,10 +15,7 @@
  */
 package org.medipi.model;
 
-import org.medipi.medication.DoseUnit;
-import org.medipi.medication.Medication;
-import org.medipi.medication.Schedule;
-import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -41,7 +38,7 @@ public class MedicationDO implements Serializable {
 
 
     private List<ScheduledDose> scheduledDoses;
-    private List<Medication> medications;
+    private List<? extends MedicationInterface> medications;
     private List<Schedule> schedules;
     private List<DoseUnit> doseUnits;
 
@@ -141,11 +138,11 @@ public class MedicationDO implements Serializable {
         this.scheduledDoses = scheduledDoses;
     }
 
-    public List<Medication> getMedications() {
+    public List<? extends MedicationInterface> getMedications() {
         return medications;
     }
 
-    public void setMedications(List<Medication> medications) {
+    public void setMedications(List<? extends MedicationInterface> medications) {
         this.medications = medications;
     }
 

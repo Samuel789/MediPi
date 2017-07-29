@@ -15,8 +15,8 @@
  */
 package org.medipi.concentrator.dao;
 
-import org.medipi.concentrator.entities.Hardware;
-import org.medipi.concentrator.entities.Medication;
+import org.medipi.concentrator.entities.DoseUnit;
+import org.medipi.medication.Medication;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,17 +26,17 @@ import java.util.List;
  * @author rick@robinsonhq.com
  */
 @Repository
-public class MedicationDAOImpl extends GenericDAOImpl<Medication> implements MedicationDAO {
+public class DoseUnitImpl extends GenericDAOImpl<DoseUnit> implements DoseUnitDAO {
     @Override
-    public Medication findByMedicationId(int medicationId) {
-        return this.getEntityManager().createNamedQuery("Medication.findByMedicationId", Medication.class)
-                .setParameter("id", medicationId)
+    public DoseUnit findByDoseUnitId(int doseUnitId) {
+        return this.getEntityManager().createNamedQuery("DoseUnit.findByDoseUnitId", DoseUnit.class)
+                .setParameter("id", doseUnitId)
                 .getSingleResult();
     }
 
     @Override
-    public List<Medication> findAll() {
-        return this.getEntityManager().createNamedQuery("Medication.findAll", Medication.class)
+    public List<DoseUnit> findAll() {
+        return this.getEntityManager().createNamedQuery("DoseUnit.findAll", DoseUnit.class)
                 .getResultList();
     }
 }

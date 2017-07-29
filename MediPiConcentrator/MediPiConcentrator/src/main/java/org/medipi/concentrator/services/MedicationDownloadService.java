@@ -46,7 +46,10 @@ public class MedicationDownloadService {
         }
         MedicationDO medicationInfo = new MedicationDO();
         medicationInfo.setTestMessage("你好我朋友！我会给你电话！");
-        medicationDAOImpl.
+        medicationInfo.setMedications(medicationDAOImpl.findAll());
+        System.out.println(medicationInfo.getTestMessage());
+        System.out.println(medicationInfo.getMedications().get(0).getCautionaryText());
         // TODO - Embed medication info
         return new ResponseEntity<MedicationDO>(medicationInfo, HttpStatus.OK);
     }
+}

@@ -780,7 +780,7 @@ SELECT pg_catalog.setval('medication_recorded_dose_id_seq', 1, false);
 -- Data for Name: medication_schedule; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY medication_schedule (id, startdate, enddate, alternatename, purposestatement, medication, patient) FROM stdin;
+COPY medication_schedule (id, assigned_start_date, assigned_end_date, alternate_name, purpose_statement, medication, patient) FROM stdin;
 1	2017-07-16	\N	\N	To prevent rejection	327096008	d9bc2478-062e-4b87-9060-4984f26b74be
 \.
 
@@ -796,7 +796,7 @@ SELECT pg_catalog.setval('medication_schedule_id_seq', 1, true);
 -- Data for Name: medication_scheduled_dose; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY medication_scheduled_dose (id, schedule, value, startday, repeatinterval, endday, windowstarttime, windowendtime, defaultremindertime, remindertime) FROM stdin;
+COPY medication_scheduled_dose (id, schedule, value, start_day, repeat_interval, end_day, window_start_time, window_end_time, default_reminder_time, reminder_time) FROM stdin;
 1	1	2	0	1	\N	06:00:00	11:00:00	09:30:00	09:30:00
 2	1	2	0	1	\N	17:00:00	22:00:00	19:30:00	19:30:00
 \.

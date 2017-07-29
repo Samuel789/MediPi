@@ -107,7 +107,16 @@ public class HardwareDownloadableService {
      *
      * @param downloadable_uuid of the download file item
      * @param hardwareName
-     * @return File System Resource Response
+     * @return File System Resource ResponseAbstractHttp11Processor.process(AbstractHttp11Processor.java:1095) [tomcat-embed-core-8.0.33.jar:8.0.33]
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:672) [tomcat-embed-core-8.0.33.jar:8.0.33]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1502) [tomcat-embed-core-8.0.33.jar:8.0.33]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1458) [tomcat-embed-core-8.0.33.jar:8.0.33]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [na:1.8.0_131]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_131]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-8.0.33.jar:8.0.33]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_131]
+
+
      */
     @Transactional(rollbackFor = RuntimeException.class)
     public ResponseEntity<FileSystemResource> getAllDownload(String downloadable_uuid, String hardwareName) {

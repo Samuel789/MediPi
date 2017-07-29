@@ -99,7 +99,9 @@ public class Synchronizer
                 Response response = rme.executeGet(hs);
                 //
                 MedicationDO recievedData = (MedicationDO) response.readEntity(new GenericType<MedicationDO>() {});
+                System.out.println(recievedData);
                 System.out.println(recievedData.getTestMessage());
+                System.out.println(recievedData.getMedications().get(0).getCautionaryText());
             }
         } catch (ProcessingException pe) {
             MediPiLogger.getInstance().log(Synchronizer.class.getName() + ".error", "Attempt to retreive incoming messages has failed - MediPi Concentrator is not available - please try again later. " + pe.getLocalizedMessage());
