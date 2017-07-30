@@ -15,7 +15,7 @@
  */
 package org.medipi.concentrator.dao;
 
-import org.medipi.concentrator.entities.DoseUnit;
+import org.medipi.medication.DoseUnit;
 import org.medipi.medication.Medication;
 import org.springframework.stereotype.Repository;
 

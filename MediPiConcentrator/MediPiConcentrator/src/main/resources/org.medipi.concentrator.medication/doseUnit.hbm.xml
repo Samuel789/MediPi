@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.medipi.medication.DoseUnit" table="dose_unit">
+        <id name="id" type="int">
+            <column name="id"  />
+            <generator class="increment" />
+        </id>
+        <property name="name" type="java.lang.String" not-null="true">
+            <column name="name" />
+        </property>
+
+            </class>
+    <query name="DoseUnit.findByDoseId">
+        <![CDATA[SELECT d FROM DoseUnit d WHERE d.id = :id]]>
+    </query>
+    <query name="DoseUnit.findAll">
+        <![CDATA[SELECT d FROM DoseUnit d]]>
+    </query>
+</hibernate-mapping>

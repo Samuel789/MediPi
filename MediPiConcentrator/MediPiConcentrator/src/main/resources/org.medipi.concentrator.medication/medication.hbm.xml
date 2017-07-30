@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.medipi.medication.Medication" table="medication">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="increment" />
+        </id>
+        <property name="shortName" type="java.lang.String" not-null="true">
+            <column name="display_name" />
+        </property>
+        <property name="fullName" type="java.lang.String" unique="true" not-null="true">
+            <column name="unique_name" />
+
+        </property>
+        <property name="cautionaryText" type="java.lang.String">
+            <column name="advisory_stmt" />
+        </property>
+        <many-to-one lazy="false" name="doseUnit" class="org.medipi.medication.DoseUnit" column="dose_unit" cascade="all" not-null="true" />
+
+    </class>
+    <query name="Medication.findByMedicationId">
+        <![CDATA[SELECT m FROM Medication m WHERE m.id = :id]]>
+    </query>
+    <query name="Medication.findAll">
+        <![CDATA[SELECT m FROM Medication m]]>
+    </query>
+
+</hibernate-mapping>

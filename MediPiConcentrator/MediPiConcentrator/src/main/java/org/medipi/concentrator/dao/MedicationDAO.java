@@ -16,7 +16,7 @@
 package org.medipi.concentrator.dao;
 
 import org.medipi.concentrator.entities.Hardware;
-import org.medipi.concentrator.entities.Medication;
+import org.medipi.medication.Medication;
 
 import java.util.List;
 

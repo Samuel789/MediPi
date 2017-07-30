@@ -1,6 +1,7 @@
 package org.medipi.concentrator.services;
 
 import ma.glasnost.orika.MapperFacade;
+import net.sf.saxon.functions.Serialize;
 import org.medipi.concentrator.dao.AllHardwareDownloadableDAOImpl;
 import org.medipi.concentrator.dao.HardwareDownloadableDAOImpl;
 import org.medipi.concentrator.dao.MedicationDAOImpl;
@@ -18,6 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -46,10 +50,25 @@ public class MedicationDownloadService {
         }
         MedicationDO medicationInfo = new MedicationDO();
         medicationInfo.setTestMessage("你好我朋友！我会给你电话！");
-        medicationInfo.setMedications(medicationDAOImpl.findAll());
+        try {
+            medicationInfo.setMedications(medicationDAOImpl.findAll());
+        } catch (Exception e) {
+            System.out.println(String.format("Failed to execute query. Error was %s: %s", e.getClass(), e.getMessage()));
+        }
         System.out.println(medicationInfo.getTestMessage());
+        try {
         System.out.println(medicationInfo.getMedications().get(0).getCautionaryText());
+
+        System.out.println(medicationInfo.getMedications().get(0).getDoseUnit().getName());
+        } catch (Exception e) {
+            System.out.println(String.format("Failed to process query results (or none returned). Error was %s: %s", e.getClass(), e.getMessage()));
+        }
         // TODO - Embed medication info
+        try {
+            return new ResponseEntity<MedicationDO>(medicationInfo, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(String.format("Creation of ResponseEntity failed. Error was %s: %s", e.getClass(), e.getMessage()));
+        }
         return new ResponseEntity<MedicationDO>(medicationInfo, HttpStatus.OK);
     }
 }

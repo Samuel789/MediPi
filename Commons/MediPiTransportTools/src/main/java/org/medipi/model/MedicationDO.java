@@ -38,7 +38,7 @@ public class MedicationDO implements Serializable {
 
 
     private List<ScheduledDose> scheduledDoses;
-    private List<? extends MedicationInterface> medications;
+    private List<Medication> medications;
     private List<Schedule> schedules;
     private List<DoseUnit> doseUnits;
 
@@ -138,11 +138,11 @@ public class MedicationDO implements Serializable {
         this.scheduledDoses = scheduledDoses;
     }
 
-    public List<? extends MedicationInterface> getMedications() {
+    public List<Medication> getMedications() {
         return medications;
     }
 
-    public void setMedications(List<? extends MedicationInterface> medications) {
+    public void setMedications(List<Medication> medications) {
         this.medications = medications;
     }
 
