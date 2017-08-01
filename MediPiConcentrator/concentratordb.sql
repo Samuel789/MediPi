@@ -26,9 +26,9 @@ ALTER TABLE ONLY public.patient_certificate DROP CONSTRAINT patient_patient_cert
 ALTER TABLE ONLY public.hardware DROP CONSTRAINT patient_hardware_fk;
 ALTER TABLE ONLY public.patient DROP CONSTRAINT patient_group_patient_fk;
 ALTER TABLE ONLY public.alert DROP CONSTRAINT patient_alert_fk;
-ALTER TABLE ONLY public.medication_scheduled_dose DROP CONSTRAINT medication_scheduled_dose_medication_schedule_id_fk;
+ALTER TABLE ONLY public.scheduled_dose DROP CONSTRAINT medication_scheduled_dose_medication_schedule_id_fk;
 ALTER TABLE ONLY public.medication_schedule DROP CONSTRAINT medication_schedule_patient_patient_uuid_fk;
-ALTER TABLE ONLY public.medication_recorded_dose DROP CONSTRAINT medication_recorded_dose_medication_schedule_id_fk;
+ALTER TABLE ONLY public.recorded_dose DROP CONSTRAINT medication_recorded_dose_medication_schedule_id_fk;
 ALTER TABLE ONLY public.hardware_downloadable DROP CONSTRAINT hardware_hardware_downloadable_fk;
 ALTER TABLE ONLY public.all_hardware_downloaded DROP CONSTRAINT hardware_all_hardware_downloaded_fk;
 ALTER TABLE ONLY public.all_hardware_downloaded DROP CONSTRAINT all_hardware_downloadable_all_hardware_downloaded_fk;
@@ -45,8 +45,8 @@ ALTER TABLE ONLY public.patient DROP CONSTRAINT patient_id_pk;
 ALTER TABLE ONLY public.patient_group DROP CONSTRAINT patient_group_pk;
 ALTER TABLE ONLY public.patient_downloadable DROP CONSTRAINT patient_downloadable_pk;
 ALTER TABLE ONLY public.patient_certificate DROP CONSTRAINT patient_certificate_pk;
-ALTER TABLE ONLY public.medication_scheduled_dose DROP CONSTRAINT medication_scheduled_dose_pkey;
-ALTER TABLE ONLY public.medication_recorded_dose DROP CONSTRAINT medication_recorded_dose_pkey;
+ALTER TABLE ONLY public.scheduled_dose DROP CONSTRAINT medication_scheduled_dose_pkey;
+ALTER TABLE ONLY public.recorded_dose DROP CONSTRAINT medication_recorded_dose_pkey;
 ALTER TABLE ONLY public.medication DROP CONSTRAINT medication_pkey;
 ALTER TABLE ONLY public.hardware DROP CONSTRAINT hardware_pkey;
 ALTER TABLE ONLY public.hardware_downloadable DROP CONSTRAINT hardware_downloadable_pkey;
@@ -54,9 +54,9 @@ ALTER TABLE ONLY public.all_hardware_downloaded DROP CONSTRAINT all_hardware_dow
 ALTER TABLE ONLY public.all_hardware_downloadable DROP CONSTRAINT all_hardware_downloadable_pkey;
 ALTER TABLE ONLY public.alert DROP CONSTRAINT alert_pk;
 ALTER TABLE public.recording_device_data ALTER COLUMN data_id DROP DEFAULT;
-ALTER TABLE public.medication_scheduled_dose ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.scheduled_dose ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.medication_schedule ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public.medication_recorded_dose ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.recorded_dose ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.medication ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.all_hardware_downloaded ALTER COLUMN all_hardware_downloaded_id DROP DEFAULT;
 ALTER TABLE public.alert ALTER COLUMN alert_id DROP DEFAULT;
@@ -73,11 +73,11 @@ DROP TABLE public.patient_certificate;
 DROP TABLE public.patient;
 DROP SEQUENCE public.messages_message_id_seq;
 DROP SEQUENCE public.medication_scheduled_dose_id_seq;
-DROP TABLE public.medication_scheduled_dose;
+DROP TABLE public.scheduled_dose;
 DROP SEQUENCE public.medication_schedule_id_seq;
 DROP TABLE public.medication_schedule;
 DROP SEQUENCE public.medication_recorded_dose_id_seq;
-DROP TABLE public.medication_recorded_dose;
+DROP TABLE public.recorded_dose;
 DROP SEQUENCE public.medication_id_seq;
 DROP TABLE public.medication;
 DROP TABLE public.hardware_downloadable;
@@ -135,7 +135,7 @@ SET default_with_oids = false;
 CREATE TABLE alert (
     alert_id bigint NOT NULL,
     data_id bigint NOT NULL,
-    patient_uuid character varying(100) NOT NULL,
+    patientUuid character varying(100) NOT NULL,
     alert_time timestamp with time zone NOT NULL,
     alert_text character varying(5000) NOT NULL,
     transmit_success_date timestamp with time zone,
@@ -267,7 +267,7 @@ CREATE TABLE hardware (
     hardware_name character varying(100) NOT NULL,
     mac_address character varying(100) NOT NULL,
     current_software_version character varying(100) NOT NULL,
-    patient_uuid character varying(100)
+    patientUuid character varying(100)
 );
 
 
@@ -339,7 +339,7 @@ CREATE TABLE medication_recorded_dose (
 );
 
 
-ALTER TABLE medication_recorded_dose OWNER TO medipiconc;
+ALTER TABLE recorded_dose OWNER TO medipiconc;
 
 --
 -- Name: medication_recorded_dose_id_seq; Type: SEQUENCE; Schema: public; Owner: medipiconc
@@ -359,7 +359,7 @@ ALTER TABLE medication_recorded_dose_id_seq OWNER TO medipiconc;
 -- Name: medication_recorded_dose_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: medipiconc
 --
 
-ALTER SEQUENCE medication_recorded_dose_id_seq OWNED BY medication_recorded_dose.id;
+ALTER SEQUENCE medication_recorded_dose_id_seq OWNED BY recorded_dose.id;
 
 
 --
@@ -418,7 +418,7 @@ CREATE TABLE medication_scheduled_dose (
 );
 
 
-ALTER TABLE medication_scheduled_dose OWNER TO medipiconc;
+ALTER TABLE scheduled_dose OWNER TO medipiconc;
 
 --
 -- Name: medication_scheduled_dose_id_seq; Type: SEQUENCE; Schema: public; Owner: medipiconc
@@ -438,7 +438,7 @@ ALTER TABLE medication_scheduled_dose_id_seq OWNER TO medipiconc;
 -- Name: medication_scheduled_dose_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: medipiconc
 --
 
-ALTER SEQUENCE medication_scheduled_dose_id_seq OWNED BY medication_scheduled_dose.id;
+ALTER SEQUENCE medication_scheduled_dose_id_seq OWNED BY scheduled_dose.id;
 
 
 --
@@ -460,7 +460,7 @@ ALTER TABLE messages_message_id_seq OWNER TO postgres;
 --
 
 CREATE TABLE patient (
-    patient_uuid character varying(100) NOT NULL,
+    patientUuid character varying(100) NOT NULL,
     patient_group_uuid character varying
 );
 
@@ -472,7 +472,7 @@ ALTER TABLE patient OWNER TO postgres;
 --
 
 CREATE TABLE patient_certificate (
-    patient_uuid character varying(100) NOT NULL,
+    patientUuid character varying(100) NOT NULL,
     certificate_location character varying(1000) NOT NULL
 );
 
@@ -485,7 +485,7 @@ ALTER TABLE patient_certificate OWNER TO postgres;
 
 CREATE TABLE patient_downloadable (
     downloadable_uuid character varying(100) NOT NULL,
-    patient_uuid character varying(100) NOT NULL,
+    patientUuid character varying(100) NOT NULL,
     version character varying(100) NOT NULL,
     version_author character varying(255) NOT NULL,
     version_date timestamp with time zone NOT NULL,
@@ -560,7 +560,7 @@ CREATE TABLE recording_device_data (
     data_id bigint NOT NULL,
     attribute_id integer NOT NULL,
     data_value character varying(1000) NOT NULL,
-    patient_uuid character varying(100) NOT NULL,
+    patientUuid character varying(100) NOT NULL,
     data_value_time timestamp with time zone NOT NULL,
     downloaded_time timestamp with time zone DEFAULT ('now'::text)::timestamp(3) with time zone NOT NULL,
     schedule_effective_time timestamp with time zone,
@@ -645,7 +645,7 @@ ALTER TABLE ONLY medication ALTER COLUMN id SET DEFAULT nextval('medication_id_s
 -- Name: medication_recorded_dose id; Type: DEFAULT; Schema: public; Owner: medipiconc
 --
 
-ALTER TABLE ONLY medication_recorded_dose ALTER COLUMN id SET DEFAULT nextval('medication_recorded_dose_id_seq'::regclass);
+ALTER TABLE ONLY recorded_dose ALTER COLUMN id SET DEFAULT nextval('medication_recorded_dose_id_seq'::regclass);
 
 
 --
@@ -659,7 +659,7 @@ ALTER TABLE ONLY medication_schedule ALTER COLUMN id SET DEFAULT nextval('medica
 -- Name: medication_scheduled_dose id; Type: DEFAULT; Schema: public; Owner: medipiconc
 --
 
-ALTER TABLE ONLY medication_scheduled_dose ALTER COLUMN id SET DEFAULT nextval('medication_scheduled_dose_id_seq'::regclass);
+ALTER TABLE ONLY scheduled_dose ALTER COLUMN id SET DEFAULT nextval('medication_scheduled_dose_id_seq'::regclass);
 
 
 --
@@ -673,7 +673,7 @@ ALTER TABLE ONLY recording_device_data ALTER COLUMN data_id SET DEFAULT nextval(
 -- Data for Name: alert; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY alert (alert_id, data_id, patient_uuid, alert_time, alert_text, transmit_success_date, retry_attempts) FROM stdin;
+COPY alert (alert_id, data_id, patientUuid, alert_time, alert_text, transmit_success_date, retry_attempts) FROM stdin;
 \.
 
 
@@ -732,7 +732,7 @@ SELECT pg_catalog.setval('device_data_data_id_seq', 1, false);
 -- Data for Name: hardware; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY hardware (hardware_name, mac_address, current_software_version, patient_uuid) FROM stdin;
+COPY hardware (hardware_name, mac_address, current_software_version, patientUuid) FROM stdin;
 9b636f94-e1c2-4773-a5ca-3858ba176e9c	b8:27:eb:27:09:93	1	d9bc2478-062e-4b87-9060-4984f26b74be
 \.
 
@@ -765,7 +765,7 @@ SELECT pg_catalog.setval('medication_id_seq', 1, false);
 -- Data for Name: medication_recorded_dose; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY medication_recorded_dose (id, value, timetaken, schedule) FROM stdin;
+COPY recorded_dose (id, value, timetaken, schedule) FROM stdin;
 \.
 
 
@@ -780,7 +780,7 @@ SELECT pg_catalog.setval('medication_recorded_dose_id_seq', 1, false);
 -- Data for Name: medication_schedule; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY medication_schedule (id, assigned_start_date, assigned_end_date, alternate_name, purpose_statement, medication, patient) FROM stdin;
+COPY medication_schedule (id, assigned_start_date, assigned_end_date, alternate_name, purpose_statement, medication_id, patientUuid) FROM stdin;
 1	2017-07-16	\N	\N	To prevent rejection	327096008	d9bc2478-062e-4b87-9060-4984f26b74be
 \.
 
@@ -796,7 +796,7 @@ SELECT pg_catalog.setval('medication_schedule_id_seq', 1, true);
 -- Data for Name: medication_scheduled_dose; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY medication_scheduled_dose (id, schedule, value, start_day, repeat_interval, end_day, window_start_time, window_end_time, default_reminder_time, reminder_time) FROM stdin;
+COPY scheduled_dose (id, schedule, value, start_day, repeat_interval, end_day, window_start_time, window_end_time, default_reminder_time, reminder_time) FROM stdin;
 1	1	2	0	1	\N	06:00:00	11:00:00	09:30:00	09:30:00
 2	1	2	0	1	\N	17:00:00	22:00:00	19:30:00	19:30:00
 \.
@@ -820,7 +820,7 @@ SELECT pg_catalog.setval('messages_message_id_seq', 1, false);
 -- Data for Name: patient; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY patient (patient_uuid, patient_group_uuid) FROM stdin;
+COPY patient (patientUuid, patient_group_uuid) FROM stdin;
 d9bc2478-062e-4b87-9060-4984f26b74be	01
 \.
 
@@ -829,7 +829,7 @@ d9bc2478-062e-4b87-9060-4984f26b74be	01
 -- Data for Name: patient_certificate; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY patient_certificate (patient_uuid, certificate_location) FROM stdin;
+COPY patient_certificate (patientUuid, certificate_location) FROM stdin;
 d9bc2478-062e-4b87-9060-4984f26b74be	/home/sam/Git/MediPi/MediPiConcentrator/config/downloadables/patient/d9bc2478-062e-4b87-9060-4984f26b74be/d9bc2478-062e-4b87-9060-4984f26b74be.crt
 \.
 
@@ -838,7 +838,7 @@ d9bc2478-062e-4b87-9060-4984f26b74be	/home/sam/Git/MediPi/MediPiConcentrator/con
 -- Data for Name: patient_downloadable; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY patient_downloadable (downloadable_uuid, patient_uuid, version, version_author, version_date, downloaded_date, script_location, signature) FROM stdin;
+COPY patient_downloadable (downloadable_uuid, patientUuid, version, version_author, version_date, downloaded_date, script_location, signature) FROM stdin;
 \.
 
 
@@ -877,7 +877,7 @@ SELECT pg_catalog.setval('recording_device_attribute_attribute_id_seq', 1, false
 -- Data for Name: recording_device_data; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY recording_device_data (data_id, attribute_id, data_value, patient_uuid, data_value_time, downloaded_time, schedule_effective_time, schedule_expiry_time) FROM stdin;
+COPY recording_device_data (data_id, attribute_id, data_value, patientUuid, data_value_time, downloaded_time, schedule_effective_time, schedule_expiry_time) FROM stdin;
 \.
 
 
@@ -955,7 +955,7 @@ ALTER TABLE ONLY medication
 -- Name: medication_recorded_dose medication_recorded_dose_pkey; Type: CONSTRAINT; Schema: public; Owner: medipiconc
 --
 
-ALTER TABLE ONLY medication_recorded_dose
+ALTER TABLE ONLY recorded_dose
     ADD CONSTRAINT medication_recorded_dose_pkey PRIMARY KEY (id);
 
 
@@ -963,7 +963,7 @@ ALTER TABLE ONLY medication_recorded_dose
 -- Name: medication_scheduled_dose medication_scheduled_dose_pkey; Type: CONSTRAINT; Schema: public; Owner: medipiconc
 --
 
-ALTER TABLE ONLY medication_scheduled_dose
+ALTER TABLE ONLY scheduled_dose
     ADD CONSTRAINT medication_scheduled_dose_pkey PRIMARY KEY (id);
 
 
@@ -972,7 +972,7 @@ ALTER TABLE ONLY medication_scheduled_dose
 --
 
 ALTER TABLE ONLY patient_certificate
-    ADD CONSTRAINT patient_certificate_pk PRIMARY KEY (patient_uuid);
+    ADD CONSTRAINT patient_certificate_pk PRIMARY KEY (patientUuid);
 
 
 --
@@ -996,7 +996,7 @@ ALTER TABLE ONLY patient_group
 --
 
 ALTER TABLE ONLY patient
-    ADD CONSTRAINT patient_id_pk PRIMARY KEY (patient_uuid);
+    ADD CONSTRAINT patient_id_pk PRIMARY KEY (patientUuid);
 
 
 --
@@ -1042,14 +1042,14 @@ CREATE UNIQUE INDEX medication_id_uindex ON medication USING btree (id);
 -- Name: medication_recorded_dose_id_uindex; Type: INDEX; Schema: public; Owner: medipiconc
 --
 
-CREATE UNIQUE INDEX medication_recorded_dose_id_uindex ON medication_recorded_dose USING btree (id);
+CREATE UNIQUE INDEX medication_recorded_dose_id_uindex ON recorded_dose USING btree (id);
 
 
 --
 -- Name: medication_scheduled_dose_id_uindex; Type: INDEX; Schema: public; Owner: medipiconc
 --
 
-CREATE UNIQUE INDEX medication_scheduled_dose_id_uindex ON medication_scheduled_dose USING btree (id);
+CREATE UNIQUE INDEX medication_scheduled_dose_id_uindex ON scheduled_dose USING btree (id);
 
 
 --
@@ -1094,7 +1094,7 @@ ALTER TABLE ONLY hardware_downloadable
 -- Name: medication_recorded_dose medication_recorded_dose_medication_schedule_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: medipiconc
 --
 
-ALTER TABLE ONLY medication_recorded_dose
+ALTER TABLE ONLY recorded_dose
     ADD CONSTRAINT medication_recorded_dose_medication_schedule_id_fk FOREIGN KEY (schedule) REFERENCES medication_schedule(id);
 
 
@@ -1103,14 +1103,14 @@ ALTER TABLE ONLY medication_recorded_dose
 --
 
 ALTER TABLE ONLY medication_schedule
-    ADD CONSTRAINT medication_schedule_patient_patient_uuid_fk FOREIGN KEY (patient) REFERENCES patient(patient_uuid);
+    ADD CONSTRAINT medication_schedule_patient_patient_uuid_fk FOREIGN KEY (patientUuid) REFERENCES patient(patientUuid);
 
 
 --
 -- Name: medication_scheduled_dose medication_scheduled_dose_medication_schedule_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: medipiconc
 --
 
-ALTER TABLE ONLY medication_scheduled_dose
+ALTER TABLE ONLY scheduled_dose
     ADD CONSTRAINT medication_scheduled_dose_medication_schedule_id_fk FOREIGN KEY (schedule) REFERENCES medication_schedule(id);
 
 
@@ -1119,7 +1119,7 @@ ALTER TABLE ONLY medication_scheduled_dose
 --
 
 ALTER TABLE ONLY alert
-    ADD CONSTRAINT patient_alert_fk FOREIGN KEY (patient_uuid) REFERENCES patient(patient_uuid);
+    ADD CONSTRAINT patient_alert_fk FOREIGN KEY (patientUuid) REFERENCES patient(patientUuid);
 
 
 --
@@ -1135,7 +1135,7 @@ ALTER TABLE ONLY patient
 --
 
 ALTER TABLE ONLY hardware
-    ADD CONSTRAINT patient_hardware_fk FOREIGN KEY (patient_uuid) REFERENCES patient(patient_uuid);
+    ADD CONSTRAINT patient_hardware_fk FOREIGN KEY (patientUuid) REFERENCES patient(patientUuid);
 
 
 --
@@ -1143,7 +1143,7 @@ ALTER TABLE ONLY hardware
 --
 
 ALTER TABLE ONLY patient_certificate
-    ADD CONSTRAINT patient_patient_certificates_fk FOREIGN KEY (patient_uuid) REFERENCES patient(patient_uuid);
+    ADD CONSTRAINT patient_patient_certificates_fk FOREIGN KEY (patientUuid) REFERENCES patient(patientUuid);
 
 
 --
@@ -1151,7 +1151,7 @@ ALTER TABLE ONLY patient_certificate
 --
 
 ALTER TABLE ONLY patient_downloadable
-    ADD CONSTRAINT patient_patient_downloadable_fk FOREIGN KEY (patient_uuid) REFERENCES patient(patient_uuid);
+    ADD CONSTRAINT patient_patient_downloadable_fk FOREIGN KEY (patientUuid) REFERENCES patient(patientUuid);
 
 
 --
@@ -1159,7 +1159,7 @@ ALTER TABLE ONLY patient_downloadable
 --
 
 ALTER TABLE ONLY recording_device_data
-    ADD CONSTRAINT patient_recording_device_data_fk FOREIGN KEY (patient_uuid) REFERENCES patient(patient_uuid);
+    ADD CONSTRAINT patient_recording_device_data_fk FOREIGN KEY (patientUuid) REFERENCES patient(patientUuid);
 
 
 --
@@ -1191,7 +1191,7 @@ ALTER TABLE ONLY recording_device_attribute
 --
 
 ALTER TABLE ONLY medication_schedule
-    ADD CONSTRAINT schedule_medication_id_fk FOREIGN KEY (medication) REFERENCES medication(id);
+    ADD CONSTRAINT schedule_medication_id_fk FOREIGN KEY (medication_id) REFERENCES medication(id);
 
 
 --

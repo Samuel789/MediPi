@@ -101,8 +101,8 @@ public class Synchronizer
                 MedicationDO recievedData = (MedicationDO) response.readEntity(new GenericType<MedicationDO>() {});
                 System.out.println(recievedData);
                 System.out.println(recievedData.getTestMessage());
-                System.out.println(recievedData.getMedications().get(0).getCautionaryText());
-                System.out.println(recievedData.getMedications().get(0).getDoseUnit().getName());
+                System.out.println(recievedData.getSchedules().get(0).getAssignedStartDate());
+                System.out.println(recievedData.getSchedules().get(0).getMedication().getFullName());
 
             }
         } catch (ProcessingException pe) {

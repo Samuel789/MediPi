@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.medipi.medication.RecordedDose" table="recorded_dose">
+        <id name="recordedDoseId" type="int">
+            <column name="recorded_dose_id" />
+            <generator class="increment" />
+        </id>
+        <property name="doseValue" type="double" not-null="true">
+            <column name="dose_value" />
+        </property>
+        <property name="timeTaken" type="java.util.Time" not-null="true">
+            <column name="assigned_end_date" />
+        </property>
+        <property name="alternateName" type="java.lang.String" not-null="true">
+            <column name="alternate_name" />
+        </property>
+        <property name="purposeStatement" type="java.lang.String" not-null="true">
+            <column name="purpose_statement" />
+        </property>
+        <many-to-one lazy="false" name="medication" class="org.medipi.medication.Medication" column="medication_id" cascade="all" not-null="true" />
+        <property name="patientUuid" type="java.lang.String" not-null="true">
+            <column name="patient_uuid" />
+        </property>
+
+    </class>
+    <query name="Schedule.findByScheduleId">
+        <![CDATA[SELECT s FROM Schedule s WHERE s.scheduleId = :id]]>
+    </query>
+    <query name="Schedule.findAll">
+        <![CDATA[SELECT s FROM Schedule s]]>
+    </query>
+
+</hibernate-mapping>

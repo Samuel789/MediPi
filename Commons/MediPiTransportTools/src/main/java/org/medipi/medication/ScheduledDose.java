@@ -46,6 +46,16 @@ public class ScheduledDose implements Serializable {
     private LocalTime reminderTime;
     private Schedule schedule;
 
+    public int getScheduledDoseId() {
+        return scheduledDoseId;
+    }
+
+    public void setScheduledDoseId(int scheduledDoseId) {
+        this.scheduledDoseId = scheduledDoseId;
+    }
+
+    private int scheduledDoseId;
+
     public ScheduledDose() {
         schedule = new Schedule();
         doseValue = 5;

@@ -4,8 +4,8 @@
 
 <hibernate-mapping>
     <class name="org.medipi.medication.Medication" table="medication">
-        <id name="id" type="int">
-            <column name="id" />
+        <id name="medicationId" type="int">
+            <column name="medication_id" />
             <generator class="increment" />
         </id>
         <property name="shortName" type="java.lang.String" not-null="true">
@@ -22,7 +22,7 @@
 
     </class>
     <query name="Medication.findByMedicationId">
-        <![CDATA[SELECT m FROM Medication m WHERE m.id = :id]]>
+        <![CDATA[SELECT m FROM Medication m WHERE m.medicationId = :id]]>
     </query>
     <query name="Medication.findAll">
         <![CDATA[SELECT m FROM Medication m]]>

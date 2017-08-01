@@ -8,15 +8,15 @@ public class Medication implements Serializable {
     private String cautionaryText;
     private String icon_name;
 
-    public int getId() {
-        return id;
+    public int getMedicationId() {
+        return medicationId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setMedicationId(int id) {
+        this.medicationId = id;
     }
 
-    private int id;
+    private int medicationId;
 
     public String getShortName() {
         return shortName;

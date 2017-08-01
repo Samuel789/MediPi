@@ -2,10 +2,7 @@ package org.medipi.concentrator.services;
 
 import ma.glasnost.orika.MapperFacade;
 import net.sf.saxon.functions.Serialize;
-import org.medipi.concentrator.dao.AllHardwareDownloadableDAOImpl;
-import org.medipi.concentrator.dao.HardwareDownloadableDAOImpl;
-import org.medipi.concentrator.dao.MedicationDAOImpl;
-import org.medipi.concentrator.dao.PatientDownloadableDAOImpl;
+import org.medipi.concentrator.dao.*;
 import org.medipi.concentrator.exception.NotFound404Exception;
 import org.medipi.concentrator.logging.MediPiLogger;
 import org.medipi.concentrator.model.DownloadableDO;
@@ -37,6 +34,9 @@ public class MedicationDownloadService {
     @Autowired
     private MedicationDAOImpl medicationDAOImpl;
 
+    @Autowired
+    private ScheduleDAOImpl scheduleDAOimpl;
+
     @Transactional(rollbackFor = RuntimeException.class)
     public ResponseEntity<MedicationDO> getMedicationData(String hardware_name, String patientUuid) {
         assert patientDeviceValidationService != null;
@@ -52,14 +52,15 @@ public class MedicationDownloadService {
         medicationInfo.setTestMessage("你好我朋友！我会给你电话！");
         try {
             medicationInfo.setMedications(medicationDAOImpl.findAll());
+            medicationInfo.setSchedules(scheduleDAOimpl.findAll());
         } catch (Exception e) {
             System.out.println(String.format("Failed to execute query. Error was %s: %s", e.getClass(), e.getMessage()));
         }
         System.out.println(medicationInfo.getTestMessage());
         try {
-        System.out.println(medicationInfo.getMedications().get(0).getCautionaryText());
+        System.out.println(medicationInfo.getSchedules().get(0).getAssignedStartDate());
+        System.out.println(medicationInfo.getSchedules().get(0).getMedication().getFullName());
 
-        System.out.println(medicationInfo.getMedications().get(0).getDoseUnit().getName());
         } catch (Exception e) {
             System.out.println(String.format("Failed to process query results (or none returned). Error was %s: %s", e.getClass(), e.getMessage()));
         }
