@@ -1,4 +1,4 @@
-package org.medipi.concentrator.dataformat;
+package org.medipi.concentrator.entities;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -16,5 +16,10 @@ public class LocalDateConverter implements AttributeConverter<LocalDate, Date> {
     @Override
     public LocalDate convertToEntityAttribute(Date sqlDate) {
         return (sqlDate == null ? null : sqlDate.toLocalDate());
+    }
+
+    public LocalDateConverter() {
+        super();
+        System.out.println("Constructed!!..");
     }
 }

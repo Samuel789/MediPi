@@ -56,6 +56,7 @@ public class MedicationDownloadService {
         } catch (Exception e) {
             System.out.println(String.format("Failed to execute query. Error was %s: %s", e.getClass(), e.getMessage()));
         }
+        System.out.println(org.hibernate.Version.getVersionString());
         System.out.println(medicationInfo.getTestMessage());
         try {
         System.out.println(medicationInfo.getSchedules().get(0).getAssignedStartDate());

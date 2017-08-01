@@ -24,8 +24,14 @@
         <property name="patientUuid" type="java.lang.String" not-null="true">
             <column name="patient_uuid" />
         </property>
-
+        <property name="deviceStartDate" type="java.util.Date" not-null="true">
+            <column name="device_start_date"/>
+        </property>
+        <property name="deviceEndDate" type="java.util.Date" not-null="true">
+            <column name="device_end_date" />
+        </property>
     </class>
+
     <query name="Schedule.findByScheduleId">
         <![CDATA[SELECT s FROM Schedule s WHERE s.scheduleId = :id]]>
     </query>
