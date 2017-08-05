@@ -31,6 +31,11 @@
             <artifactId>commons-codec</artifactId>
             <version>1.3</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>RELEASE</version>
+        </dependency>
 
     </dependencies>
 </project>

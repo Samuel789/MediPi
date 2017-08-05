@@ -24,6 +24,13 @@
         <property name="patientUuid" type="java.lang.String" not-null="true">
             <column name="patient_uuid" />
         </property>
+        <set name="recordedDoses" table="recorded_dose"
+             inverse="true" lazy="false" cascade="all">
+            <key>
+                <column name="schedule_id" not-null="true" />
+            </key>
+            <one-to-many class="org.medipi.medication.RecordedDose" />
+        </set>
         <property name="deviceStartDate" type="date" not-null="true">
             <column name="device_start_date"/>
         </property>

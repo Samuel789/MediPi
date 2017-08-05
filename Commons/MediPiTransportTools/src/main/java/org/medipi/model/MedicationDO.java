@@ -40,7 +40,6 @@ public class MedicationDO implements Serializable {
     private String signature;
 
     private List<Schedule> schedules;
-    private List<RecordedDose> recordedDoses;
     private Date downloadedDate;
 
     /**
@@ -73,13 +72,6 @@ public class MedicationDO implements Serializable {
         this.versionDate = versionDate;
     }
 
-    public List<RecordedDose> getRecordedDoses() {
-        return recordedDoses;
-    }
-
-    public void setRecordedDoses(List<RecordedDose> recordedDoses) {
-        this.recordedDoses = recordedDoses;
-    }
 
     public String getMedicationPackageId() {
         return medicationPackageId;
@@ -131,11 +123,17 @@ public class MedicationDO implements Serializable {
 
     public void recreateReferences() {
         for (Schedule schedule: schedules) {
-            for (ScheduledDose dose: schedule.getScheduledDoses()) {
-                if (dose.getScheduleId() != schedule.getScheduleId()) {
-                    throw new MedicationLogicException("Dose ScheduleId (" + dose.getScheduleId() + ") does not match containing schedule (" + schedule.getScheduleId() + ")");
+            for (ScheduledDose scheduledDose: schedule.getScheduledDoses()) {
+                if (scheduledDose.getScheduleId() != schedule.getScheduleId()) {
+                    throw new MedicationLogicException("Scheduled Dose ScheduleId (" + scheduledDose.getScheduleId() + ") does not match containing schedule (" + schedule.getScheduleId() + ")");
                 }
-                dose.setSchedule(schedule);
+                scheduledDose.setSchedule(schedule);
+            }
+            for (RecordedDose recordedDose: schedule.getRecordedDoses()) {
+                if (recordedDose.getScheduleId() != schedule.getScheduleId()) {
+                    throw new MedicationLogicException("RecordedDose ScheduleId (" + recordedDose.getScheduleId() + ") does not match containing schedule (" + schedule.getScheduleId() + ")");
+                }
+                recordedDose.setSchedule(schedule);
             }
         }
     }

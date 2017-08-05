@@ -3,6 +3,7 @@ package org.medipi.medication;
 import java.beans.Transient;
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,8 +39,6 @@ public class Schedule implements Serializable {
     private int scheduleId;
     private Medication medication;
 
-
-
     public Set<ScheduledDose> getScheduledDoses() {
         return scheduledDoses;
     }
@@ -49,6 +48,16 @@ public class Schedule implements Serializable {
     }
 
     private Set<ScheduledDose> scheduledDoses = new HashSet<ScheduledDose>(0);
+
+    public Set<RecordedDose> getRecordedDoses() {
+        return recordedDoses;
+    }
+
+    public void setRecordedDoses(Set<RecordedDose> recordedDoses) {
+        this.recordedDoses = recordedDoses;
+    }
+
+    private Set<RecordedDose> recordedDoses = new HashSet<RecordedDose>(0);
     public Schedule() {
     }
 
@@ -104,7 +113,7 @@ public class Schedule implements Serializable {
         return medication;
     }
 
-    public String getDisplayName() {
+    public String determineDisplayName() {
         if (alternateName != null) {
             return alternateName;
         } else {
@@ -121,6 +130,8 @@ public class Schedule implements Serializable {
         return null;
     }
 
-
+    public void recordDose(Timestamp timeTaken, double doseValue) {
+        recordedDoses.add(new RecordedDose(timeTaken, doseValue, this));
+    }
 
 }

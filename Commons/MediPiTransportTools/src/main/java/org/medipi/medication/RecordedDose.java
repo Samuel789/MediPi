@@ -1,5 +1,6 @@
 package org.medipi.medication;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -39,6 +40,19 @@ public class RecordedDose implements Serializable {
     private double doseValue;
     private Timestamp timeTaken;
 
+    @XmlTransient
+    public Schedule getSchedule() {
+        return schedule;
+    }
+
+    @XmlTransient
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+    }
+
+    @XmlTransient
+    private transient Schedule schedule;
+
     public Integer getScheduleId() {
         return scheduleId;
     }
@@ -56,6 +70,7 @@ public class RecordedDose implements Serializable {
         this.timeTaken = timeTaken;
         this.doseValue = doseValue;
         this.scheduleId = schedule.getScheduleId();
+        this.schedule = schedule;
     }
 
     public String toString() {

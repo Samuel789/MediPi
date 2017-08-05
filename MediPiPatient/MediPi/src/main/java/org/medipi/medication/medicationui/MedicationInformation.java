@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import org.medipi.medication.Schedule;
 
 import java.io.File;
-import java.net.MalformedURLException;
 
 
 public class MedicationInformation extends Group {
@@ -34,7 +33,7 @@ public class MedicationInformation extends Group {
         this.getChildren().add(content);
         content.setPrefWidth(550);
         content.setPrefHeight(300);
-        titleLabel = new Label(schedule.getDisplayName());
+        titleLabel = new Label(schedule.determineDisplayName());
         fullNameLabel = new Label(schedule.getMedication().getFullName());
         purposeLabel = new Label(schedule.getPurposeStatement());
         advisoryTextArea = new TextArea(schedule.getMedication().getCautionaryText());

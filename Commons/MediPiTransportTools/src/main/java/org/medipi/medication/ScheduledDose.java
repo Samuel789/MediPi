@@ -1,14 +1,21 @@
 package org.medipi.medication;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.xml.bind.annotation.XmlTransient;
 import java.beans.Transient;
 import java.io.Serializable;
 import java.sql.Time;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class ScheduledDose implements Serializable {
     public double getDoseValue() {
         return doseValue;
     }
+    private final long MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
 
     public Integer getStartDay() {
         return startDay;
@@ -98,15 +105,17 @@ public class ScheduledDose implements Serializable {
         this.windowEndTime = windowEndTime;
     }
 
-
+    @XmlTransient
     public Schedule getSchedule() {
         return schedule;
     }
 
+    @XmlTransient
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
     }
 
+    @XmlTransient
     private transient Schedule schedule;
 
 
@@ -134,7 +143,7 @@ public class ScheduledDose implements Serializable {
     }
 
     public boolean calculateIsDue() {
-        long MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
+
         java.util.Date currentDateTime = new java.util.Date();
         long diff = Math.abs(currentDateTime.getTime() - schedule.getAssignedStartDate().getTime());
         int thisDayNumber = (int) (diff/(24 * 60 * 60 * 1000));
@@ -148,6 +157,20 @@ public class ScheduledDose implements Serializable {
         long startTime = windowStartTime.getTime() % MILLIS_PER_DAY;
         long endTime = windowEndTime.getTime() % MILLIS_PER_DAY;
         long currentTime = currentDateTime.getTime() % MILLIS_PER_DAY;
-        return (currentTime < endTime && currentTime >= startTime);
+        return (currentTime < endTime && currentTime >= startTime && !hasBeenTaken());
+    }
+
+    public boolean hasBeenTaken() {
+        LocalDate today = LocalDate.now();
+        LocalDateTime startTime = today.atTime(windowStartTime.toLocalTime());
+        LocalDateTime endTime = today.atTime(windowEndTime.toLocalTime());
+        for (RecordedDose takenDose: schedule.getRecordedDoses()) {
+            System.out.println(takenDose.getTimeTaken());
+            LocalDateTime takenTime = takenDose.getTimeTaken().toLocalDateTime();
+            if (takenTime.isAfter(startTime) && takenTime.isBefore(endTime)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

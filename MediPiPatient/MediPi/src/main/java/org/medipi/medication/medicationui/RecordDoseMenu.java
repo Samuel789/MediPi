@@ -129,7 +129,7 @@ class DoseDetailsScreen extends TileMenu {
         });
         header.setMainContent(new Label("Now, make sure the dose and time are correct"));
         doseUnit = (DoseUnit) medicationSchedule.getMedication().getDoseUnit();
-        medicationName = medicationSchedule.getDisplayName();
+        medicationName = medicationSchedule.determineDisplayName();
         doseDay = LocalDate.now();
         doseTime = LocalTime.now();
         doseValue = 0;
@@ -163,8 +163,7 @@ class DoseDetailsScreen extends TileMenu {
 
         saveButton.setOnButtonClick((ActionEvent) -> {
             if (getUserConfirmation()) {
-                ((MedicationManager)medipi.getElement("Medication")).getDatestore().recordDose(
-                    new RecordedDose(Timestamp.valueOf(doseTime.atDate(doseDay)), doseValue, medicationSchedule));
+                medicationSchedule.recordDose(Timestamp.valueOf(doseTime.atDate(doseDay)), doseValue);
                 if (upperMenu instanceof RecordDoseMenu) {
                     ((RecordDoseMenu) upperMenu).close();
                 } else {

@@ -72,9 +72,12 @@ public class MedicationDownloadService {
         return new ResponseEntity<MedicationDO>(medicationInfo, HttpStatus.OK);
     }
 
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = Throwable.class)
     public void uploadRecordedDoses(MedicationDO uploadedData) {
-        List<RecordedDose> doseData = uploadedData.getRecordedDoses();
+        List<RecordedDose> doseData = new ArrayList<>();
+        for (Schedule schedule: uploadedData.getSchedules()) {
+            doseData.addAll(schedule.getRecordedDoses());
+        }
         System.out.println("RECEIVED UPLOAD: " + " " + doseData.size());
         for (RecordedDose dose: doseData) {
             try{recordedDoseDAOimpl.findByRecordedDoseUUID(dose.getRecordedDoseUUID());

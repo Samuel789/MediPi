@@ -15,6 +15,7 @@
  */
 package org.medipi.medication;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.medipi.MediPi;
 import org.medipi.MediPiMessageBox;
 import org.medipi.logging.MediPiLogger;
@@ -24,7 +25,6 @@ import org.medipi.model.MedicationDO;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
 import java.util.HashMap;
@@ -49,6 +49,7 @@ public class Synchronizer
     private final String deviceCertName;
     private final String resourcePath;
     private final MediPi medipi;
+    private final MedicationManager medicationManager;
 
     /**
      * Constructor for PollIncomingMessage class
@@ -57,6 +58,7 @@ public class Synchronizer
      */
     public Synchronizer(MediPi medipi) throws Exception {
         this.medipi = medipi;
+        medicationManager = (MedicationManager) medipi.getElement("Medication");
         resourcePath = medipi.getProperties().getProperty(MEDIPITRANSMITRESOURCEPATH);
         if (resourcePath == null || resourcePath.trim().equals("")) {
             MediPiLogger.getInstance().log(Synchronizer.class.getName() + ".error", "MediPi resource base path is not set");
@@ -91,7 +93,9 @@ public class Synchronizer
         System.out.println(params);
         Response response = rme.executeGet(params);
         //
-        MedicationDO recievedData = (MedicationDO) response.readEntity(new GenericType<MedicationDO>() {});
+        String jsonResponse = response.readEntity(String.class);
+        System.out.println(jsonResponse);
+        MedicationDO recievedData = new ObjectMapper().readValue(jsonResponse, MedicationDO.class);
 
         return recievedData;
 
@@ -102,7 +106,7 @@ public class Synchronizer
         List<Schedule> newSchedules = recievedData.getSchedules();
         for (Schedule schedule: newSchedules) {
             System.out.println(schedule.getAssignedStartDate());
-            System.out.println(schedule.getDisplayName());
+            System.out.println(schedule.determineDisplayName());
             System.out.println(schedule.getAlternateName());
             System.out.println(schedule.getPurposeStatement());
             System.out.println(schedule.getPatientUuid());
@@ -128,13 +132,14 @@ public class Synchronizer
         Datastore datastore = ((MedicationManager)medipi.getElement("Medication")).getDatestore();
         System.out.println("MedUpdate run at: " + Instant.now());
         try {
+            MedicationDO uploadData = new MedicationDO();
+            uploadData.setSchedules(datastore.getPatientSchedules());
+            uploadDoseData(uploadData);
+            System.out.println("Sent upload data");
             MedicationDO recievedData = downloadScheduleData();
             List<Schedule> schedules = processScheduleData(recievedData);
             datastore.replacePatientSchedules(schedules);
-            MedicationDO uploadData = new MedicationDO();
-            uploadData.setRecordedDoses(datastore.getRecordedDoses());
-            uploadDoseData(uploadData);
-            System.out.println("Sent upload data");
+
         }  catch (ProcessingException pe) {
             MediPiLogger.getInstance().log(Synchronizer.class.getName() + ".error", "Attempt to synchronize medication data has failed - MediPi Concentrator is not available - please try again later. " + pe.getLocalizedMessage());
             MediPiMessageBox.getInstance().makeErrorMessage("Attempt to synchronize medication data has failed - MediPi Concentrator is not available - please try again later. " + pe.getLocalizedMessage(), pe);

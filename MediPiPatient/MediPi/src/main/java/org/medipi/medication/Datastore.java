@@ -14,12 +14,10 @@ import java.util.UUID;
 public class Datastore {
 
     private List<Schedule> patientSchedules;
-    private ArrayList<RecordedDose> recordedDoses;
     private MediPi medipi;
 
     public Datastore(MediPi medipi){
         this.medipi = medipi;
-        recordedDoses = new ArrayList<>();
     }
 
     public List<Schedule> getPatientSchedules() {
@@ -29,14 +27,5 @@ public class Datastore {
     public void replacePatientSchedules(List<Schedule> patientSchedules) {
         this.patientSchedules = patientSchedules;
     }
-
-    public void recordDose(RecordedDose dose) {
-        recordedDoses.add(dose);
-    }
-
-    public ArrayList<RecordedDose> getRecordedDoses() {
-        return recordedDoses;
-    }
-
 
 }
