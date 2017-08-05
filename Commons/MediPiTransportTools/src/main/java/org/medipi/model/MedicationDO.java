@@ -15,7 +15,10 @@
  */
 package org.medipi.model;
 
-import org.medipi.medication.*;
+import org.medipi.medication.MedicationLogicException;
+import org.medipi.medication.RecordedDose;
+import org.medipi.medication.Schedule;
+import org.medipi.medication.ScheduledDose;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -36,22 +39,8 @@ public class MedicationDO implements Serializable {
     private Date versionDate;
     private String signature;
 
-
-    private List<ScheduledDose> scheduledDoses;
-    private List<Medication> medications;
     private List<Schedule> schedules;
-    private List<DoseUnit> doseUnits;
-
-    public String getTestMessage() {
-        return testMessage;
-    }
-
-    public void setTestMessage(String testMessage) {
-        this.testMessage = testMessage;
-    }
-
-    private String testMessage;
-
+    private List<RecordedDose> recordedDoses;
     private Date downloadedDate;
 
     /**
@@ -62,6 +51,7 @@ public class MedicationDO implements Serializable {
 
     /**
      * Constructor
+     *
      * @param downloadableUuid
      */
     public MedicationDO(String downloadableUuid) {
@@ -70,6 +60,7 @@ public class MedicationDO implements Serializable {
 
     /**
      * Constructor
+     *
      * @param downloadableUuid
      * @param version
      * @param versionAuthor
@@ -80,6 +71,14 @@ public class MedicationDO implements Serializable {
         this.version = version;
         this.versionAuthor = versionAuthor;
         this.versionDate = versionDate;
+    }
+
+    public List<RecordedDose> getRecordedDoses() {
+        return recordedDoses;
+    }
+
+    public void setRecordedDoses(List<RecordedDose> recordedDoses) {
+        this.recordedDoses = recordedDoses;
     }
 
     public String getMedicationPackageId() {
@@ -130,20 +129,15 @@ public class MedicationDO implements Serializable {
         this.downloadedDate = downloadedDate;
     }
 
-    public List<ScheduledDose> getScheduledDoses() {
-        return scheduledDoses;
-    }
-
-    public void setScheduledDoses(List<ScheduledDose> scheduledDoses) {
-        this.scheduledDoses = scheduledDoses;
-    }
-
-    public List<Medication> getMedications() {
-        return medications;
-    }
-
-    public void setMedications(List<Medication> medications) {
-        this.medications = medications;
+    public void recreateReferences() {
+        for (Schedule schedule: schedules) {
+            for (ScheduledDose dose: schedule.getScheduledDoses()) {
+                if (dose.getScheduleId() != schedule.getScheduleId()) {
+                    throw new MedicationLogicException("Dose ScheduleId (" + dose.getScheduleId() + ") does not match containing schedule (" + schedule.getScheduleId() + ")");
+                }
+                dose.setSchedule(schedule);
+            }
+        }
     }
 
     public List<Schedule> getSchedules() {
@@ -152,14 +146,6 @@ public class MedicationDO implements Serializable {
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
-    }
-
-    public List<DoseUnit> getDoseUnits() {
-        return doseUnits;
-    }
-
-    public void setDoseUnits(List<DoseUnit> doseUnits) {
-        this.doseUnits = doseUnits;
     }
 
     @Override

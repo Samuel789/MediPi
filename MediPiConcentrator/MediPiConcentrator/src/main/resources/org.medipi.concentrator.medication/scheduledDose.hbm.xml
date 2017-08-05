@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.medipi.medication.ScheduledDose" table="scheduled_dose">
+        <id name="scheduledDoseId" type="int">
+            <column name="scheduled_dose_id" />
+            <generator class="increment" />
+        </id>
+        <property name="scheduleId" type="int" not-null="true">
+            <column name="schedule_id" />
+        </property>
+        <property name="doseValue" type="double" not-null="true">
+            <column name="value" />
+        </property>
+        <property name="startDay" type="int" not-null="true">
+            <column name="start_day" />
+        </property>
+        <property name="repeatInterval" type="int" not-null="false">
+            <column name="repeat_interval" />
+        </property>
+        <property name="endDay" type="int" not-null="false">
+            <column name="end_day" />
+        </property>
+        <property name="windowStartTime" type="time" not-null="true">
+            <column name="window_start_time" />
+        </property>
+        <property name="windowEndTime" type="time" not-null="true">
+            <column name="window_end_time" />
+        </property>
+        <property name="defaultReminderTime" type="time" not-null="true">
+            <column name="default_reminder_time" />
+        </property>
+        <property name="reminderTime" type="time" not-null="true">
+            <column name="reminder_time" />
+        </property>
+        <property name="deviceStartDate" type="date" not-null="false">
+            <column name="device_start_date" />
+        </property>
+        <property name="deviceEndDate" type="date" not-null="false">
+            <column name="device_end_date" />
+        </property>
+
+    </class>
+    <query name="ScheduledDose.findByScheduleId">
+        <![CDATA[SELECT d FROM ScheduledDose d WHERE d.scheduledDoseId = :id]]>
+    </query>
+    <query name="ScheduledDose.findAll">
+        <![CDATA[SELECT d FROM ScheduledDose d]]>
+    </query>
+
+</hibernate-mapping>

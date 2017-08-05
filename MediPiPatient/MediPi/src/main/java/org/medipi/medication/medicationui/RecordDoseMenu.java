@@ -2,6 +2,8 @@ package org.medipi.medication.medicationui;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -9,35 +11,39 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import org.medipi.MediPi;
-import org.medipi.medication.DoseUnit;
-import org.medipi.medication.Schedule;
-import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.*;
 import org.medipi.ui.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Vector;
+import java.util.*;
 
 
 public class RecordDoseMenu extends TileMenu {
     double adherenceRate =0.8;
     TileMenu mainPane;
-    Vector<Schedule> schedules;
+    List<Schedule> schedules;
     MediPi mediPi;
+    TileMenu upperMenu;
+
     public RecordDoseMenu(MediPi mediPi, TileMenu upperMenu, ScheduledDose dose) {
         super(new WindowManager(), 5, 3.15, upperMenu);
         setOverlayWindow(new DoseDetailsScreen(mediPi, upperMenu, dose));
         showOverlayWindow();
+        this.mediPi = mediPi;
     }
     public RecordDoseMenu(MediPi medipi, TileMenu upperMenu) {
         super(new WindowManager(), 5, 3.15, upperMenu);
         this.mediPi = medipi;
+        this.upperMenu = upperMenu;
         HeaderTile header = new HeaderTile(new SimpleBooleanProperty(true), 3, 1);
         header.setTitleText("Recording a Dose");
         ButtonTile backButton = new ButtonTile(new SimpleBooleanProperty(true), 2, 1);
         backButton.setText("Back");
-        backButton.setOnButtonClick((MouseEvent event) -> {upperMenu.closeOverlayWindow();});
+        backButton.setOnButtonClick((MouseEvent event) -> {close();});
         header.setMainContent(new Label("First, tap the medication you've taken"));
         this.addTile(backButton);
         this.addTile(header);
@@ -54,21 +60,32 @@ public class RecordDoseMenu extends TileMenu {
     }
 
     private void populateMedicationTiles() {
-        schedules = new Vector<>();
-        schedules.add(new Schedule());
-        schedules.add(new Schedule());
-        schedules.add(new Schedule());
-        schedules.add(new Schedule());
-        schedules.add(new Schedule());
-        schedules.add(new Schedule());
-        schedules.add(new Schedule());
-        schedules.add(new Schedule());
-        schedules.add(new Schedule());
+        schedules = ((MedicationManager) mediPi.getElement("Medication")).getDatestore().getPatientSchedules();
+        ArrayList<MedicationTile> orderedTiles = new ArrayList<>();
         for (Schedule schedule: schedules) {
             MedicationTile newTile = new MedicationTile(new SimpleBooleanProperty(true), 1, 1, schedule);
-            mainPane.addTile(newTile);
+
+            if (schedule.findDueDose() == null) {
+                if (schedule.getScheduledDoses().size() == 0) {
+                    newTile.setDueStatus(MedicationTile.DueStatus.ASNEEDED);
+                } else {
+                    newTile.setDueStatus(MedicationTile.DueStatus.NOTNOW);
+                }
+            } else {
+                newTile.setDueStatus(MedicationTile.DueStatus.TAKENOW);
+            }
             newTile.setDisplayType(MedicationTile.DisplayType.DUESTATUS);
             newTile.setOnTileClick((MouseEvent event) -> {selectTile(newTile);});
+            orderedTiles.add(newTile);
+        }
+        orderedTiles.sort(new Comparator<MedicationTile>() {
+            @Override
+            public int compare(MedicationTile o1, MedicationTile o2) {
+                return o1.getDueStatus().compareTo(o2.getDueStatus());
+            }
+        });
+        for (MedicationTile tile: orderedTiles) {
+            mainPane.addTile(tile);
         }
     }
 
@@ -77,6 +94,10 @@ public class RecordDoseMenu extends TileMenu {
         setOverlayWindow(new DoseDetailsScreen(mediPi, this, tile.getMedicationSchedule()));
         showOverlayWindow();
 
+    }
+
+    void close() {
+        upperMenu.closeOverlayWindow();
     }
 }
 
@@ -87,6 +108,7 @@ class DoseDetailsScreen extends TileMenu {
     double doseValue;
     DoseUnit doseUnit;
     String medicationName;
+    MediPi mediPi;
 
     public DoseDetailsScreen(MediPi mediPi, TileMenu upperMenu, ScheduledDose dose) {
         this(mediPi, upperMenu, dose.getSchedule());
@@ -96,6 +118,8 @@ class DoseDetailsScreen extends TileMenu {
 
     public DoseDetailsScreen(MediPi medipi, TileMenu upperMenu, Schedule medicationSchedule) {
         super(new WindowManager(), 8, 3.15, upperMenu);
+        this.mediPi = medipi;
+
         HeaderTile header = new HeaderTile(new SimpleBooleanProperty(true), 5, 1);
         header.setTitleText("Recording a Dose");
         ButtonTile backButton = new ButtonTile(new SimpleBooleanProperty(true), 3, 1);
@@ -132,14 +156,42 @@ class DoseDetailsScreen extends TileMenu {
 
         addTile(centralTile);
 
-        addBufferTile(1, 1);
         addTile(doseButton);
         addTile(timeButton);
         addBufferTile(1, 1);
         addTile(saveButton);
+
+        saveButton.setOnButtonClick((ActionEvent) -> {
+            if (getUserConfirmation()) {
+                ((MedicationManager)medipi.getElement("Medication")).getDatestore().recordDose(
+                    new RecordedDose(Timestamp.valueOf(doseTime.atDate(doseDay)), doseValue, medicationSchedule));
+                if (upperMenu instanceof RecordDoseMenu) {
+                    ((RecordDoseMenu) upperMenu).close();
+                } else {
+                    upperMenu.closeOverlayWindow();
+                }
+            }
+        });
     }
 
     private void generateDoseString() {
         doseDescriptor.setText(String.format("Recording %f %s(s) of %s taken %s at %s", doseValue, doseUnit.getName(), medicationName, doseDay, doseTime));
+    }
+
+    private boolean getUserConfirmation() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Confirm recording dose");
+        alert.setHeaderText(null);
+        System.out.println(mediPi);
+        System.out.println(mediPi.getCssfile());
+        alert.getDialogPane().getStylesheets().add("file:///" + mediPi.getCssfile());
+        alert.getDialogPane().setMaxSize(600, 300);
+        alert.getDialogPane().setId("message-box");
+        Text text = new Text("Are you sure you want to record this dose?\n" + doseDescriptor.getText());
+        text.setWrappingWidth(600);
+        alert.getDialogPane().setContent(text);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.get() == ButtonType.YES;
     }
 }

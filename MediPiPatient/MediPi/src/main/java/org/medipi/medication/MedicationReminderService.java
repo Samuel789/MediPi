@@ -25,6 +25,14 @@ public class MedicationReminderService {
         popupWindow.showAndWait();
     }
     public void throwTestReminder() {
-        throwReminder(new ScheduledDose());
+        MedicationManager medicationManager =(MedicationManager) mediPi.getElement("Medication");
+        System.out.println(medicationManager);
+        throwReminder(
+                medicationManager.getDatestore()
+                        .getPatientSchedules()
+                        .get(0)
+                        .getScheduledDoses()
+                        .iterator()
+                        .next());
     }
 }

@@ -20,10 +20,10 @@ import org.medipi.MediPiMessageBox;
 import org.medipi.logging.MediPiLogger;
 import org.medipi.messaging.rest.RESTfulMessagingEngine;
 import org.medipi.messaging.vpn.VPNServiceManager;
-import org.medipi.model.DownloadableDO;
 import org.medipi.model.MedicationDO;
 
 import javax.ws.rs.ProcessingException;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
@@ -46,11 +46,9 @@ public class Synchronizer
     private static final String MEDIPITRANSMITRESOURCEPATH = "medipi.transmit.resourcepath";
     private static final String MEDIPIDEVICECERTNAME = "medipi.device.cert.name";
     private static final String MEDIPIPATIENTCERTNAME = "medipi.patient.cert.name";
-    private String patientCertName;
     private final String deviceCertName;
     private final String resourcePath;
     private final MediPi medipi;
-    private RESTfulMessagingEngine rme;
 
     /**
      * Constructor for PollIncomingMessage class
@@ -69,59 +67,80 @@ public class Synchronizer
         if (deviceCertName == null || deviceCertName.trim().length() == 0) {
             medipi.makeFatalErrorMessage("MediPi device cert not found", null);
         }
-        String[] params = {"{deviceId}", "{patientId}"};
-        rme = new RESTfulMessagingEngine(resourcePath + "medication/download", params);
+
+    }
+
+    private MedicationDO downloadScheduleData() throws Exception {
+        RESTfulMessagingEngine rme = new RESTfulMessagingEngine(resourcePath + "medication/download", new String[] {"{deviceId}", "{patientId}"});
+        UUID uuid = UUID.randomUUID();
+        VPNServiceManager vpnm = null;
+        String patientCertName = System.getProperty(MEDIPIPATIENTCERTNAME);
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("deviceId", deviceCertName);
+        params.put("patientId", patientCertName);
+        if (!medipi.wifiSync.get()) {
+            throw new RuntimeException("No wifi connection");
+        }
+        if (patientCertName == null || patientCertName.trim().length() == 0) {
+            throw new RuntimeException("Patient certificate is not available");
+        }
+        vpnm = VPNServiceManager.getInstance();
+        if (vpnm.isEnabled()) {
+            vpnm.VPNConnection(VPNServiceManager.OPEN, uuid);
+        }
+        System.out.println(params);
+        Response response = rme.executeGet(params);
+        //
+        MedicationDO recievedData = (MedicationDO) response.readEntity(new GenericType<MedicationDO>() {});
+
+        return recievedData;
+
+    }
+
+    private List<Schedule> processScheduleData(MedicationDO recievedData) {
+        recievedData.recreateReferences();
+        List<Schedule> newSchedules = recievedData.getSchedules();
+        for (Schedule schedule: newSchedules) {
+            System.out.println(schedule.getAssignedStartDate());
+            System.out.println(schedule.getDisplayName());
+            System.out.println(schedule.getAlternateName());
+            System.out.println(schedule.getPurposeStatement());
+            System.out.println(schedule.getPatientUuid());
+        }
+        //Todo - Process schedules
+        return newSchedules;
+    }
+
+    private void uploadDoseData(MedicationDO doses) throws Exception {
+        HashMap<String, Object> params = new HashMap<>();
+        String patientCertName = System.getProperty(MEDIPIPATIENTCERTNAME);
+        params.put("deviceId", deviceCertName);
+        params.put("patientId", patientCertName);
+        RESTfulMessagingEngine rme = new RESTfulMessagingEngine(resourcePath + "medication/upload", new String[] {});
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Data-Format", "MediPiNative");
+        Response postResponse = rme.executePut(params, Entity.json(doses), headers);
+        System.out.println(postResponse.getStatusInfo());
     }
 
     @Override
     public void run() {
+        Datastore datastore = ((MedicationManager)medipi.getElement("Medication")).getDatestore();
         System.out.println("MedUpdate run at: " + Instant.now());
-        UUID uuid = UUID.randomUUID();
-        VPNServiceManager vpnm = null;
         try {
-            // get the patient cert - this is only available after the first login 
-            // and therefore no downloads are attempted before the first login
-            patientCertName = System.getProperty(MEDIPIPATIENTCERTNAME);
-            if (!medipi.wifiSync.get()) {
-                System.out.println("WIFI not available - no polling");
-                // Do not try and download anything before wifi is available
-            } else if (patientCertName == null || patientCertName.trim().length() == 0) {
-                System.out.println("Patient Certificate Name not known");
-                // Do not try and download anything before the user password is input for the first time
-            } else {
-                vpnm = VPNServiceManager.getInstance();
-                if (vpnm.isEnabled()) {
-                    vpnm.VPNConnection(VPNServiceManager.OPEN, uuid);
-                }
-                HashMap<String, Object> hs = new HashMap<>();
-                hs.put("deviceId", deviceCertName);
-                hs.put("patientId", patientCertName);
-                Response response = rme.executeGet(hs);
-                //
-                MedicationDO recievedData = (MedicationDO) response.readEntity(new GenericType<MedicationDO>() {});
-                System.out.println(recievedData);
-                System.out.println(recievedData.getTestMessage());
-                System.out.println(recievedData.getSchedules().get(0).getAssignedStartDate());
-                System.out.println(recievedData.getSchedules().get(0).getMedication().getFullName());
-
-            }
-        } catch (ProcessingException pe) {
-            MediPiLogger.getInstance().log(Synchronizer.class.getName() + ".error", "Attempt to retreive incoming messages has failed - MediPi Concentrator is not available - please try again later. " + pe.getLocalizedMessage());
-            MediPiMessageBox.getInstance().makeErrorMessage("Attempt to retreive incoming messages has failed - MediPi Concentrator is not available - please try again later.", pe);
+            MedicationDO recievedData = downloadScheduleData();
+            List<Schedule> schedules = processScheduleData(recievedData);
+            datastore.replacePatientSchedules(schedules);
+            MedicationDO uploadData = new MedicationDO();
+            uploadData.setRecordedDoses(datastore.getRecordedDoses());
+            uploadDoseData(uploadData);
+            System.out.println("Sent upload data");
+        }  catch (ProcessingException pe) {
+            MediPiLogger.getInstance().log(Synchronizer.class.getName() + ".error", "Attempt to synchronize medication data has failed - MediPi Concentrator is not available - please try again later. " + pe.getLocalizedMessage());
+            MediPiMessageBox.getInstance().makeErrorMessage("Attempt to synchronize medication data has failed - MediPi Concentrator is not available - please try again later. " + pe.getLocalizedMessage(), pe);
         } catch (Exception e) {
-            MediPiLogger.getInstance().log(Synchronizer.class.getName() + ".error", "Error detected when attempting to poll the Concentrator: " + e.getLocalizedMessage());
-            MediPiMessageBox.getInstance().makeErrorMessage("Error detected when attempting to poll the Concentrator: " + e.getLocalizedMessage(), e);
-        } finally {
-            System.out.println("pollFinally1");
-            if (vpnm != null && vpnm.isEnabled()) {
-                try {
-                    System.out.println("pollFinally2");
-                    vpnm.VPNConnection(VPNServiceManager.CLOSE, uuid);
-                    System.out.println("pollFinally3");
-                } catch (Exception ex) {
-                    MediPiLogger.getInstance().log(Synchronizer.class.getName(), ex);
-                }
-            }
+            MediPiLogger.getInstance().log(Synchronizer.class.getName() + ".error", "Error detected when attempting to synchronize medication data: " + e.getLocalizedMessage());
+            MediPiMessageBox.getInstance().makeErrorMessage("Error detected when attempting to synchronize medication data: " + e.getLocalizedMessage(), e);
         }
     }
 }

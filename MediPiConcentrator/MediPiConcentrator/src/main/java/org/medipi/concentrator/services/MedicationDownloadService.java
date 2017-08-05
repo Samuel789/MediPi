@@ -1,25 +1,21 @@
 package org.medipi.concentrator.services;
 
-import ma.glasnost.orika.MapperFacade;
-import net.sf.saxon.functions.Serialize;
 import org.medipi.concentrator.dao.*;
 import org.medipi.concentrator.exception.NotFound404Exception;
-import org.medipi.concentrator.logging.MediPiLogger;
-import org.medipi.concentrator.model.DownloadableDO;
 import org.medipi.concentrator.utilities.Utilities;
+import org.medipi.medication.RecordedDose;
+import org.medipi.medication.Schedule;
+import org.medipi.medication.ScheduledDose;
 import org.medipi.model.MedicationDO;
-import org.medipi.security.CertificateDefinitions;
-import org.medipi.security.UploadEncryptionAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.security.NoSuchAlgorithmException;
+import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,6 +33,12 @@ public class MedicationDownloadService {
     @Autowired
     private ScheduleDAOImpl scheduleDAOimpl;
 
+    @Autowired
+    private ScheduledDoseDAOImpl scheduledDoseDAOimpl;
+
+    @Autowired
+    private RecordedDoseDAOImpl recordedDoseDAOimpl;
+
     @Transactional(rollbackFor = RuntimeException.class)
     public ResponseEntity<MedicationDO> getMedicationData(String hardware_name, String patientUuid) {
         assert patientDeviceValidationService != null;
@@ -49,18 +51,14 @@ public class MedicationDownloadService {
             throw new NotFound404Exception("Hardware and/or patient not registered" + e.getLocalizedMessage());
         }
         MedicationDO medicationInfo = new MedicationDO();
-        medicationInfo.setTestMessage("你好我朋友！我会给你电话！");
-        try {
-            medicationInfo.setMedications(medicationDAOImpl.findAll());
-            medicationInfo.setSchedules(scheduleDAOimpl.findAll());
-        } catch (Exception e) {
-            System.out.println(String.format("Failed to execute query. Error was %s: %s", e.getClass(), e.getMessage()));
-        }
+        List<ScheduledDose> doses = new ArrayList<>();
         System.out.println(org.hibernate.Version.getVersionString());
-        System.out.println(medicationInfo.getTestMessage());
         try {
-        System.out.println(medicationInfo.getSchedules().get(0).getAssignedStartDate());
-        System.out.println(medicationInfo.getSchedules().get(0).getMedication().getFullName());
+            medicationInfo.setSchedules(scheduleDAOimpl.findAll());
+        for (Schedule schedule: medicationInfo.getSchedules()) {
+            System.out.println(schedule.getAssignedStartDate());
+        }
+
 
         } catch (Exception e) {
             System.out.println(String.format("Failed to process query results (or none returned). Error was %s: %s", e.getClass(), e.getMessage()));
@@ -72,5 +70,17 @@ public class MedicationDownloadService {
             System.out.println(String.format("Creation of ResponseEntity failed. Error was %s: %s", e.getClass(), e.getMessage()));
         }
         return new ResponseEntity<MedicationDO>(medicationInfo, HttpStatus.OK);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void uploadRecordedDoses(MedicationDO uploadedData) {
+        List<RecordedDose> doseData = uploadedData.getRecordedDoses();
+        System.out.println("RECEIVED UPLOAD: " + " " + doseData.size());
+        for (RecordedDose dose: doseData) {
+            try{recordedDoseDAOimpl.findByRecordedDoseUUID(dose.getRecordedDoseUUID());
+            } catch (EmptyResultDataAccessException e) {
+                recordedDoseDAOimpl.save(dose);
+            }
+        }
     }
 }

@@ -338,3 +338,15 @@ Messenger
     -fx-font: 15px Tahoma;
 	-fx-alignment:center;
 }
+
+.button-caution {
+	-fx-background-color: #FFC5C5 !important;
+}
+
+.button-neutral {
+	-fx-background-color: #FAFEA8 !important;
+}
+
+.button-advised {
+	-fx-background-color: #D4F5B3 !important;
+}

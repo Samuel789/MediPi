@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import org.medipi.medication.Schedule;
 import org.medipi.ui.Tile;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class MedicationTile extends Tile {
@@ -21,6 +22,27 @@ public class MedicationTile extends Tile {
     Label purposeLabel;
     AdherenceBar adherenceBar;
     public enum DisplayType {ADHERENCE, DUESTATUS};
+    public enum DueStatus {TAKENOW, ASNEEDED, NOTNOW};
+    public static final HashMap<DueStatus, String> styles = new HashMap<>();
+    static {
+        styles.put(DueStatus.TAKENOW, "button-advised");
+        styles.put(DueStatus.ASNEEDED, "button-neutral");
+        styles.put(DueStatus.NOTNOW, "button-caution");
+    }
+
+    public DueStatus getDueStatus() {
+        return dueStatus;
+    }
+
+    public void setDueStatus(DueStatus dueStatus) {
+        if (this.dueStatus != null) {
+            content.getStyleClass().remove(styles.get(dueStatus));
+        }
+        this.dueStatus = dueStatus;
+        content.getStyleClass().add(styles.get(dueStatus));
+    }
+
+    private DueStatus dueStatus = null;
 
     public DisplayType getDisplayType() {
         return displayType;
@@ -91,14 +113,18 @@ public class MedicationTile extends Tile {
 
     }
 
+    private void setDoseStatus(DueStatus status) {
+        dueStatus = status;
+    }
+
+    private DueStatus getDoseStatus() {
+        return dueStatus;
+    }
+
     public void setMedicationSchedule(Schedule schedule) {
         adherenceBar.setProgress(new Random().nextDouble() % 1);
         adherenceBar.setStreakLength((int) ((new Random().nextDouble() % 1)*20));
         this.medicationSchedule = schedule;
-    }
-
-    protected void setBackgroundColour(Color color) {
-        content.setBackground(new Background(new BackgroundFill(color, new CornerRadii(10), Insets.EMPTY)));
     }
 
     public void setShowInfoOnClick() {

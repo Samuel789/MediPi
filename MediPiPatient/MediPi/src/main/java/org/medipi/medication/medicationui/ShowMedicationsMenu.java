@@ -11,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import org.medipi.MediPi;
+import org.medipi.medication.MedicationManager;
 import org.medipi.medication.Schedule;
 import org.medipi.ui.*;
 
@@ -18,10 +19,12 @@ import org.medipi.ui.*;
 public class ShowMedicationsMenu extends TileMenu {
     double adherenceRate =0.8;
     TileMenu mainPane;
+    MediPi medipi;
     public ShowMedicationsMenu(MediPi medipi, TileMenu upperMenu) {
         super(new WindowManager(), 3, 2.15, upperMenu);
         MajorMinorTile medTile1 = new MajorMinorTile(new SimpleBooleanProperty(true), 1, 1);
         medTile1.setMajorText("Back");
+        this.medipi = medipi;
         medTile1.setOnMajorClick((MouseEvent event) -> {upperMenu.closeOverlayWindow();});
         medTile1.setMinorText("Help");
         System.out.println(getUnitWidth());
@@ -44,15 +47,8 @@ public class ShowMedicationsMenu extends TileMenu {
     }
 
     private void populateMedicationTiles() {
-        mainPane.addTile(new MedicationTile(new SimpleBooleanProperty(true), 1, 1, new Schedule()));
-        mainPane.addTile(new MedicationTile(new SimpleBooleanProperty(true), 1, 1, new Schedule()));
-        mainPane.addTile(new MedicationTile(new SimpleBooleanProperty(true), 1, 1, new Schedule()));
-        mainPane.addTile(new MedicationTile(new SimpleBooleanProperty(true), 1, 1, new Schedule()));
-        mainPane.addTile(new MedicationTile(new SimpleBooleanProperty(true), 1, 1, new Schedule()));
-        mainPane.addTile(new MedicationTile(new SimpleBooleanProperty(true), 1, 1, new Schedule()));
-        mainPane.addTile(new MedicationTile(new SimpleBooleanProperty(true), 1, 1, new Schedule()));
-        mainPane.addTile(new MedicationTile(new SimpleBooleanProperty(true), 1, 1, new Schedule()));
-        mainPane.addTile(new MedicationTile(new SimpleBooleanProperty(true), 1, 1, new Schedule()));
-        mainPane.addTile(new MedicationTile(new SimpleBooleanProperty(true), 1, 1, new Schedule()));
+        for (Schedule schedule : ((MedicationManager) medipi.getElement("Medication")).getDatestore().getPatientSchedules()) {
+            mainPane.addTile(new MedicationTile(new SimpleBooleanProperty(true), 1, 1, schedule));
+        }
     }
 }

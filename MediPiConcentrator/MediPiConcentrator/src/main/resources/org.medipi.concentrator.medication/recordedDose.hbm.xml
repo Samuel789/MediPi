@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.medipi.medication.RecordedDose" table="recorded_dose">
+        <id name="recordedDoseUUID" type="java.lang.String">
+            <column name="recorded_dose_uuid" />
+        </id>
+        <property name="doseValue" type="double" not-null="true">
+            <column name="value" />
+        </property>
+        <property name="timeTaken" type="timestamp" not-null="true">
+            <column name="timetaken" />
+        </property>
+        <property name="scheduleId" type="int" not-null="true">
+            <column name="schedule_id" />
+        </property>
+
+    </class>
+    <query name="RecordedDose.findByRecordedDoseUUID">
+        <![CDATA[SELECT d FROM RecordedDose d WHERE d.recordedDoseUUID = :id]]>
+    </query>
+    <query name="RecordedDose.findAll">
+        <![CDATA[SELECT d FROM RecordedDose d]]>
+    </query>
+
+</hibernate-mapping>

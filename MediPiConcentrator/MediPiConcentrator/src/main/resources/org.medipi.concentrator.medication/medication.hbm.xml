@@ -6,7 +6,6 @@
     <class name="org.medipi.medication.Medication" table="medication">
         <id name="medicationId" type="int">
             <column name="medication_id" />
-            <generator class="increment" />
         </id>
         <property name="shortName" type="java.lang.String" not-null="true">
             <column name="display_name" />

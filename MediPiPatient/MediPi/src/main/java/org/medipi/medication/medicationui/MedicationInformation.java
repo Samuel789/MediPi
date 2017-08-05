@@ -34,22 +34,22 @@ public class MedicationInformation extends Group {
         this.getChildren().add(content);
         content.setPrefWidth(550);
         content.setPrefHeight(300);
-        titleLabel = new Label("Myfortic");
-        fullNameLabel = new Label("Myfortic 360mg tablets");
-        purposeLabel = new Label("To prevent rejection");
-        advisoryTextArea = new TextArea("! Take with food\n! Take with a glass of water");
+        titleLabel = new Label(schedule.getDisplayName());
+        fullNameLabel = new Label(schedule.getMedication().getFullName());
+        purposeLabel = new Label(schedule.getPurposeStatement());
+        advisoryTextArea = new TextArea(schedule.getMedication().getCautionaryText());
         adherenceBar = new AdherenceBar();
         adherenceBar.setProgress(0.4);
         adherenceBar.setStreakLength(12);
         try {
-            iconImage = new Image(new File("/home/sam/Pictures/TommyWHead.png").toURL().toString());
-            iconImageView = new ImageView(iconImage);
-            iconImageView.setFitWidth(100);
-            iconImageView.setFitHeight(100);
+            iconImage = new Image(new File(schedule.getMedication().getIconName()).toURL().toString());
+
         } catch (Exception e) {
             System.out.println("Couldn't load icon");
         }
-
+        iconImageView = new ImageView(iconImage);
+        iconImageView.setFitWidth(100);
+        iconImageView.setFitHeight(100);
         titleLabel.setId("mainwindow-dashboard-component-title");
         content.setPadding(new Insets(10));
         content.setCenter(titleLabel);

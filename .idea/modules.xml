@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/MediPiPatient/MediPi/MediPi.iml" filepath="$PROJECT_DIR$/MediPiPatient/MediPi/MediPi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Application/MediPi-Application.iml" filepath="$PROJECT_DIR$/Application/MediPi-Application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MediPiPatient/MediPi-parent.iml" filepath="$PROJECT_DIR$/MediPiPatient/MediPi-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Clinician/MediPiClinical/MediPiClinical.iml" filepath="$PROJECT_DIR$/Clinician/MediPiClinical/MediPiClinical.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/MediPiConcentrator.iml" filepath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/MediPiConcentrator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator-parent.iml" filepath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Commons/MediPiTransportTools/MediPiTransportTools.iml" filepath="$PROJECT_DIR$/Commons/MediPiTransportTools/MediPiTransportTools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Application/Common-Components/devops-commons/devops-commons.iml" filepath="$PROJECT_DIR$/Application/Common-Components/devops-commons/devops-commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Application/Common-Components/devops-exception-manager/devops-exception-manager.iml" filepath="$PROJECT_DIR$/Application/Common-Components/devops-exception-manager/devops-exception-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MediPiPatient/javax-usb/javax-usb.iml" filepath="$PROJECT_DIR$/MediPiPatient/javax-usb/javax-usb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Application/Services/medipi-clinician-service/medipi-clinician-service.iml" filepath="$PROJECT_DIR$/Application/Services/medipi-clinician-service/medipi-clinician-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Application/Web-Aplication/medipi-clinician-web-application/medipi-clinician-web-application.iml" filepath="$PROJECT_DIR$/Application/Web-Aplication/medipi-clinician-web-application/medipi-clinician-web-application.iml" />
+    </modules>
+  </component>
+</project>

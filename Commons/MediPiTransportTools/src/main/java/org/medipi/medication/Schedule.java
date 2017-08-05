@@ -1,8 +1,10 @@
 package org.medipi.medication;
 
+import java.beans.Transient;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Date;
+import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Schedule implements Serializable {
 
@@ -35,6 +37,18 @@ public class Schedule implements Serializable {
     private String patientUuid;
     private int scheduleId;
     private Medication medication;
+
+
+
+    public Set<ScheduledDose> getScheduledDoses() {
+        return scheduledDoses;
+    }
+
+    public void setScheduledDoses(Set<ScheduledDose> scheduledDoses) {
+        this.scheduledDoses = scheduledDoses;
+    }
+
+    private Set<ScheduledDose> scheduledDoses = new HashSet<ScheduledDose>(0);
     public Schedule() {
     }
 
@@ -97,4 +111,16 @@ public class Schedule implements Serializable {
             return medication.getShortName();
         }
     }
+
+    public ScheduledDose findDueDose() {
+        for (ScheduledDose dose: getScheduledDoses()) {
+            if (dose.calculateIsDue()) {
+                return dose;
+            }
+        }
+        return null;
+    }
+
+
+
 }

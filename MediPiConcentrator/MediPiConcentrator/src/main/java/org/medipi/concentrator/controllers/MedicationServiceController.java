@@ -26,13 +26,10 @@ import org.medipi.concentrator.services.PatientDownloadableService;
 import org.medipi.model.MedicationDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Class for controlling the download service for the MediPi patient units .
@@ -62,9 +59,18 @@ public class MedicationServiceController {
      */
     @RequestMapping(value = "/download/{hardwareName}/{patientUuid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<MedicationDO> getDownloadableList(@PathVariable("hardwareName") String hardwareName, @PathVariable("patientUuid") String patientUuid) {
+    public ResponseEntity<MedicationDO> getMedicationSchedules(@PathVariable("hardwareName") String hardwareName, @PathVariable("patientUuid") String patientUuid) {
 //Removed to Reduce Logs size        logger.log(DownloadServiceController.class.getName(), new Date().toString() + " get DownloadableList called by patientUuid: " + patientUuid + " using hardwareName: " + hardwareName);
         return this.medicationDownloadService.getMedicationData(hardwareName, patientUuid);
+    }
+
+    @RequestMapping(value="/upload", method = RequestMethod.PUT, consumes = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ResponseEntity<String> uploadRecordedDoses(@RequestBody MedicationDO uploadedData) {
+//Removed to Reduce Logs size        logger.log(DownloadServiceController.class.getName(), new Date().toString() + " get DownloadableList called by patientUuid: " + patientUuid + " using hardwareName: " + hardwareName);
+        this.medicationDownloadService.uploadRecordedDoses(uploadedData);
+        return new ResponseEntity<String>("Upload successful", HttpStatus.ACCEPTED);
     }
 
 }
