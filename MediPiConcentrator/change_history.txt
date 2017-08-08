@@ -9,7 +9,7 @@ Changes since MediPiConcentrator_v1.0.0-PILOT-X-1
 - Addition of patient data request service for clinical systems to get data for all patients from a patient group
 - Update of the code base to make sure that dates and times are handled and persisted to the postgres DB as UTC  
 - Addition of units to recording device attributes
--Addition of schedule effective time and scheldule expiry time to recording device data to allow categorisation within schedules
+-Addition of scheduleId effective time and scheldule expiry time to recording device data to allow categorisation within schedules
 - Addition of functionality to automatically save details of new recording device types and recording device attributtes
 - General refactoring and addition of comments and improved exception handling
 

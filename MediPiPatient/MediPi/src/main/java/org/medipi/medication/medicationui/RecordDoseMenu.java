@@ -123,10 +123,12 @@ class DoseDetailsScreen extends TileMenu {
     DoseUnit doseUnit;
     String medicationName;
     MediPi mediPi;
+    ScheduledDose correspondingDose = null;
 
     public DoseDetailsScreen(MediPi mediPi, TileMenu upperMenu, ScheduledDose dose) {
         this(mediPi, upperMenu, dose.getSchedule());
         doseValue = dose.getDoseValue();
+        correspondingDose = dose;
         generateDoseString();
     }
 
@@ -177,11 +179,19 @@ class DoseDetailsScreen extends TileMenu {
 
         saveButton.setOnButtonClick((ActionEvent) -> {
             if (getUserConfirmation()) {
-                ZonedDateTime timeOnSystem = ZonedDateTime.of(doseTime.atDate(doseDay),ZoneId.systemDefault());
                 Timestamp ts = Timestamp.valueOf(doseTime.atDate(doseDay));
                 System.out.println(ts);
                 System.out.println(ts.getTime());
-                medicationSchedule.getRecordedDoses().add(new RecordedDose(Timestamp.valueOf(doseTime.atDate(doseDay)), doseValue, medicationSchedule));
+                medicationSchedule.getRecordedDoses().add(new RecordedDose(Timestamp.valueOf(doseTime.atDate(doseDay).atZone(ZoneId.of("Europe/London")).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()), doseValue, medicationSchedule));
+                if (correspondingDose != null) {
+                    ReminderService reminderService = ((MedicationManager) mediPi.getElement("Medication")).getReminderService();
+                    for (ReminderEventInterface event: reminderService.getTodayActiveEvents()) {
+                        if (((MedicationReminderEvent) event).getDose() == correspondingDose) {
+                            reminderService.dismissEvent(event);
+                            break;
+                        }
+                    }
+                }
                 if (upperMenu instanceof RecordDoseMenu) {
                     ((RecordDoseMenu) upperMenu).close();
                 } else {

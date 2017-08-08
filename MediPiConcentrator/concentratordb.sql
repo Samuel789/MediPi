@@ -335,7 +335,7 @@ CREATE TABLE medication_recorded_dose (
     id integer NOT NULL,
     value double precision NOT NULL,
     timetaken timestamp without time zone NOT NULL,
-    schedule integer NOT NULL
+    scheduleId integer NOT NULL
 );
 
 
@@ -406,7 +406,7 @@ ALTER SEQUENCE medication_schedule_id_seq OWNED BY medication_schedule.id;
 
 CREATE TABLE medication_scheduled_dose (
     id integer NOT NULL,
-    schedule integer NOT NULL,
+    scheduleId integer NOT NULL,
     value double precision NOT NULL,
     startday integer NOT NULL,
     repeatinterval integer,
@@ -765,7 +765,7 @@ SELECT pg_catalog.setval('medication_id_seq', 1, false);
 -- Data for Name: medication_recorded_dose; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY recorded_dose (id, value, timetaken, schedule) FROM stdin;
+COPY recorded_dose (id, value, timetaken, scheduleId) FROM stdin;
 \.
 
 
@@ -796,7 +796,7 @@ SELECT pg_catalog.setval('medication_schedule_id_seq', 1, true);
 -- Data for Name: medication_scheduled_dose; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY scheduled_dose (id, schedule, value, start_day, repeat_interval, end_day, window_start_time, window_end_time, default_reminder_time, reminder_time) FROM stdin;
+COPY scheduled_dose (id, scheduleId, value, start_day, repeat_interval, end_day, window_start_time, window_end_time, default_reminder_time, reminder_time) FROM stdin;
 1	1	2	0	1	\N	06:00:00	11:00:00	09:30:00	09:30:00
 2	1	2	0	1	\N	17:00:00	22:00:00	19:30:00	19:30:00
 \.
@@ -1095,7 +1095,7 @@ ALTER TABLE ONLY hardware_downloadable
 --
 
 ALTER TABLE ONLY recorded_dose
-    ADD CONSTRAINT medication_recorded_dose_medication_schedule_id_fk FOREIGN KEY (schedule) REFERENCES medication_schedule(id);
+    ADD CONSTRAINT medication_recorded_dose_medication_schedule_id_fk FOREIGN KEY (scheduleId) REFERENCES medication_schedule(id);
 
 
 --
@@ -1111,7 +1111,7 @@ ALTER TABLE ONLY medication_schedule
 --
 
 ALTER TABLE ONLY scheduled_dose
-    ADD CONSTRAINT medication_scheduled_dose_medication_schedule_id_fk FOREIGN KEY (schedule) REFERENCES medication_schedule(id);
+    ADD CONSTRAINT medication_scheduled_dose_medication_schedule_id_fk FOREIGN KEY (scheduleId) REFERENCES medication_schedule(id);
 
 
 --

@@ -16,9 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -91,9 +89,6 @@ public class MedicationDownloadService {
         for (RecordedDose dose: doseData) {
             try{recordedDoseDAOimpl.findByRecordedDoseUUID(dose.getRecordedDoseUUID());
             } catch (EmptyResultDataAccessException e) {
-                // TODO - Deserialization results in misinterpretation of UTC timestamp, currently using a dirty fix;
-                ZonedDateTime zonedDateTime = dose.getTimeTaken().toLocalDateTime().atZone(TimeZone.getTimeZone("Europe/London").toZoneId());
-                dose.setTimeTaken(new Timestamp(zonedDateTime.toEpochSecond()*1000));
                 recordedDoseDAOimpl.save(dose);
             }
         }

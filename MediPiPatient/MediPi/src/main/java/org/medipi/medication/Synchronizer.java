@@ -27,8 +27,10 @@ import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.UUID;
 
 /**
@@ -115,7 +117,19 @@ public class Synchronizer
         RESTfulMessagingEngine rme = new RESTfulMessagingEngine(resourcePath + "medication/upload", new String[] {});
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Data-Format", "MediPiNative");
-        Entity entity = Entity.json(doses);
+        for (Schedule schedule: doses.getSchedules()) {
+            for (RecordedDose dose: schedule.getRecordedDoses()) {
+                System.out.println("TIMESTAMP DEBUG FOR " + dose.getRecordedDoseUUID() + ":");
+                System.out.println("STAMP: " + dose.getTimeTaken().getTime());
+                System.out.println("TO LOCALDATETIME: " + dose.getTimeTaken().toLocalDateTime());
+                System.out.println("TO LONDON ZONE: " + dose.getTimeTaken().toLocalDateTime().atZone(TimeZone.getTimeZone("Europe/London").toZoneId()));
+                System.out.println("--STAMP: " + dose.getTimeTaken().toLocalDateTime().atZone(TimeZone.getTimeZone("Europe/London").toZoneId()).getNano()/1000);
+                System.out.println("TO DEFAULT ZONE: " + dose.getTimeTaken().toLocalDateTime().atZone(TimeZone.getDefault().toZoneId()));
+                System.out.println("--STAMP: " + dose.getTimeTaken().toLocalDateTime().atZone(TimeZone.getDefault().toZoneId()).getNano()/1000);
+                System.out.println("TO UTC ZONE: " + dose.getTimeTaken().toLocalDateTime().atZone(ZoneOffset.UTC));
+                System.out.println("--STAMP: " + dose.getTimeTaken().toLocalDateTime().atZone(ZoneOffset.UTC).getNano()/1000);
+            }
+        }
         Response postResponse = rme.executePut(params, Entity.json(doses), headers);
         System.out.println(postResponse.getStatusInfo());
     }

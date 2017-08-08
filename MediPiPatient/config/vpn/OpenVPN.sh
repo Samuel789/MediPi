@@ -1,4 +1,4 @@
 #!/bin/bash
 #
 #;
-sudo openvpn --config ${config-directory-location}/vpn/xxxx.ovpn
+sudo openvpn --config /home/sam/Git/MediPi/MediPiPatient/config/vpn/xxxx.ovpn

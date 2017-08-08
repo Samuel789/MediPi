@@ -20,6 +20,7 @@ public class Datastore {
 
     public Datastore(MediPi medipi){
         this.medipi = medipi;
+        patientSchedules = new ArrayList<>();
     }
 
     public List<Schedule> getPatientSchedules() {
