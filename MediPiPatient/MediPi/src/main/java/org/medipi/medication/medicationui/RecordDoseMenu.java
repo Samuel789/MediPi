@@ -14,11 +14,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.medipi.MediPi;
 import org.medipi.medication.*;
+import org.medipi.medication.reminders.MedicationReminderEvent;
+import org.medipi.medication.reminders.ReminderEventInterface;
+import org.medipi.medication.reminders.ReminderService;
 import org.medipi.ui.*;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.*;
 
 
@@ -28,6 +30,7 @@ public class RecordDoseMenu extends TileMenu {
     List<Schedule> schedules;
     MediPi mediPi;
     TileMenu upperMenu;
+    HashMap<MedicationTile, ScheduledDose> dueDose;
 
     public RecordDoseMenu(MediPi mediPi, TileMenu upperMenu, ScheduledDose dose) {
         super(new WindowManager(), 5, 3.15, upperMenu);
@@ -60,38 +63,49 @@ public class RecordDoseMenu extends TileMenu {
     }
 
     private void populateMedicationTiles() {
+        dueDose = new HashMap<>();
         schedules = ((MedicationManager) mediPi.getElement("Medication")).getDatestore().getPatientSchedules();
         ArrayList<MedicationTile> orderedTiles = new ArrayList<>();
+        ReminderService reminderService = ((MedicationManager) mediPi.getElement("Medication")).getReminderService();
+        LocalTime currentTime = LocalTime.now();
+        // Categorize medications by due status (take now, as needed or not now)
         for (Schedule schedule: schedules) {
             MedicationTile newTile = new MedicationTile(new SimpleBooleanProperty(true), 1, 1, schedule);
-
-            if (schedule.findDueDose() == null) {
-                if (schedule.getScheduledDoses().size() == 0) {
-                    newTile.setDueStatus(MedicationTile.DueStatus.ASNEEDED);
-                } else {
+            if (schedule.getScheduledDoses().size() == 0) {
+                newTile.setDueStatus(MedicationTile.DueStatus.ASNEEDED);
+            } else {
+                boolean foundDueDose = false;
+                for (ReminderEventInterface event: reminderService.getTodayActiveEvents()) {
+                    MedicationReminderEvent medEvent = (MedicationReminderEvent) event;
+                    if (medEvent.getDose().getSchedule() == schedule) {
+                        if (medEvent.getStartTime().isBefore(currentTime) && medEvent.getEndTime().isAfter(currentTime)) {
+                            newTile.setDueStatus(MedicationTile.DueStatus.TAKENOW);
+                            dueDose.put(newTile, medEvent.getDose());
+                            foundDueDose = true;
+                            break;
+                        }
+                    }
+                }
+                if (!foundDueDose) {
                     newTile.setDueStatus(MedicationTile.DueStatus.NOTNOW);
                 }
-            } else {
-                newTile.setDueStatus(MedicationTile.DueStatus.TAKENOW);
             }
             newTile.setDisplayType(MedicationTile.DisplayType.DUESTATUS);
             newTile.setOnTileClick((MouseEvent event) -> {selectTile(newTile);});
             orderedTiles.add(newTile);
         }
-        orderedTiles.sort(new Comparator<MedicationTile>() {
-            @Override
-            public int compare(MedicationTile o1, MedicationTile o2) {
-                return o1.getDueStatus().compareTo(o2.getDueStatus());
-            }
-        });
+        orderedTiles.sort(Comparator.comparing(MedicationTile::getDueStatus));
         for (MedicationTile tile: orderedTiles) {
             mainPane.addTile(tile);
         }
     }
 
     public void selectTile(MedicationTile tile) {
-        Schedule selectedSchedule = tile.getMedicationSchedule();
-        setOverlayWindow(new DoseDetailsScreen(mediPi, this, tile.getMedicationSchedule()));
+        if (dueDose.containsKey(tile)) {
+            setOverlayWindow(new DoseDetailsScreen(mediPi, this, dueDose.get(tile)));
+        } else {
+            setOverlayWindow(new DoseDetailsScreen(mediPi, this, tile.getMedicationSchedule()));
+        }
         showOverlayWindow();
 
     }
@@ -163,7 +177,11 @@ class DoseDetailsScreen extends TileMenu {
 
         saveButton.setOnButtonClick((ActionEvent) -> {
             if (getUserConfirmation()) {
-                medicationSchedule.recordDose(Timestamp.valueOf(doseTime.atDate(doseDay)), doseValue);
+                ZonedDateTime timeOnSystem = ZonedDateTime.of(doseTime.atDate(doseDay),ZoneId.systemDefault());
+                Timestamp ts = Timestamp.valueOf(doseTime.atDate(doseDay));
+                System.out.println(ts);
+                System.out.println(ts.getTime());
+                medicationSchedule.getRecordedDoses().add(new RecordedDose(Timestamp.valueOf(doseTime.atDate(doseDay)), doseValue, medicationSchedule));
                 if (upperMenu instanceof RecordDoseMenu) {
                     ((RecordDoseMenu) upperMenu).close();
                 } else {

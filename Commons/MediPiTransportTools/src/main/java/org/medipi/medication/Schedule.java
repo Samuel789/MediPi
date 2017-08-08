@@ -1,6 +1,5 @@
 package org.medipi.medication;
 
-import java.beans.Transient;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -121,17 +120,6 @@ public class Schedule implements Serializable {
         }
     }
 
-    public ScheduledDose findDueDose() {
-        for (ScheduledDose dose: getScheduledDoses()) {
-            if (dose.calculateIsDue()) {
-                return dose;
-            }
-        }
-        return null;
-    }
 
-    public void recordDose(Timestamp timeTaken, double doseValue) {
-        recordedDoses.add(new RecordedDose(timeTaken, doseValue, this));
-    }
 
 }

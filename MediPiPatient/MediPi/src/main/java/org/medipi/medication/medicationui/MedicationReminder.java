@@ -16,7 +16,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.medipi.MediPi;
+import org.medipi.medication.Medication;
 import org.medipi.medication.MedicationManager;
+import org.medipi.medication.Schedule;
 import org.medipi.medication.ScheduledDose;
 
 import java.io.File;
@@ -26,15 +28,20 @@ public class MedicationReminder extends Group {
     public MedicationReminder(ScheduledDose dose, MediPi mediPi) {
         content = new VBox();
         this.getChildren().add(content);
+        Schedule schedule = dose.getSchedule();
+        Medication medication = schedule.getMedication();
         Label titleLabel = new Label("Medication Reminder");
-        Label reminderLabel = new Label("It's time to take Solian tablets");
-        Label doseLabel = new Label("Dose: 2 tablets");
-        Label fullNameLabel = new Label("(Amisulpride 50mg tablets)");
-        TextArea advisoryTextArea = new TextArea("! Take with food\n! Take with a glass of water");
+        Label reminderLabel = new Label("It's time to take " + schedule.determineDisplayName());
+        Label doseLabel = new Label("Dose: " + dose.getDoseValue() + " " + medication.getDoseUnit().getName());
+        Label fullNameLabel = new Label("(" + medication.getFullName() + ")");
+        TextArea advisoryTextArea = new TextArea(medication.getCautionaryText());
         advisoryTextArea.setEditable(false);
         Button takeButton = new Button("Take Now!");
+        takeButton.getStyleClass().add("button-advised");
         Button delayButton = new Button("Delay");
+        delayButton.getStyleClass().add("button-neutral");
         Button dismissButton = new Button("Dismiss");
+        dismissButton.getStyleClass().add("button-caution");
         Image iconImage;
         ImageView iconImageView;
 

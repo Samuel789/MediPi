@@ -11,7 +11,7 @@
             <column name="value" />
         </property>
         <property name="timeTaken" type="timestamp" not-null="true">
-            <column name="timetaken" />
+            <column name="timetaken" sql-type="TIMESTAMP WITHOUT TIME ZONE" />
         </property>
         <property name="scheduleId" type="int" not-null="true">
             <column name="schedule_id" />

@@ -104,14 +104,6 @@ public class Synchronizer
     private List<Schedule> processScheduleData(MedicationDO recievedData) {
         recievedData.recreateReferences();
         List<Schedule> newSchedules = recievedData.getSchedules();
-        for (Schedule schedule: newSchedules) {
-            System.out.println(schedule.getAssignedStartDate());
-            System.out.println(schedule.determineDisplayName());
-            System.out.println(schedule.getAlternateName());
-            System.out.println(schedule.getPurposeStatement());
-            System.out.println(schedule.getPatientUuid());
-        }
-        //Todo - Process schedules
         return newSchedules;
     }
 
@@ -123,6 +115,7 @@ public class Synchronizer
         RESTfulMessagingEngine rme = new RESTfulMessagingEngine(resourcePath + "medication/upload", new String[] {});
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Data-Format", "MediPiNative");
+        Entity entity = Entity.json(doses);
         Response postResponse = rme.executePut(params, Entity.json(doses), headers);
         System.out.println(postResponse.getStatusInfo());
     }

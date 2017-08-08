@@ -5,7 +5,6 @@ import javafx.scene.input.MouseEvent;
 import org.medipi.MediPi;
 import org.medipi.medication.MedicationManager;
 import org.medipi.medication.ScheduledDose;
-import org.medipi.medication.Synchronizer;
 import org.medipi.ui.*;
 
 
@@ -30,7 +29,7 @@ public class MedicationMenu extends TileMenu {
         showMedicationsTile.addTitle("Show Medications");
         viewScheduleTile.addTitle("View Schedule");
         recordDoseTile.setOnTileClick((MouseEvent event) -> {this.setOverlayWindow(new RecordDoseMenu(mediPi, this)); this.showOverlayWindow();});
-        viewScheduleTile.setOnTileClick((MouseEvent event) -> {((MedicationManager) mediPi.getElement("Medication")).getMedicationReminderService().throwTestReminder();});
+        viewScheduleTile.setOnTileClick((MouseEvent event) -> {((MedicationManager) mediPi.getElement("Medication")).getReminderService().throwTestReminder();});
         showMedicationsTile.setOnTileClick((MouseEvent event) -> {this.setOverlayWindow(new ShowMedicationsMenu(mediPi, this)); this.showOverlayWindow();});
 
         this.addTile(recordDoseTile);

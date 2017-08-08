@@ -81,7 +81,6 @@ import org.medipi.devices.Scheduler;
 import org.medipi.downloadable.handlers.DownloadableHandlerManager;
 import org.medipi.downloadable.handlers.HardwareHandler;
 import org.medipi.logging.MediPiLogger;
-import org.medipi.medication.MedicationReminderService;
 import org.medipi.messaging.vpn.VPNServiceManager;
 import org.medipi.ui.WindowManager;
 import org.medipi.utilities.ConfigurationStringTokeniser;

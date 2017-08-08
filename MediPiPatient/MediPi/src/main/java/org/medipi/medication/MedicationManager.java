@@ -4,9 +4,11 @@ import javafx.scene.Node;
 import org.medipi.DashboardTile;
 import org.medipi.devices.Element;
 import org.medipi.medication.medicationui.MedicationMenu;
+import org.medipi.medication.reminders.ReminderEventInterface;
+import org.medipi.medication.reminders.ReminderService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class MedicationManager extends Element {
@@ -19,7 +21,7 @@ public class MedicationManager extends Element {
     private static final String MEDIPIIMAGESHIGHESTERRORMISSING = "medipi.images.highesterror.missing";
     private MedicationMenu menu;
     private Datastore datastore;
-    private MedicationReminderService medicationReminderService;
+    private ReminderService reminderService;
     private Synchronizer synchronizer;
 
     public static String getDisplayname() {
@@ -50,8 +52,8 @@ public class MedicationManager extends Element {
         return datastore;
     }
 
-    public MedicationReminderService getMedicationReminderService() {
-        return medicationReminderService;
+    public ReminderService getReminderService() {
+        return reminderService;
     }
 
     public Synchronizer getSynchronizer() {
@@ -60,7 +62,7 @@ public class MedicationManager extends Element {
 
     public String init() {
         menu = new MedicationMenu(medipi, null);
-        medicationReminderService = new MedicationReminderService(medipi);
+        reminderService = new ReminderService(medipi, new HashSet<ReminderEventInterface>());
         datastore = new Datastore(medipi);
         try {
             synchronizer = new Synchronizer(medipi);

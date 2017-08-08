@@ -76,8 +76,8 @@ public class MedicationTile extends Tile {
         content.setTop(vbox);
         content.setAlignment(vbox, Pos.CENTER_LEFT);
 
-        titleLabel = new Label("No title set");
-        purposeLabel = new Label("No purpose set");
+        titleLabel = new Label(medicationSchedule.determineDisplayName());
+        purposeLabel = new Label(medicationSchedule.getPurposeStatement());
 
         //titleLabel.setPrefSize(content.getWidth(), 30);
         titleLabel.setId("mainwindow-dashboard-component-title");

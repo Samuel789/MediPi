@@ -15,8 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Service
 public class MedicationDownloadService {
@@ -76,12 +82,18 @@ public class MedicationDownloadService {
     public void uploadRecordedDoses(MedicationDO uploadedData) {
         List<RecordedDose> doseData = new ArrayList<>();
         for (Schedule schedule: uploadedData.getSchedules()) {
+            for (RecordedDose dose : schedule.getRecordedDoses()) {
+                System.out.println(dose.getTimeTaken());
+            }
             doseData.addAll(schedule.getRecordedDoses());
         }
         System.out.println("RECEIVED UPLOAD: " + " " + doseData.size());
         for (RecordedDose dose: doseData) {
             try{recordedDoseDAOimpl.findByRecordedDoseUUID(dose.getRecordedDoseUUID());
             } catch (EmptyResultDataAccessException e) {
+                // TODO - Deserialization results in misinterpretation of UTC timestamp, currently using a dirty fix;
+                ZonedDateTime zonedDateTime = dose.getTimeTaken().toLocalDateTime().atZone(TimeZone.getTimeZone("Europe/London").toZoneId());
+                dose.setTimeTaken(new Timestamp(zonedDateTime.toEpochSecond()*1000));
                 recordedDoseDAOimpl.save(dose);
             }
         }
