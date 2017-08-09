@@ -20,7 +20,9 @@ import org.medipi.medication.reminders.ReminderService;
 import org.medipi.ui.*;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -202,7 +204,7 @@ class DoseDetailsScreen extends TileMenu {
     }
 
     private void generateDoseString() {
-        doseDescriptor.setText(String.format("Recording %f %s(s) of %s taken %s at %s", doseValue, doseUnit.getName(), medicationName, doseDay, doseTime));
+        doseDescriptor.setText(String.format("Recording %s %s(s) of %s\nTaken %s at %s", formatNumber(doseValue), doseUnit.getName(), medicationName, doseDay.format(DateTimeFormatter.ofPattern("EEEE d MMMM")), doseTime.format(DateTimeFormatter.ofPattern("HH:mm"))));
     }
 
     private boolean getUserConfirmation() {
@@ -220,5 +222,13 @@ class DoseDetailsScreen extends TileMenu {
 
         Optional<ButtonType> result = alert.showAndWait();
         return result.get() == ButtonType.YES;
+    }
+
+    private static String formatNumber(double d)
+    {
+        if(d == (long) d)
+            return String.format("%d",(long)d);
+        else
+            return String.format("%s",d);
     }
 }

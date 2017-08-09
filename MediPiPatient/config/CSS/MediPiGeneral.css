@@ -350,3 +350,16 @@ Messenger
 .button-advised {
 	-fx-background-color: #D4F5B3 !important;
 }
+
+.mp-button {
+	-fx-background-color: white;
+	-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 5 , 5 );
+	-fx-background-radius:10;
+	-fx-alignment:center;
+	-fx-font-weight: bold;
+}
+
+.button-large {
+	-fx-pref-width: 120;
+	-fx-pref-height: 40;
+}

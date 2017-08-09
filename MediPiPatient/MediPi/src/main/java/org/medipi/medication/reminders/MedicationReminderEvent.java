@@ -38,6 +38,12 @@ public class MedicationReminderEvent implements ReminderEventInterface {
         return dose;
     }
 
+    @Override
+    public boolean isFrozen() {
+        return frozen;
+    }
+
+    private boolean frozen = false;
     private ScheduledDose dose;
 
 
@@ -55,22 +61,24 @@ public class MedicationReminderEvent implements ReminderEventInterface {
 
     public void snoozeForSeconds(int seconds) throws SnoozeNotAllowedException {
         if (isSnoozeAllowed(seconds)) {
-            alarmTime = alarmTime.plusSeconds(seconds);
+            alarmTime = LocalTime.now().plusSeconds(seconds);
+            frozen = false;
         } else {
             throw new SnoozeNotAllowedException();
         }
     }
 
     public boolean isSnoozeAllowed(int seconds) {
-        return endTime.plusSeconds(seconds).isBefore(endTime);
+        return LocalTime.now().plusSeconds(seconds).isBefore(endTime);
     }
 
     @Override
     public void execute(MediPi mediPi) {
+        frozen = true;
         Stage popupWindow = new Stage();
-        MedicationReminder popupContents = new MedicationReminder(dose, mediPi);
+        MedicationReminder popupContents = new MedicationReminder(this, mediPi);
         Scene popupScene = new Scene(popupContents);
-        mediPi.scene.getStylesheets().addAll(popupScene.getStylesheets());
+        popupContents.getStylesheets().addAll(mediPi.scene.getStylesheets());
         popupWindow.setScene(popupScene);
         popupWindow.setTitle("Medication Information");
         popupWindow.initModality(Modality.WINDOW_MODAL);

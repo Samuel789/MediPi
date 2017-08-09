@@ -67,8 +67,8 @@ public class MajorMinorTile extends Tile {
         content.setPrefSize(width, height);
         content.setMaxSize(width, height);
         content.setMinSize(width, height);
-        majorButton.setId("mainwindow-dashboard-content-title");
-        minorButton.setId("mainwindow-dashboard-content-title");
+        majorButton.getStyleClass().add("mp-button");
+        minorButton.getStyleClass().add("mp-button");
         majorButton.setPrefWidth(width - 2*buttonPadding);
         minorButton.setPrefWidth((width - 2*buttonPadding)*0.7);
         majorButton.setPrefHeight((height - 2*buttonPadding)/2);

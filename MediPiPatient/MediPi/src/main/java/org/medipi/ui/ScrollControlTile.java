@@ -68,8 +68,8 @@ public class ScrollControlTile extends Tile {
         content.setPrefSize(width, height);
         content.setMaxSize(width, height);
         content.setMinSize(width, height);
-        upButton.setId("mainwindow-dashboard-content-title");
-        downButton.setId("mainwindow-dashboard-content-title");
+        upButton.getStyleClass().add("mp-button");
+        downButton.getStyleClass().add("mp-button");
         upButton.setPrefWidth(width - 20);
         downButton.setPrefWidth(width - 20);
         upButton.setPrefHeight((height - 30)/2);

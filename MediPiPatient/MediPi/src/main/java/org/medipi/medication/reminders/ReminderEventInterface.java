@@ -11,5 +11,6 @@ import java.time.LocalTime;
 public interface ReminderEventInterface {
     public LocalTime getReminderTime();
     public boolean activeOnDay(LocalDate date);
+    public boolean isFrozen();
     public void execute(MediPi mediPi);
 }

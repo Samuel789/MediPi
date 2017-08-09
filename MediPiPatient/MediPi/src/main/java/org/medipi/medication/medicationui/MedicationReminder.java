@@ -20,12 +20,17 @@ import org.medipi.medication.Medication;
 import org.medipi.medication.MedicationManager;
 import org.medipi.medication.Schedule;
 import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.reminders.MedicationReminderEvent;
+import org.medipi.medication.reminders.ReminderService;
 
 import java.io.File;
 
 public class MedicationReminder extends Group {
     VBox content;
-    public MedicationReminder(ScheduledDose dose, MediPi mediPi) {
+    ReminderService reminderService;
+    public MedicationReminder(MedicationReminderEvent reminderEvent, MediPi mediPi) {
+        ScheduledDose dose = reminderEvent.getDose();
+        reminderService = ((MedicationManager) mediPi.getElement("Medication")).getReminderService();
         content = new VBox();
         this.getChildren().add(content);
         Schedule schedule = dose.getSchedule();
@@ -37,11 +42,11 @@ public class MedicationReminder extends Group {
         TextArea advisoryTextArea = new TextArea(medication.getCautionaryText());
         advisoryTextArea.setEditable(false);
         Button takeButton = new Button("Take Now!");
-        takeButton.getStyleClass().add("button-advised");
-        Button delayButton = new Button("Delay");
-        delayButton.getStyleClass().add("button-neutral");
+        takeButton.getStyleClass().addAll("button-advised", "mp-button", "button-large");
+        Button delayButton = new Button("Delay (10 mins)");
+        delayButton.getStyleClass().addAll("button-neutral", "mp-button", "button-large");
         Button dismissButton = new Button("Dismiss");
-        dismissButton.getStyleClass().add("button-caution");
+        dismissButton.getStyleClass().addAll("button-caution", "mp-button", "button-large");
         Image iconImage;
         ImageView iconImageView;
 
@@ -61,11 +66,20 @@ public class MedicationReminder extends Group {
         buttonBox.getChildren().add(takeButton);
         buttonBox.getChildren().add(delayButton);
         buttonBox.getChildren().add(dismissButton);
-        dismissButton.setOnMouseClicked((MouseEvent event) -> {((Stage)this.getScene().getWindow()).close();});
+        dismissButton.setOnMouseClicked((MouseEvent event) -> {
+            ((Stage)this.getScene().getWindow()).close();
+            reminderService.dismissEvent(reminderEvent);
+        });
+        delayButton.setOnMouseClicked((MouseEvent event) -> {
+            ((Stage)this.getScene().getWindow()).close();
+            reminderEvent.snoozeForSeconds(600);
+        });
         takeButton.setOnMouseClicked((MouseEvent event) -> {
             ((MedicationManager)mediPi.getElement("Medication")).recordMedicationDose(dose);
             ((Stage)this.getScene().getWindow()).close();});
         content.getChildren().add(buttonBox);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setSpacing(5);
 
         try {
             iconImage = new Image(new File("/home/sam/Pictures/TommyWHead.png").toURL().toString());

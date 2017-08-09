@@ -16,7 +16,7 @@ public class MedicationMenu extends TileMenu {
         this.mediPi = mediPi;
         MajorMinorTile medTile1 = new MajorMinorTile(new SimpleBooleanProperty(true), 1, 1);
         medTile1.setMajorText("Back");
-        medTile1.setMinorText("<- Synchronize ->");
+        medTile1.setMinorText("< Synchronize >");
         Tile medTile2 = createAdherenceSummaryTile();
         medTile1.setOnMajorClick((MouseEvent event) -> {mediPi.callDashboard();});
         medTile1.setOnMinorClick((MouseEvent event) -> {((MedicationManager) mediPi.getElement("Medication")).getSynchronizer().run();});

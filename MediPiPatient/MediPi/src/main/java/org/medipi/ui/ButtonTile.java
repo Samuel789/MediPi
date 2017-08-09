@@ -62,7 +62,7 @@ public class ButtonTile extends Tile {
         content.setPrefSize(width, height);
         content.setMaxSize(width, height);
         content.setMinSize(width, height);
-        button.setId("mainwindow-dashboard-content-title");
+        button.getStyleClass().add("mp-button");
         button.setPrefWidth(width - 2*10);
         button.setPrefHeight((height - 2*10));
         return content;

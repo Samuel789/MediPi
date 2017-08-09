@@ -20,14 +20,19 @@ public class MedicationTile extends Tile {
 
     Label titleLabel;
     Label purposeLabel;
+    Label dueStatusLabel;
     AdherenceBar adherenceBar;
     public enum DisplayType {ADHERENCE, DUESTATUS};
     public enum DueStatus {TAKENOW, ASNEEDED, NOTNOW};
-    public static final HashMap<DueStatus, String> styles = new HashMap<>();
+    public static final HashMap<DueStatus, String> dueStatusStyles = new HashMap<>();
+    public static final HashMap<DueStatus, String> dueStatusStrings = new HashMap<>();
     static {
-        styles.put(DueStatus.TAKENOW, "button-advised");
-        styles.put(DueStatus.ASNEEDED, "button-neutral");
-        styles.put(DueStatus.NOTNOW, "button-caution");
+        dueStatusStyles.put(DueStatus.TAKENOW, "button-advised");
+        dueStatusStyles.put(DueStatus.ASNEEDED, "");
+        dueStatusStyles.put(DueStatus.NOTNOW, "button-caution");
+        dueStatusStrings.put(DueStatus.TAKENOW, "Take Now");
+        dueStatusStrings.put(DueStatus.ASNEEDED, "Take as Needed");
+        dueStatusStrings.put(DueStatus.NOTNOW, "Not Due");
     }
 
     public DueStatus getDueStatus() {
@@ -36,10 +41,12 @@ public class MedicationTile extends Tile {
 
     public void setDueStatus(DueStatus dueStatus) {
         if (this.dueStatus != null) {
-            content.getStyleClass().remove(styles.get(dueStatus));
+            content.getStyleClass().remove(dueStatusStyles.get(dueStatus));
+            dueStatusLabel.setText("");
         }
         this.dueStatus = dueStatus;
-        content.getStyleClass().add(styles.get(dueStatus));
+        content.getStyleClass().add(dueStatusStyles.get(dueStatus));
+        dueStatusLabel.setText(dueStatusStrings.get(dueStatus));
     }
 
     private DueStatus dueStatus = null;
@@ -78,6 +85,8 @@ public class MedicationTile extends Tile {
 
         titleLabel = new Label(medicationSchedule.determineDisplayName());
         purposeLabel = new Label(medicationSchedule.getPurposeStatement());
+        dueStatusLabel = new Label();
+
 
         //titleLabel.setPrefSize(content.getWidth(), 30);
         titleLabel.setId("mainwindow-dashboard-component-title");
@@ -98,6 +107,9 @@ public class MedicationTile extends Tile {
             setAdherenceView();
         } else if (displayType == DisplayType.DUESTATUS) {
             setDoseStatusView();
+            content.setBottom(dueStatusLabel);
+            content.setAlignment(dueStatusLabel, Pos.CENTER);
+            dueStatusLabel.setPadding(new Insets(5));
         }
     }
 

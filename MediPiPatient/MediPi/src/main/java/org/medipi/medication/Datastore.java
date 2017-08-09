@@ -42,6 +42,7 @@ public class Datastore {
             }
         }
         LocalDate today = LocalDate.now();
+        reminderService.stopService();
         reminderService.setEvents(events);
         // Check if any doses have already been taken today
         for (Schedule schedule: patientSchedules) {
@@ -72,7 +73,7 @@ public class Datastore {
             }
         }
         }
-
+        reminderService.startService();
     }
 
 }
