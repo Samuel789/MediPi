@@ -37,9 +37,8 @@ public class MedicationInformation extends Group {
         fullNameLabel = new Label(schedule.getMedication().getFullName());
         purposeLabel = new Label(schedule.getPurposeStatement());
         advisoryTextArea = new TextArea(schedule.getMedication().getCautionaryText());
-        adherenceBar = new AdherenceBar();
-        adherenceBar.setProgress(0.4);
-        adherenceBar.setStreakLength(12);
+        adherenceBar = new AdherenceBar(schedule.getAdherence());
+        adherenceBar.setLongForm(true);
         try {
             iconImage = new Image(new File(schedule.getMedication().getIconName()).toURL().toString());
 

@@ -90,13 +90,13 @@ public class MedicationTile extends Tile {
 
         //titleLabel.setPrefSize(content.getWidth(), 30);
         titleLabel.setId("mainwindow-dashboard-component-title");
-        adherenceBar = new AdherenceBar();
+        adherenceBar = new AdherenceBar(medicationSchedule.getAdherence());
         adherenceBar.setWidth(200);
         vbox.getChildren().add(titleLabel);
         vbox.getChildren().add(purposeLabel);
         updateLayout();
 
-        setMedicationSchedule(medicationSchedule);
+        this.medicationSchedule = medicationSchedule;
         setShowInfoOnClick();
     }
 
@@ -131,12 +131,6 @@ public class MedicationTile extends Tile {
 
     private DueStatus getDoseStatus() {
         return dueStatus;
-    }
-
-    public void setMedicationSchedule(Schedule schedule) {
-        adherenceBar.setProgress(new Random().nextDouble() % 1);
-        adherenceBar.setStreakLength((int) ((new Random().nextDouble() % 1)*20));
-        this.medicationSchedule = schedule;
     }
 
     public void setShowInfoOnClick() {

@@ -44,6 +44,8 @@
             </key>
             <one-to-many class="org.medipi.medication.ScheduledDose" />
         </set>
+        <one-to-one name="adherence" class="org.medipi.medication.Adherence"
+                    cascade="save-update"></one-to-one>
     </class>
 
     <query name="Schedule.findByScheduleId">

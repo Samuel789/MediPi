@@ -55,8 +55,13 @@ public class MedicationReminderEvent implements ReminderEventInterface {
     }
 
     @Override
-    public LocalTime getReminderTime() {
+    public LocalTime getReminderStartTime() {
         return alarmTime;
+    }
+
+    @Override
+    public LocalTime getReminderEndTime() {
+        return endTime;
     }
 
     public void snoozeForSeconds(int seconds) throws SnoozeNotAllowedException {

@@ -8,6 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.medipi.medication.Adherence;
+import org.medipi.medication.Schedule;
+import org.medipi.medication.ScheduledDose;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -31,7 +34,12 @@ public class AdherenceBar extends Group {
     }
 
     boolean longForm = false;
-    public AdherenceBar() {
+
+    public AdherenceBar(Adherence adherence){
+        this(adherence.getSevenDayFraction(), adherence.getStreakLength());
+    }
+
+    public AdherenceBar(double sevenDayFraction, int streakLength) {
         content = new VBox();
         hbox = new HBox();
         adherenceText = new Label();
@@ -49,6 +57,9 @@ public class AdherenceBar extends Group {
         streakNumber = new Label("-");
         content.getChildren().add(adherenceText);
         content.getChildren().add(streakText);
+        hbox.setAlignment(Pos.CENTER);
+        content.setAlignment(Pos.CENTER);
+        progressBar.setPrefWidth(500);
 
         hbox.getChildren().add(progressBar);
         hbox.getChildren().add(streakNumber);
@@ -60,11 +71,12 @@ public class AdherenceBar extends Group {
         streakText.setId("mainwindow-dashboard-component-title");
         streakText.setPadding(new Insets(5, 0, 0, 0));
         streakText.setAlignment(Pos.CENTER);
-
+        setProgress(sevenDayFraction);
+        setStreakLength(streakLength);
         this.getChildren().add(content);
     }
 
-    public void setProgress(double value) {
+    private void setProgress(double value) {
         progressBar.setProgress(value);
         updateLabel();
     }
@@ -79,7 +91,7 @@ public class AdherenceBar extends Group {
         }
     }
 
-    public void setStreakLength(int value) {
+    private void setStreakLength(int value) {
         streakLength = value;
         streakNumber.setText(String.format("%d", value));
     }

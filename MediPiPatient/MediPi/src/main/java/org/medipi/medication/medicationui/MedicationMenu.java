@@ -3,6 +3,7 @@ package org.medipi.medication.medicationui;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.input.MouseEvent;
 import org.medipi.MediPi;
+import org.medipi.medication.Adherence;
 import org.medipi.medication.MedicationManager;
 import org.medipi.medication.ScheduledDose;
 import org.medipi.ui.*;
@@ -39,11 +40,12 @@ public class MedicationMenu extends TileMenu {
 
     private Tile createAdherenceSummaryTile() {
         HeaderTile tile = new HeaderTile(new SimpleBooleanProperty(true), 2, 1);
-
-        AdherenceBar adherenceBar = new AdherenceBar();
+        Adherence globalAdherence = new Adherence();
+        globalAdherence.setSevenDayFraction(0.5);
+        globalAdherence.setStreakLength(4);
+        AdherenceBar adherenceBar = new AdherenceBar(globalAdherence);
         tile.setMainContent(adherenceBar);
         tile.setTitleText("Medication Manager");
-        adherenceBar.setProgress(adherenceRate);
         adherenceBar.setWidth(450);
         adherenceBar.setLongForm(true);
 

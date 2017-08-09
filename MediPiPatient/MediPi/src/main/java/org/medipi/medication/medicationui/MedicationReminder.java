@@ -74,6 +74,7 @@ public class MedicationReminder extends Group {
             ((Stage)this.getScene().getWindow()).close();
             reminderEvent.snoozeForSeconds(600);
         });
+        System.out.println("REMINDER - DoseId " + dose.getScheduledDoseId());
         takeButton.setOnMouseClicked((MouseEvent event) -> {
             ((MedicationManager)mediPi.getElement("Medication")).recordMedicationDose(dose);
             ((Stage)this.getScene().getWindow()).close();});

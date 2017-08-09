@@ -121,7 +121,7 @@ class ReminderServiceAsync extends Thread {
             LocalTime currentTime = LocalTime.now();
             synchronized (activeEvents) {
                 for (ReminderEventInterface event: activeEvents) {
-                    if (!event.isFrozen() && event.getReminderTime().isBefore(currentTime)) {
+                    if (!event.isFrozen() && event.getReminderStartTime().isBefore(currentTime) && event.getReminderEndTime().isAfter(currentTime)) {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {

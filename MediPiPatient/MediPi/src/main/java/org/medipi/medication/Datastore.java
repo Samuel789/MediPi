@@ -18,6 +18,17 @@ public class Datastore {
     private List<Schedule> patientSchedules;
     private MediPi medipi;
 
+    public int getOverallSevenDayAdherenceFraction() {
+        return overallSevenDayAdherenceFraction;
+    }
+
+    public int getOverallStreakLength() {
+        return overallStreakLength;
+    }
+
+    private int overallSevenDayAdherenceFraction;
+    private int overallStreakLength;
+
     public Datastore(MediPi medipi){
         this.medipi = medipi;
         patientSchedules = new ArrayList<>();
@@ -75,5 +86,6 @@ public class Datastore {
         }
         reminderService.startService();
     }
+
 
 }

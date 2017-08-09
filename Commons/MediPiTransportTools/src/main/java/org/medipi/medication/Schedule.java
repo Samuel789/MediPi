@@ -38,6 +38,16 @@ public class Schedule implements Serializable {
     private int scheduleId;
     private Medication medication;
 
+    public Adherence getAdherence() {
+        return adherence;
+    }
+
+    public void setAdherence(Adherence adherence) {
+        this.adherence = adherence;
+    }
+
+    private Adherence adherence;
+
     public Set<ScheduledDose> getScheduledDoses() {
         return scheduledDoses;
     }
