@@ -44,7 +44,7 @@
             </key>
             <one-to-many class="org.medipi.medication.ScheduledDose" />
         </set>
-        <one-to-one name="adherence" class="org.medipi.medication.Adherence"
+        <one-to-one name="scheduleAdherence" class="org.medipi.medication.ScheduleAdherence"
                     cascade="save-update"></one-to-one>
     </class>
 

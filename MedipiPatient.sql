@@ -56,6 +56,40 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: schedule_adherence; Type: TABLE; Schema: public; Owner: medipiconc
+--
+
+CREATE TABLE schedule_adherence (
+    schedule_id integer NOT NULL,
+    seven_day_fraction double precision,
+    streak_length integer
+);
+
+
+ALTER TABLE schedule_adherence OWNER TO medipiconc;
+
+--
+-- Name: adherence_schedule_id_seq; Type: SEQUENCE; Schema: public; Owner: medipiconc
+--
+
+CREATE SEQUENCE adherence_schedule_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE adherence_schedule_id_seq OWNER TO medipiconc;
+
+--
+-- Name: adherence_schedule_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: medipiconc
+--
+
+ALTER SEQUENCE adherence_schedule_id_seq OWNED BY schedule_adherence.schedule_id;
+
+
+--
 -- Name: alert; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -433,6 +467,19 @@ CREATE TABLE patient (
 ALTER TABLE patient OWNER TO postgres;
 
 --
+-- Name: patient_adherence; Type: TABLE; Schema: public; Owner: medipiconc
+--
+
+CREATE TABLE patient_adherence (
+    patient_uuid character varying NOT NULL,
+    seven_day_fraction double precision,
+    streak_length integer
+);
+
+
+ALTER TABLE patient_adherence OWNER TO medipiconc;
+
+--
 -- Name: patient_certificate; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -635,10 +682,24 @@ ALTER TABLE ONLY schedule ALTER COLUMN schedule_id SET DEFAULT nextval('medicati
 
 
 --
+-- Name: schedule_adherence schedule_id; Type: DEFAULT; Schema: public; Owner: medipiconc
+--
+
+ALTER TABLE ONLY schedule_adherence ALTER COLUMN schedule_id SET DEFAULT nextval('adherence_schedule_id_seq'::regclass);
+
+
+--
 -- Name: scheduled_dose scheduled_dose_id; Type: DEFAULT; Schema: public; Owner: medipiconc
 --
 
 ALTER TABLE ONLY scheduled_dose ALTER COLUMN scheduled_dose_id SET DEFAULT nextval('medication_scheduled_dose_id_seq'::regclass);
+
+
+--
+-- Name: adherence_schedule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: medipiconc
+--
+
+SELECT pg_catalog.setval('adherence_schedule_id_seq', 1, false);
 
 
 --
@@ -772,6 +833,13 @@ INSERT INTO patient VALUES ('d9bc2478-062e-4b87-9060-4984f26b74be', '01');
 
 
 --
+-- Data for Name: patient_adherence; Type: TABLE DATA; Schema: public; Owner: medipiconc
+--
+
+INSERT INTO patient_adherence VALUES ('d9bc2478-062e-4b87-9060-4984f26b74be', 0.5, 7);
+
+
+--
 -- Data for Name: patient_certificate; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -856,12 +924,29 @@ INSERT INTO schedule VALUES (3, '2017-07-16', NULL, 'Bactrim', 'To reduce consti
 
 
 --
+-- Data for Name: schedule_adherence; Type: TABLE DATA; Schema: public; Owner: medipiconc
+--
+
+INSERT INTO schedule_adherence VALUES (1, 0.25, 1);
+INSERT INTO schedule_adherence VALUES (2, 0.5, 2);
+INSERT INTO schedule_adherence VALUES (3, 0.75, 3);
+
+
+--
 -- Data for Name: scheduled_dose; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
 INSERT INTO scheduled_dose VALUES (1, 1, 2, 0, 1, NULL, '06:00:00', '11:00:00', '09:30:00', '09:30:00', NULL, NULL);
 INSERT INTO scheduled_dose VALUES (2, 1, 2, 0, 1, NULL, '17:00:00', '22:00:00', '19:30:00', '19:30:00', NULL, NULL);
-INSERT INTO scheduled_dose VALUES (3, 3, 2, 0, 1, NULL, '00:00:00', '02:00:00', '00:30:00', '00:30:00', NULL, NULL);
+INSERT INTO scheduled_dose VALUES (3, 3, 2, 0, 1, NULL, '00:00:00', '02:00:00', '00:01:00', '00:01:00', NULL, NULL);
+
+
+--
+-- Name: schedule_adherence adherence_pkey; Type: CONSTRAINT; Schema: public; Owner: medipiconc
+--
+
+ALTER TABLE ONLY schedule_adherence
+    ADD CONSTRAINT adherence_pkey PRIMARY KEY (schedule_id);
 
 
 --
@@ -937,6 +1022,14 @@ ALTER TABLE ONLY scheduled_dose
 
 
 --
+-- Name: patient_adherence patient_adherence_pkey; Type: CONSTRAINT; Schema: public; Owner: medipiconc
+--
+
+ALTER TABLE ONLY patient_adherence
+    ADD CONSTRAINT patient_adherence_pkey PRIMARY KEY (patient_uuid);
+
+
+--
 -- Name: patient_certificate patient_certificate_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1001,6 +1094,13 @@ ALTER TABLE ONLY schedule
 
 
 --
+-- Name: adherence_schedule_id_uindex; Type: INDEX; Schema: public; Owner: medipiconc
+--
+
+CREATE UNIQUE INDEX adherence_schedule_id_uindex ON schedule_adherence USING btree (schedule_id);
+
+
+--
 -- Name: dose_unit_id_uindex; Type: INDEX; Schema: public; Owner: medipiconc
 --
 
@@ -1043,10 +1143,25 @@ CREATE UNIQUE INDEX medication_unique_name_uindex ON medication USING btree (uni
 
 
 --
+-- Name: patient_adherence_patient_uuid_uindex; Type: INDEX; Schema: public; Owner: medipiconc
+--
+
+CREATE UNIQUE INDEX patient_adherence_patient_uuid_uindex ON patient_adherence USING btree (patient_uuid);
+
+
+--
 -- Name: schedule_id_uindex; Type: INDEX; Schema: public; Owner: medipiconc
 --
 
 CREATE UNIQUE INDEX schedule_id_uindex ON schedule USING btree (schedule_id);
+
+
+--
+-- Name: schedule_adherence adherence_schedule_schedule_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: medipiconc
+--
+
+ALTER TABLE ONLY schedule_adherence
+    ADD CONSTRAINT adherence_schedule_schedule_id_fk FOREIGN KEY (schedule_id) REFERENCES schedule(schedule_id);
 
 
 --
@@ -1087,6 +1202,14 @@ ALTER TABLE ONLY medication
 
 ALTER TABLE ONLY schedule
     ADD CONSTRAINT medication_schedule_patient_patient_uuid_fk FOREIGN KEY (patient_uuid) REFERENCES patient(patient_uuid);
+
+
+--
+-- Name: patient_adherence patient_adherence_patient_patient_uuid_fk; Type: FK CONSTRAINT; Schema: public; Owner: medipiconc
+--
+
+ALTER TABLE ONLY patient_adherence
+    ADD CONSTRAINT patient_adherence_patient_patient_uuid_fk FOREIGN KEY (patient_uuid) REFERENCES patient(patient_uuid);
 
 
 --

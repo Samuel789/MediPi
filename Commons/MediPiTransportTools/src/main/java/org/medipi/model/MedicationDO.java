@@ -15,10 +15,7 @@
  */
 package org.medipi.model;
 
-import org.medipi.medication.MedicationLogicException;
-import org.medipi.medication.RecordedDose;
-import org.medipi.medication.Schedule;
-import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -38,6 +35,16 @@ public class MedicationDO implements Serializable {
     private String versionAuthor;
     private Date versionDate;
     private String signature;
+
+    public PatientAdherence getPatientAdherence() {
+        return patientAdherence;
+    }
+
+    public void setPatientAdherence(PatientAdherence patientAdherence) {
+        this.patientAdherence = patientAdherence;
+    }
+
+    private PatientAdherence patientAdherence;
 
     private List<Schedule> schedules;
     private Date downloadedDate;

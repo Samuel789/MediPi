@@ -19,6 +19,11 @@ public class MedicationManager extends Element {
     private static final String MEDIPIIMAGESHIGHESTERROROUTOFTHRESHOLD = "medipi.images.highesterror.outofthreshold";
     private static final String MEDIPIIMAGESHIGHESTERRORCANTCALCULATE = "medipi.images.highesterror.cantcalculate";
     private static final String MEDIPIIMAGESHIGHESTERRORMISSING = "medipi.images.highesterror.missing";
+
+    public MedicationMenu getMenu() {
+        return menu;
+    }
+
     private MedicationMenu menu;
     private Datastore datastore;
     private ReminderService reminderService;
@@ -56,12 +61,15 @@ public class MedicationManager extends Element {
         return reminderService;
     }
 
+    public void reload() {
+        menu.reload();
+    }
+
     public Synchronizer getSynchronizer() {
         return synchronizer;
     }
 
     public String init() {
-        menu = new MedicationMenu(medipi, null);
         reminderService = new ReminderService(medipi, new HashSet<ReminderEventInterface>());
         datastore = new Datastore(medipi);
         try {
@@ -70,6 +78,7 @@ public class MedicationManager extends Element {
             System.out.println("Unable to create Medication synchronizer - synchronization will not be available");
             System.out.println(e.getMessage());
         }
+        menu = new MedicationMenu(medipi, null, datastore);
         return null;
     }
 

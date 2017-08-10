@@ -986,7 +986,7 @@ public class MediPi extends Application implements UnlockConsumer {
     }
 
     /**
-     * Method to reset all the data on all the devices loaded onto MediPi
+     * Method to reload all the data on all the devices loaded onto MediPi
      *
      */
     public void resetAllDevices() {

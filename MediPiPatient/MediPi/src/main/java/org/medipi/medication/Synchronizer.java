@@ -51,7 +51,6 @@ public class Synchronizer
     private final String deviceCertName;
     private final String resourcePath;
     private final MediPi medipi;
-    private final MedicationManager medicationManager;
 
     /**
      * Constructor for PollIncomingMessage class
@@ -60,7 +59,6 @@ public class Synchronizer
      */
     public Synchronizer(MediPi medipi) throws Exception {
         this.medipi = medipi;
-        medicationManager = (MedicationManager) medipi.getElement("Medication");
         resourcePath = medipi.getProperties().getProperty(MEDIPITRANSMITRESOURCEPATH);
         if (resourcePath == null || resourcePath.trim().equals("")) {
             MediPiLogger.getInstance().log(Synchronizer.class.getName() + ".error", "MediPi resource base path is not set");
@@ -136,7 +134,8 @@ public class Synchronizer
 
     @Override
     public void run() {
-        Datastore datastore = ((MedicationManager)medipi.getElement("Medication")).getDatestore();
+        MedicationManager medicationManager = (MedicationManager) medipi.getElement("Medication");
+        Datastore datastore = medicationManager.getDatestore();
         System.out.println("MedUpdate run at: " + Instant.now());
         try {
             MedicationDO uploadData = new MedicationDO();
@@ -146,6 +145,8 @@ public class Synchronizer
             MedicationDO recievedData = downloadScheduleData();
             List<Schedule> schedules = processScheduleData(recievedData);
             datastore.replacePatientSchedules(schedules);
+            datastore.setPatientAdherence(recievedData.getPatientAdherence());
+            medicationManager.reload();
 
         }  catch (ProcessingException pe) {
             MediPiLogger.getInstance().log(Synchronizer.class.getName() + ".error", "Attempt to synchronize medication data has failed - MediPi Concentrator is not available - please try again later. " + pe.getLocalizedMessage());

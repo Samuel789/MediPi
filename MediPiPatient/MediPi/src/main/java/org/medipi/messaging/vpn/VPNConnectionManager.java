@@ -129,7 +129,7 @@ public class VPNConnectionManager {
                 System.out.println("VPN Connection timed out");
                 continue;
             }            
-            if (line.contains("Connection reset")) {
+            if (line.contains("Connection reload")) {
                 hasTunnelProperty.set(MediPi.VPNRESTARTING);
                 continue;
             }

@@ -176,10 +176,10 @@ public class VPNServiceManager {
 //        new Thread(task).start();
 //    }
     /**
-     * A method to reset the timer to the original timeout period as defined by
+     * A method to reload the timer to the original timeout period as defined by
      * the timeout configuration
      */
-//    public void reset() {
+//    public void reload() {
 //        expireTime = System.currentTimeMillis() + expirePeriod;
 //    }
     /**

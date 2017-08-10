@@ -13,17 +13,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-package org.medipi.devices.drivers.domain;
+package org.medipi.concentrator.dao;
 
-import javafx.scene.Node;
+import org.medipi.medication.PatientAdherence;
+import org.medipi.medication.Schedule;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
- * Interface to allow the DeviceTimestampchecker to call the individual time
- * reload guide for a device when the timestamp is assessed to need resetting
- *
+ * Data Access Object for Hardware
  * @author rick@robinsonhq.com
  */
-public interface DeviceTimestampUpdateInterface {
-
-    public Node getDeviceTimestampUpdateMessageBoxContent();
+@Repository
+public class PatientAdherenceDAOImpl extends GenericDAOImpl<Schedule> implements PatientAdherenceDAO {
+    @Override
+    public PatientAdherence findByPatientUuid(String patientUuid) {
+        return this.getEntityManager().createNamedQuery("PatientAdherence.findByPatientUuid", PatientAdherence.class)
+                .setParameter("uuid", patientUuid)
+                .getSingleResult();
+    }
 }

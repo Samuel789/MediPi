@@ -105,6 +105,7 @@ public class TileMenu extends Group {
         dashTile.getChildren().add(tile.getNode(getUnitWidth(), getUnitHeight(), columns));
     }
 
+
     private void updateDisplay() {
         dashTile.getChildren().clear();
         for (Tile tile: tiles) {

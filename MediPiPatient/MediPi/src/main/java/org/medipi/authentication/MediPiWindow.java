@@ -133,7 +133,7 @@ public class MediPiWindow extends Pane {
     }
 
     /**
-     * A method to reset the timer to the original timeout period as defined by
+     * A method to reload the timer to the original timeout period as defined by
      * the timeout configuration
      */
     protected void unlock() {

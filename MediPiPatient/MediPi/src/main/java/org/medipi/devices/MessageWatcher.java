@@ -145,7 +145,7 @@ public class MessageWatcher extends Thread {
                 }
             }
 
-            // reset key and remove from set if directory no longer accessible
+            // reload key and remove from set if directory no longer accessible
             boolean valid = key.reset();
             if (!valid) {
                 keys.remove(key);

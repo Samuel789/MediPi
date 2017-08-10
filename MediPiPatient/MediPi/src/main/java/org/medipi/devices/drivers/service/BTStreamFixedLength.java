@@ -76,7 +76,7 @@ public class BTStreamFixedLength extends BluetoothService {
                     // do nothing as this is thrown when there is an attempted connection and the BT device is switched off
                 }
             }
-//            // reset keepLookingForBTConnection
+//            // reload keepLookingForBTConnection
 //            keepLookingForBTConnection = true;
         } finally {
             if (is != null) {

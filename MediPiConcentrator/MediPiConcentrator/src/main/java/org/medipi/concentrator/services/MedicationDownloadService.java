@@ -32,13 +32,10 @@ public class MedicationDownloadService {
     private PatientDeviceValidationService patientDeviceValidationService;
 
     @Autowired
-    private MedicationDAOImpl medicationDAOImpl;
-
-    @Autowired
     private ScheduleDAOImpl scheduleDAOimpl;
 
     @Autowired
-    private ScheduledDoseDAOImpl scheduledDoseDAOimpl;
+    private PatientAdherenceDAOImpl patientAdherenceDAOimpl;
 
     @Autowired
     private RecordedDoseDAOImpl recordedDoseDAOimpl;
@@ -59,10 +56,10 @@ public class MedicationDownloadService {
         System.out.println(org.hibernate.Version.getVersionString());
         try {
             medicationInfo.setSchedules(scheduleDAOimpl.findAll());
-        for (Schedule schedule: medicationInfo.getSchedules()) {
-            System.out.println(schedule.getAssignedStartDate());
-        }
-
+            for (Schedule schedule: medicationInfo.getSchedules()) {
+                System.out.println(schedule.getAssignedStartDate());
+            }
+            medicationInfo.setPatientAdherence(patientAdherenceDAOimpl.findByPatientUuid(patientUuid));
 
         } catch (Exception e) {
             System.out.println(String.format("Failed to process query results (or none returned). Error was %s: %s", e.getClass(), e.getMessage()));

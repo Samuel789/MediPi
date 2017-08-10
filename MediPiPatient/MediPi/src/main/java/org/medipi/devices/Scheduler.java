@@ -377,7 +377,7 @@ public class Scheduler extends Device {
                     if (!alertBooleanProperty.get()) {
                         alertBooleanProperty.set(true);
                     }
-                    // If a schedule is currently underway, inform the user, reset and restart
+                    // If a schedule is currently underway, inform the user, reload and restart
                     if (runningSchedule.get()) {
                         MediPiMessageBox.getInstance().makeMessage("The schedule period has just elapsed during the execution of this schedule and a new schedule must be taken. All data taken in the expired schedule has been deleted and must be retaken.");
                         Platform.runLater(() -> {
@@ -639,7 +639,7 @@ public class Scheduler extends Device {
     }
 
     // Method to execute the chain of elements in a schedule. A new STARTED line
-    // is prepared and data in each of the elements is reset
+    // is prepared and data in each of the elements is reload
     private void runSchedule() {
         if (!runningSchedule.get()) {
             runningSchedule.set(true);

@@ -8,7 +8,8 @@
         <mapping resource="org.medipi.concentrator.medication/medication.hbm.xml"/>
         <mapping resource="org.medipi.concentrator.medication/scheduledDose.hbm.xml"/>
         <mapping resource="org.medipi.concentrator.medication/schedule.hbm.xml"/>
-        <mapping resource="org.medipi.concentrator.medication/adherence.hbm.xml"/>
+        <mapping resource="org.medipi.concentrator.medication/scheduleAdherence.hbm.xml"/>
+        <mapping resource="org.medipi.concentrator.medication/patientAdherence.hbm.xml"/>
         <mapping resource="org.medipi.concentrator.medication/recordedDose.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

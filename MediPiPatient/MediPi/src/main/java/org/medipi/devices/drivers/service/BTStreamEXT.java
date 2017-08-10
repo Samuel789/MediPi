@@ -136,7 +136,7 @@ public class BTStreamEXT extends BluetoothService implements Runnable {
                         // do nothing as this is thrown when there is an attempted connection and the BT device is switched off
                     }
                 }
-                // reset keepLookingForBTConnection
+                // reload keepLookingForBTConnection
                 keepLookingForBTConnection = true;
             } finally {
                 System.out.println("finallynotify@ " + Instant.now());

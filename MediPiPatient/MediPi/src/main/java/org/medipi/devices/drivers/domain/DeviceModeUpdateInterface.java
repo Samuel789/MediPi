@@ -19,7 +19,7 @@ import javafx.scene.Node;
 
 /**
  * Interface to allow the DeviceTimestampchecker to call the individual time
- * reset guide for a device when the timestamp is assessed to need resetting
+ * reload guide for a device when the timestamp is assessed to need resetting
  *
  * @author rick@robinsonhq.com
  */

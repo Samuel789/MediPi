@@ -14,7 +14,6 @@ import org.medipi.medication.Schedule;
 import org.medipi.ui.Tile;
 
 import java.util.HashMap;
-import java.util.Random;
 
 public class MedicationTile extends Tile {
 
@@ -90,7 +89,7 @@ public class MedicationTile extends Tile {
 
         //titleLabel.setPrefSize(content.getWidth(), 30);
         titleLabel.setId("mainwindow-dashboard-component-title");
-        adherenceBar = new AdherenceBar(medicationSchedule.getAdherence());
+        adherenceBar = new AdherenceBar(medicationSchedule.getScheduleAdherence());
         adherenceBar.setWidth(200);
         vbox.getChildren().add(titleLabel);
         vbox.getChildren().add(purposeLabel);

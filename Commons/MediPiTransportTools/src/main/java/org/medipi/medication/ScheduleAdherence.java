@@ -3,7 +3,7 @@ package org.medipi.medication;
 /**
  * Created by sam on 10/08/17.
  */
-public class Adherence {
+public class ScheduleAdherence {
     public int getScheduleId() {
         return scheduleId;
     }
@@ -12,23 +12,23 @@ public class Adherence {
         this.scheduleId = scheduleId;
     }
 
-    public int getStreakLength() {
+    public Integer getStreakLength() {
         return streakLength;
     }
 
-    public void setStreakLength(int streakLength) {
+    public void setStreakLength(Integer streakLength) {
         this.streakLength = streakLength;
     }
 
-    public double getSevenDayFraction() {
+    public Double getSevenDayFraction() {
         return sevenDayFraction;
     }
 
-    public void setSevenDayFraction(double sevenDayFraction) {
+    public void setSevenDayFraction(Double sevenDayFraction) {
         this.sevenDayFraction = sevenDayFraction;
     }
 
     private int scheduleId;
-    private int streakLength;
-    private double sevenDayFraction;
+    private Integer streakLength;
+    private Double sevenDayFraction;
 }

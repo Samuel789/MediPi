@@ -3,7 +3,7 @@ package org.medipi.medication.medicationui;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.input.MouseEvent;
 import org.medipi.MediPi;
-import org.medipi.medication.Adherence;
+import org.medipi.medication.Datastore;
 import org.medipi.medication.MedicationManager;
 import org.medipi.medication.ScheduledDose;
 import org.medipi.ui.*;
@@ -12,17 +12,20 @@ import org.medipi.ui.*;
 public class MedicationMenu extends TileMenu {
     double adherenceRate =0.8;
     MediPi mediPi;
-    public MedicationMenu(MediPi mediPi, TileMenu upperMenu) {
+    Datastore datastore;
+    HeaderTile headerTile;
+    public MedicationMenu(MediPi mediPi, TileMenu upperMenu, Datastore datastore) {
         super(new WindowManager(), 3, 2.15, upperMenu);
         this.mediPi = mediPi;
-        MajorMinorTile medTile1 = new MajorMinorTile(new SimpleBooleanProperty(true), 1, 1);
-        medTile1.setMajorText("Back");
-        medTile1.setMinorText("< Synchronize >");
-        Tile medTile2 = createAdherenceSummaryTile();
-        medTile1.setOnMajorClick((MouseEvent event) -> {mediPi.callDashboard();});
-        medTile1.setOnMinorClick((MouseEvent event) -> {((MedicationManager) mediPi.getElement("Medication")).getSynchronizer().run();});
-        this.addTile(medTile1);
-        this.addTile(medTile2);
+        this.datastore = datastore;
+        MajorMinorTile backSettingsTile = new MajorMinorTile(new SimpleBooleanProperty(true), 1, 1);
+        backSettingsTile.setMajorText("Back");
+        backSettingsTile.setMinorText("< Synchronize >");
+        headerTile = createAdherenceHeaderTile();
+        backSettingsTile.setOnMajorClick((MouseEvent event) -> {mediPi.callDashboard();});
+        backSettingsTile.setOnMinorClick((MouseEvent event) -> {((MedicationManager) mediPi.getElement("Medication")).getSynchronizer().run();});
+        this.addTile(backSettingsTile);
+        this.addTile(headerTile);
         EntityTile recordDoseTile = new EntityTile(new SimpleBooleanProperty(true), 1, 1);
         EntityTile viewScheduleTile = new EntityTile(new SimpleBooleanProperty(true), 1, 1);
         EntityTile showMedicationsTile = new EntityTile(new SimpleBooleanProperty(true), 1 ,1);
@@ -36,19 +39,23 @@ public class MedicationMenu extends TileMenu {
         this.addTile(recordDoseTile);
         this.addTile(showMedicationsTile);
         this.addTile(viewScheduleTile);
+        loadPatientAdherenceStatistics();
     }
 
-    private Tile createAdherenceSummaryTile() {
-        HeaderTile tile = new HeaderTile(new SimpleBooleanProperty(true), 2, 1);
-        Adherence globalAdherence = new Adherence();
-        globalAdherence.setSevenDayFraction(0.5);
-        globalAdherence.setStreakLength(4);
-        AdherenceBar adherenceBar = new AdherenceBar(globalAdherence);
-        tile.setMainContent(adherenceBar);
-        tile.setTitleText("Medication Manager");
+    private void loadPatientAdherenceStatistics() {
+        AdherenceBar adherenceBar = new AdherenceBar(datastore.getPatientAdherence());
+        headerTile.setMainContent(adherenceBar);
         adherenceBar.setWidth(450);
         adherenceBar.setLongForm(true);
+    }
 
+    public void reload() {
+        loadPatientAdherenceStatistics();
+    }
+
+    private HeaderTile createAdherenceHeaderTile() {
+        HeaderTile tile = new HeaderTile(new SimpleBooleanProperty(true), 2, 1);
+        tile.setTitleText("Medication Manager");
         return tile;
     }
     public void recordMedicationDose(ScheduledDose dose) {

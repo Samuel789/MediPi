@@ -3,17 +3,12 @@ package org.medipi.medication.medicationui;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.medipi.medication.Adherence;
-import org.medipi.medication.Schedule;
-import org.medipi.medication.ScheduledDose;
-
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import org.medipi.medication.PatientAdherence;
+import org.medipi.medication.ScheduleAdherence;
 
 public class AdherenceBar extends Group {
     ProgressBar progressBar;
@@ -22,7 +17,8 @@ public class AdherenceBar extends Group {
     VBox content;
     Label streakNumber;
     Label streakText;
-    int streakLength;
+    Integer streakLength;
+    Double progress;
 
     public boolean isLongForm() {
         return longForm;
@@ -35,11 +31,15 @@ public class AdherenceBar extends Group {
 
     boolean longForm = false;
 
-    public AdherenceBar(Adherence adherence){
-        this(adherence.getSevenDayFraction(), adherence.getStreakLength());
+    public AdherenceBar(ScheduleAdherence scheduleAdherence){
+        this(scheduleAdherence.getSevenDayFraction(), scheduleAdherence.getStreakLength());
     }
 
-    public AdherenceBar(double sevenDayFraction, int streakLength) {
+    public AdherenceBar(PatientAdherence patientAdherence){
+        this(patientAdherence.getSevenDayFraction(), patientAdherence.getStreakLength());
+    }
+
+    public AdherenceBar(Double sevenDayFraction, Integer streakLength) {
         content = new VBox();
         hbox = new HBox();
         adherenceText = new Label();
@@ -73,27 +73,52 @@ public class AdherenceBar extends Group {
         streakText.setAlignment(Pos.CENTER);
         setProgress(sevenDayFraction);
         setStreakLength(streakLength);
+        updateLabel();
         this.getChildren().add(content);
     }
 
-    private void setProgress(double value) {
-        progressBar.setProgress(value);
-        updateLabel();
+    private void setProgress(Double value) {
+        progress = value;
+        if (value == null) {
+            progressBar.setProgress(100);
+            progressBar.setStyle("-fx-accent: navy;");
+        } else {
+            progressBar.setProgress(value);
+            progressBar.setStyle("-fx-accent: yellow;");
+        }
     }
 
     private void updateLabel() {
         if (longForm) {
-            adherenceText.setText(String.format("%d%% overall adherence in the last 7 days", (int) (progressBar.getProgress()*100), streakLength));
-            streakText.setText(String.format("Perfect for %d days!", streakLength));
+            if (progress == null) {
+                adherenceText.setText("Sync with the Concentrator to use this feature.");
+                streakText.setText("Tap the <Synchronize> button");
+            } else {
+                adherenceText.setText(String.format("%d%% overall adherence in the last 7 days", (int) (progressBar.getProgress() * 100), streakLength));
+                streakText.setText(String.format("Perfect for %d days!", streakLength));
+            }
         } else {
-            adherenceText.setText(String.format("%d%% adherence", (int) (progressBar.getProgress()*100)));
-            streakText.setText("");
+            if (progress == null) {
+                adherenceText.setText("Unknown");
+                streakText.setText("");
+            } else {
+                adherenceText.setText(String.format("%d%% adherence", (int) (progressBar.getProgress()*100)));
+                if (streakLength > 1) {
+                    streakText.setText(streakLength.toString() + " perfect days!");
+                } else {
+                    streakText.setText("");
+                }
+            }
         }
     }
 
-    private void setStreakLength(int value) {
+    private void setStreakLength(Integer value) {
         streakLength = value;
-        streakNumber.setText(String.format("%d", value));
+        if (value == null) {
+            streakNumber.setText("");
+        } else {
+            streakNumber.setText(String.format("%d", value));
+        }
     }
 
     public void setWidth(int width) {

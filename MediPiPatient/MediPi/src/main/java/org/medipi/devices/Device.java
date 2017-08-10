@@ -85,7 +85,7 @@ public abstract class Device extends Element {
     public abstract void setData(ArrayList<ArrayList<String>> deviceData);
 
     /**
-     * Method to reset a device and initialise it
+     * Method to reload a device and initialise it
      *
      */
     public abstract void resetDevice();
@@ -119,7 +119,7 @@ public abstract class Device extends Element {
     public abstract StringProperty getResultsSummary();
 
     /**
-     * Method to confirm that the user is happy to reset previously recorded
+     * Method to confirm that the user is happy to reload previously recorded
      * untransmitted data.
      *
      * @return boolean indicator of assent or dissent
@@ -134,7 +134,7 @@ public abstract class Device extends Element {
         alert.getDialogPane().getStylesheets().add("file:///" + medipi.getCssfile());
         alert.getDialogPane().setMaxSize(600, 300);
         alert.getDialogPane().setId("message-box");
-        Text text = new Text(getSpecificDeviceDisplayName() + "\n\n" + getResultsSummary().getValue() + "\nThis reading has not been transmitted.\nAre you sure you want to reset?");
+        Text text = new Text(getSpecificDeviceDisplayName() + "\n\n" + getResultsSummary().getValue() + "\nThis reading has not been transmitted.\nAre you sure you want to reload?");
         text.setWrappingWidth(600);
         alert.getDialogPane().setContent(text);
         Optional<ButtonType> result = alert.showAndWait();

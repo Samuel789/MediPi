@@ -82,7 +82,7 @@ public class ScheduleWatcher extends Thread {
                     sched.refreshSchedule();
                 }
             }
-            // reset the key
+            // reload the key
             boolean valid = watchKey.reset();
             if (!valid) {
                 System.out.println("Key has been unregistered");

@@ -18,20 +18,21 @@ public class Datastore {
     private List<Schedule> patientSchedules;
     private MediPi medipi;
 
-    public int getOverallSevenDayAdherenceFraction() {
-        return overallSevenDayAdherenceFraction;
+    public PatientAdherence getPatientAdherence() {
+        return patientAdherence;
     }
 
-    public int getOverallStreakLength() {
-        return overallStreakLength;
+    public void setPatientAdherence(PatientAdherence patientAdherence) {
+        this.patientAdherence = patientAdherence;
     }
 
-    private int overallSevenDayAdherenceFraction;
-    private int overallStreakLength;
+    private PatientAdherence patientAdherence;
+
 
     public Datastore(MediPi medipi){
         this.medipi = medipi;
         patientSchedules = new ArrayList<>();
+        patientAdherence = new PatientAdherence();
     }
 
     public List<Schedule> getPatientSchedules() {

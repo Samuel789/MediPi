@@ -2,7 +2,6 @@ package org.medipi.medication;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,15 +37,15 @@ public class Schedule implements Serializable {
     private int scheduleId;
     private Medication medication;
 
-    public Adherence getAdherence() {
-        return adherence;
+    public ScheduleAdherence getScheduleAdherence() {
+        return scheduleAdherence;
     }
 
-    public void setAdherence(Adherence adherence) {
-        this.adherence = adherence;
+    public void setScheduleAdherence(ScheduleAdherence scheduleAdherence) {
+        this.scheduleAdherence = scheduleAdherence;
     }
 
-    private Adherence adherence;
+    private ScheduleAdherence scheduleAdherence;
 
     public Set<ScheduledDose> getScheduledDoses() {
         return scheduledDoses;

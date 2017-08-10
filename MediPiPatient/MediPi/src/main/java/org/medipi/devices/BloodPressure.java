@@ -325,7 +325,7 @@ public abstract class BloodPressure extends Device {
         return profileId;
     }
 
-    // reset the device
+    // reload the device
     @Override
     public void resetDevice() {
         deviceData = new ArrayList<>();
