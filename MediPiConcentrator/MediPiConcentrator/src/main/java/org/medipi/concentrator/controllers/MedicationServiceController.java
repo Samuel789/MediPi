@@ -48,29 +48,12 @@ public class MedicationServiceController {
     @Autowired
     private MediPiLogger logger;
 
-    /**
-     * Controller for downloading a list of available updates to a patient
-     * device. This method passes the incoming message to the service layer for
-     * processing
-     *
-     * @param hardwareName incoming deviceId parameter from RESTful message
-     * @param patientUuid incoming patientUuid parameter from RESTful message
-     * @return Response to the request
-     */
-    @RequestMapping(value = "/download/{hardwareName}/{patientUuid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<MedicationDO> getMedicationSchedules(@PathVariable("hardwareName") String hardwareName, @PathVariable("patientUuid") String patientUuid) {
-//Removed to Reduce Logs size        logger.log(DownloadServiceController.class.getName(), new Date().toString() + " get DownloadableList called by patientUuid: " + patientUuid + " using hardwareName: " + hardwareName);
-        return this.medicationDownloadService.getMedicationData(hardwareName, patientUuid);
-    }
-
-    @RequestMapping(value="/upload", method = RequestMethod.PUT, consumes = {"application/json"})
+    @RequestMapping(value="/synchronize", method = RequestMethod.POST, consumes = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ResponseEntity<String> uploadRecordedDoses(@RequestBody MedicationDO uploadedData) {
+    public ResponseEntity<MedicationDO> synchronize(@RequestBody MedicationDO uploadedData) {
 //Removed to Reduce Logs size        logger.log(DownloadServiceController.class.getName(), new Date().toString() + " get DownloadableList called by patientUuid: " + patientUuid + " using hardwareName: " + hardwareName);
-        this.medicationDownloadService.uploadRecordedDoses(uploadedData);
-        return new ResponseEntity<String>("Upload successful", HttpStatus.ACCEPTED);
+        return this.medicationDownloadService.synchronize(uploadedData);
     }
 
 }

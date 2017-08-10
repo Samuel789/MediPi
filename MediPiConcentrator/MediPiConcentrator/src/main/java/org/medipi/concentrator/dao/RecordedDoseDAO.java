@@ -11,4 +11,5 @@ import java.util.List;
 public interface RecordedDoseDAO extends GenericDAO<RecordedDose> {
    RecordedDose findByRecordedDoseUUID(String recordedDoseUUID);
     List<RecordedDose> findAll();
+    List<RecordedDose> findByPatientUuid(String patientUuid);
 }

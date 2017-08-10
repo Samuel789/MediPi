@@ -83,7 +83,7 @@ public class MedicationReminder extends Group {
         buttonBox.setSpacing(5);
 
         try {
-            iconImage = new Image(new File("/home/sam/Pictures/TommyWHead.png").toURL().toString());
+            iconImage = new Image(new File("/home/sam/Pictures/medication.png").toURL().toString());
             iconImageView = new ImageView(iconImage);
             iconFullNameVBox.getChildren().add(iconImageView);
             iconImageView.setFitWidth(100);

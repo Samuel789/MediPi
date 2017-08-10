@@ -106,7 +106,22 @@ public class Synchronizer
         List<Schedule> newSchedules = recievedData.getSchedules();
         return newSchedules;
     }
+    private MedicationDO performDataExchange(MedicationDO uploadData) throws Exception {
+        HashMap<String, Object> params = new HashMap<>();
+        String patientCertName = System.getProperty(MEDIPIPATIENTCERTNAME);
+        uploadData.setHardwareName(deviceCertName);
+        uploadData.setPatientUuid(patientCertName);
 
+        RESTfulMessagingEngine rme = new RESTfulMessagingEngine(resourcePath + "medication/synchronize", new String[] {});
+        Response postResponse = rme.executePost(params, Entity.json(uploadData));
+        System.out.println(postResponse.getStatusInfo());
+        String jsonResponse = postResponse.readEntity(String.class);
+        System.out.println("////");
+        System.out.println(jsonResponse);
+        System.out.println("////");
+
+        return new ObjectMapper().readValue(jsonResponse, MedicationDO.class);
+    }
     private void uploadDoseData(MedicationDO doses) throws Exception {
         HashMap<String, Object> params = new HashMap<>();
         String patientCertName = System.getProperty(MEDIPIPATIENTCERTNAME);
@@ -115,19 +130,6 @@ public class Synchronizer
         RESTfulMessagingEngine rme = new RESTfulMessagingEngine(resourcePath + "medication/upload", new String[] {});
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Data-Format", "MediPiNative");
-        for (Schedule schedule: doses.getSchedules()) {
-            for (RecordedDose dose: schedule.getRecordedDoses()) {
-                System.out.println("TIMESTAMP DEBUG FOR " + dose.getRecordedDoseUUID() + ":");
-                System.out.println("STAMP: " + dose.getTimeTaken().getTime());
-                System.out.println("TO LOCALDATETIME: " + dose.getTimeTaken().toLocalDateTime());
-                System.out.println("TO LONDON ZONE: " + dose.getTimeTaken().toLocalDateTime().atZone(TimeZone.getTimeZone("Europe/London").toZoneId()));
-                System.out.println("--STAMP: " + dose.getTimeTaken().toLocalDateTime().atZone(TimeZone.getTimeZone("Europe/London").toZoneId()).getNano()/1000);
-                System.out.println("TO DEFAULT ZONE: " + dose.getTimeTaken().toLocalDateTime().atZone(TimeZone.getDefault().toZoneId()));
-                System.out.println("--STAMP: " + dose.getTimeTaken().toLocalDateTime().atZone(TimeZone.getDefault().toZoneId()).getNano()/1000);
-                System.out.println("TO UTC ZONE: " + dose.getTimeTaken().toLocalDateTime().atZone(ZoneOffset.UTC));
-                System.out.println("--STAMP: " + dose.getTimeTaken().toLocalDateTime().atZone(ZoneOffset.UTC).getNano()/1000);
-            }
-        }
         Response postResponse = rme.executePut(params, Entity.json(doses), headers);
         System.out.println(postResponse.getStatusInfo());
     }
@@ -140,9 +142,7 @@ public class Synchronizer
         try {
             MedicationDO uploadData = new MedicationDO();
             uploadData.setSchedules(datastore.getPatientSchedules());
-            uploadDoseData(uploadData);
-            System.out.println("Sent upload data");
-            MedicationDO recievedData = downloadScheduleData();
+            MedicationDO recievedData = performDataExchange(uploadData);
             List<Schedule> schedules = processScheduleData(recievedData);
             datastore.replacePatientSchedules(schedules);
             datastore.setPatientAdherence(recievedData.getPatientAdherence());

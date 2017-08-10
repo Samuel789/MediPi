@@ -32,6 +32,25 @@ public class MedicationDO implements Serializable {
     private static final long serialVersionUID = 1L;
     private String medicationPackageId;
     private String version;
+
+    public String getPatientUuid() {
+        return patientUuid;
+    }
+
+    public void setPatientUuid(String patientUuid) {
+        this.patientUuid = patientUuid;
+    }
+
+    public String getHardwareName() {
+        return hardwareName;
+    }
+
+    public void setHardwareName(String hardwareName) {
+        this.hardwareName = hardwareName;
+    }
+
+    private String patientUuid;
+    private String hardwareName;
     private String versionAuthor;
     private Date versionDate;
     private String signature;

@@ -36,7 +36,14 @@ public class RecordedDoseDAOImpl extends GenericDAOImpl<RecordedDose> implements
 
     @Override
     public List<RecordedDose> findAll() {
-        return this.getEntityManager().createNamedQuery("ScheduledDose.findAll", RecordedDose.class)
+        return this.getEntityManager().createNamedQuery("RecordedDose.findAll", RecordedDose.class)
+                .getResultList();
+    }
+
+    @Override
+    public List<RecordedDose> findByPatientUuid(String patientUuid) {
+        return this.getEntityManager().createNamedQuery("RecordedDose.findByPatientUuid", RecordedDose.class)
+                .setParameter("patientUuid", patientUuid)
                 .getResultList();
     }
 }
