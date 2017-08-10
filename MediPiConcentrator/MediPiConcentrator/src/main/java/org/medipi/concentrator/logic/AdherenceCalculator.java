@@ -1,5 +1,6 @@
 package org.medipi.concentrator.logic;
 
+import org.apache.tomcat.jni.Local;
 import org.medipi.medication.RecordedDose;
 import org.medipi.medication.Schedule;
 import org.medipi.medication.ScheduledDose;
@@ -8,6 +9,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class MedicationLogic {
     public static boolean dueOnDay(ScheduledDose dose, int day) {
@@ -62,4 +68,70 @@ public class MedicationLogic {
             }
         }
     }
+    public List<DoseInstance> unpackDoses(ScheduledDose scheduledDose, int startDay, int endDay) {
+        assert(startDay < endDay && startDay >= 0 && endDay >= 0);
+        int sequenceStartDay = Math.max(startDay, scheduledDose.getStartDay());
+        int sequenceEndDay = Math.min(endDay, scheduledDose.getEndDay());
+        if (scheduledDose.getRepeatInterval() == null) {
+            if (startDay >= sequenceStartDay && startDay < sequenceEndDay) {
+                return Arrays.singletonList(new DoseInstance(scheduledDose, startDay));
+            }
+        }
+        int relativeStartDay = Math.max(startDay, scheduledDose.getStartDay()) - startDay;
+        int offset = (sequenceStartDay - startDay) % scheduledDose.getRepeatInterval();
+        List<DoseInstance> doses = range(sequenceStartDay + offset, sequenceEndDay, scheduledDose.getRepeatInterval()).mapToObj(day -> new DoseInstance(scheduledDose, day)).collect(Collectors.toList());
+        return doses;
+    }
+
+    private IntStream range(int start, int stop, int step) {
+        return IntStream.range(start, stop/step).map(i -> i*step);
+    }
+
+    public computePatientAdherence(String patientUuid) {
+
+    }
+}
+
+class DoseInstance {
+    public ScheduledDose getDose() {
+        return dose;
+    }
+
+    private ScheduledDose dose;
+
+    public int getDay() {
+        return day;
+    }
+
+
+    private int day;
+
+    public LocalTime getTimeStart() {
+        return timeStart;
+    }
+
+    public LocalTime getTimeEnd() {
+        return timeEnd;
+    }
+
+    private LocalTime timeStart;
+    private LocalTime timeEnd;
+
+    public boolean isTaken() {
+        return taken;
+    }
+
+    public void setTaken(boolean taken) {
+        this.taken = taken;
+    }
+
+    private boolean taken;
+
+    DoseInstance(ScheduledDose dose, int day) {
+        this.dose = dose;
+        this.day = day;
+        this.timeStart = dose.getWindowStartTime().toLocalTime();
+        this.timeEnd = dose.getWindowEndTime().toLocalTime();
+    }
+
 }
