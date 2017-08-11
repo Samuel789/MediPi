@@ -28,17 +28,27 @@ public class RecordedDose implements Serializable {
         this.doseValue = doseValue;
     }
 
-    public Timestamp getTimeTaken() {
+    public Time getTimeTaken() {
         return timeTaken;
     }
 
-    public void setTimeTaken(Timestamp timeTaken) {
+    public void setTimeTaken(Time timeTaken) {
         this.timeTaken = timeTaken;
     }
 
     private String recordedDoseUUID;
     private double doseValue;
-    private Timestamp timeTaken;
+
+    public int getDayTaken() {
+        return dayTaken;
+    }
+
+    public void setDayTaken(int dayTaken) {
+        this.dayTaken = dayTaken;
+    }
+
+    private int dayTaken;
+    private Time timeTaken;
 
     public boolean isAdherent() {
         return adherent;
@@ -75,8 +85,9 @@ public class RecordedDose implements Serializable {
 
     public RecordedDose() {}
 
-    public RecordedDose(Timestamp timeTaken, double doseValue, Schedule schedule) {
+    public RecordedDose(int dayTaken, Time timeTaken, double doseValue, Schedule schedule) {
         recordedDoseUUID = UUID.randomUUID().toString();
+        this.dayTaken = dayTaken;
         this.timeTaken = timeTaken;
         this.doseValue = doseValue;
         this.scheduleId = schedule.getScheduleId();

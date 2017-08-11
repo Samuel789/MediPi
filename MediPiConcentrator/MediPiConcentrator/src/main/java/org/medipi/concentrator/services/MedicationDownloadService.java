@@ -2,9 +2,8 @@ package org.medipi.concentrator.services;
 
 import org.medipi.concentrator.dao.*;
 import org.medipi.concentrator.exception.NotFound404Exception;
-import org.medipi.concentrator.logic.MedicationLogic;
+import org.medipi.concentrator.logic.AdherenceCalculator;
 import org.medipi.concentrator.utilities.Utilities;
-import org.medipi.medication.Medication;
 import org.medipi.medication.RecordedDose;
 import org.medipi.medication.Schedule;
 import org.medipi.medication.ScheduledDose;
@@ -16,12 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.NoResultException;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 @Service
@@ -104,27 +99,29 @@ public class MedicationDownloadService {
     private void updateAdherence(String patientUuid) {
         LocalDate searchEndTime = LocalDate.now();
         LocalDate searchStartTime = searchEndTime.minusDays(7);
-        List<RecordedDose> recordedDoses = recordedDoseDAOimpl.findByPatientUuid(patientUuid);
-        List<ScheduledDose> scheduledDoses = scheduledDoseDAOimpl.findByPatientUuid(patientUuid);
-        HashMap<Schedule, int> recordedDoseCount = new HashMap<>();
-        HashMap<Schedule, int> takenDoseCount = new HashMap<>();
-        for (RecordedDose dose: recordedDoses) {
-            LocalDateTime timeTaken = dose.getTimeTaken().toLocalDateTime();
-            if (timeTaken.isBefore(searchStartTime)) {
+        List<RecordedDose> orderedRecordedDoses = recordedDoseDAOimpl.findByPatientUuid(patientUuid);
+        HashMap<Schedule, Integer> recordedDoseCount = new HashMap<>();
+        HashMap<Schedule, Integer> takenDoseCount = new HashMap<>();
+        for (RecordedDose dose: orderedRecordedDoses) {
+            LocalDate dateTaken = dose.getTimeTaken().toLocalDateTime().toLocalDate();
+            if (dateTaken.isBefore(searchStartTime)) {
                 continue;
-            } else if (timeTaken.isAfter(searchEndTime)) {
+            } else if (dateTaken.isAfter(searchEndTime)) {
                 break;
             }
-            if (dose.isAdherent()) adherentDoses++;
-        }
-        for (ScheduledDose dose: scheduledDoses) {
-            int startDayOfSchedule = MedicationLogic.getDayOfSchedule(dose.getSchedule(), searchStartTime);
-            int endDayOfSchedule = MedicationLogic.getDayOfSchedule(dose.getSchedule(), searchEndTime);
-            if (!recordedDoseCount.containsKey(dose.getSchedule())) {
-                recordedDoseCount.put(dose.getSchedule(), 0);
+            if (dose.isAdherent()) {
+                takenDoseCount.put(dose.getSchedule(), takenDoseCount.get(dose.getSchedule()) + 1);
             }
-            recordedDoseCount.put(dose.getSchedule(), recordedDoseCount.get(dose.getSchedule()) + MedicationLogic.countDosesBetween(startDayOfSchedule, endDayOfSchedule, dose));
-
+        }
+        for (Schedule schedule: scheduleDAOimpl.findAll()) {
+            for (ScheduledDose dose : schedule.getScheduledDoses()) {
+                int startDayOfSchedule = AdherenceCalculator.getDayOfSchedule(dose.getSchedule(), searchStartTime);
+                int endDayOfSchedule = AdherenceCalculator.getDayOfSchedule(dose.getSchedule(), searchEndTime);
+                if (!recordedDoseCount.containsKey(dose.getSchedule())) {
+                    recordedDoseCount.put(dose.getSchedule(), 0);
+                }
+                recordedDoseCount.put(dose.getSchedule(), recordedDoseCount.get(dose.getSchedule()) + AdherenceCalculator.countDosesBetween(startDayOfSchedule, endDayOfSchedule, dose));
+            }
         }
     }
 

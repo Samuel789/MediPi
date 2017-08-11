@@ -10,8 +10,11 @@
         <property name="doseValue" type="double" not-null="true">
             <column name="value" />
         </property>
-        <property name="timeTaken" type="timestamp" not-null="true">
-            <column name="timetaken" sql-type="TIMESTAMP WITHOUT TIME ZONE" />
+        <property name="timeTaken" type="java.sql.Time" not-null="true">
+            <column name="time_taken"/>
+        </property>
+        <property name="dayTaken" type="int" not-null="true">
+            <column name="day_taken"/>
         </property>
         <property name="scheduleId" type="int" not-null="true">
             <column name="schedule_id" />
