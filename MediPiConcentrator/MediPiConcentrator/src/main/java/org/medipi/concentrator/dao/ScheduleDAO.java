@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ScheduleDAO extends GenericDAO<Schedule> {
     Schedule findByMedicationId(int medicationId);
-
+    List<Schedule> findByPatientUuid(String patientUuid);
     List<Schedule> findAll();
 }

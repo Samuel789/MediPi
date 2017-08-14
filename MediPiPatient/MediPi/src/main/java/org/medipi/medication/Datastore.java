@@ -7,6 +7,7 @@ import org.medipi.medication.reminders.ReminderEventInterface;
 import org.medipi.medication.reminders.ReminderService;
 
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,12 +60,11 @@ public class Datastore {
         // Check if any doses have already been taken today
         for (Schedule schedule: patientSchedules) {
             HashSet<RecordedDose> todayTakenDoses = new HashSet<>();
+            int dayOfSchedule = (int) schedule.getAssignedStartDate().toLocalDate().until(LocalDate.now(), ChronoUnit.DAYS);
             for (RecordedDose takenDose : schedule.getRecordedDoses()) {
-                LocalDateTime takenTime = takenDose.getTimeTaken().toLocalDateTime();
-                if (takenTime.toLocalDate().equals(today)) {
+                int takenDay = takenDose.getDayTaken();
+                if (takenDay == dayOfSchedule) {
                     todayTakenDoses.add(takenDose);
-                    System.out.println(takenDose.getTimeTaken());
-                    System.out.println(takenDose.getTimeTaken());
                 }
             }
             System.out.println(todayTakenDoses.size());

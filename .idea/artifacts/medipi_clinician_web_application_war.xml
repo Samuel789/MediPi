@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="medipi-clinician-web-application:war">
+    <output-path>$PROJECT_DIR$/Application/Web-Aplication/medipi-clinician-web-application/target</output-path>
+    <root id="archive" name="medipiClinicianWebApp.war">
+      <element id="artifact" artifact-name="medipi-clinician-web-application:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -25,7 +25,7 @@
         <![CDATA[SELECT d FROM RecordedDose d WHERE d.recordedDoseUUID = :id]]>
     </query>
     <query name="RecordedDose.findAll">
-        <![CDATA[SELECT d FROM RecordedDose d]]>
+        <![CDATA[SELECT d FROM RecordedDose d ORDER BY dayTaken, timeTaken]]>
     </query>
 
 </hibernate-mapping>

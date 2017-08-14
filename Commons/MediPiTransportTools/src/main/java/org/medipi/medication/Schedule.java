@@ -29,8 +29,6 @@ public class Schedule implements Serializable {
 
     private Date assignedStartDate;
     private Date assignedEndDate;
-    private Date deviceStartDate;
-    private Date deviceEndDate;
     private String alternateName;
     private String purposeStatement;
     private String patientUuid;
@@ -67,22 +65,6 @@ public class Schedule implements Serializable {
 
     private Set<RecordedDose> recordedDoses = new HashSet<RecordedDose>(0);
     public Schedule() {
-    }
-
-    public Date getDeviceStartDate() {
-        return deviceStartDate;
-    }
-
-    public void setDeviceStartDate(Date deviceStartDate) {
-        this.deviceStartDate = deviceStartDate;
-    }
-
-    public Date getDeviceEndDate() {
-        return deviceEndDate;
-    }
-
-    public void setDeviceEndDate(Date deviceEndDate) {
-        this.deviceEndDate = deviceEndDate;
     }
 
     public String getPatientUuid() {

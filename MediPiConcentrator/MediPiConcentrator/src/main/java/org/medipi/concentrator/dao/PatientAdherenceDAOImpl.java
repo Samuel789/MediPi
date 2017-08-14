@@ -26,7 +26,7 @@ import java.util.List;
  * @author rick@robinsonhq.com
  */
 @Repository
-public class PatientAdherenceDAOImpl extends GenericDAOImpl<Schedule> implements PatientAdherenceDAO {
+public class PatientAdherenceDAOImpl extends GenericDAOImpl<PatientAdherence> implements PatientAdherenceDAO {
     @Override
     public PatientAdherence findByPatientUuid(String patientUuid) {
         return this.getEntityManager().createNamedQuery("PatientAdherence.findByPatientUuid", PatientAdherence.class)

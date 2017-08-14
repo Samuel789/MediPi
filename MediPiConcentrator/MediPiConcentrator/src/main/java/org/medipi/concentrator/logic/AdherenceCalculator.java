@@ -24,9 +24,25 @@ public class AdherenceCalculator {
     private Collection<Schedule> schedules;
     private HashMap<Schedule, Integer> scheduleStreakLength;
     private HashMap<Schedule, Double> scheduleFraction;
+
+    public int getPatientStreaklength() {
+        return patientStreaklength;
+    }
+
+    public double getPatientFraction() {
+        return patientFraction;
+    }
+
     private int patientStreaklength;
     private double patientFraction;
 
+    public double getAdherenceFractionOf(Schedule schedule) {
+        return scheduleFraction.get(schedule);
+    }
+
+    public int getStreakLengthOf(Schedule schedule) {
+        return scheduleStreakLength.get(schedule);
+    }
 
     public AdherenceCalculator(Collection<Schedule> schedules, LocalDate startDay, LocalDate endDay, boolean calculatingStreak) {
         this.schedules = schedules;
@@ -78,7 +94,12 @@ public class AdherenceCalculator {
     public List<DoseInstance> unpackDoses(ScheduledDose scheduledDose, int startDay, int endDay) {
         assert(startDay < endDay && startDay >= 0 && endDay >= 0);
         int sequenceStartDay = Math.max(startDay, scheduledDose.getStartDay());
-        int sequenceEndDay = Math.min(endDay, scheduledDose.getEndDay());
+        int sequenceEndDay;
+        if (scheduledDose.getEndDay() != null) {
+            sequenceEndDay = Math.min(endDay, scheduledDose.getEndDay());
+        } else {
+            sequenceEndDay = endDay;
+        }
         if (scheduledDose.getRepeatInterval() == null) {
             if (startDay >= sequenceStartDay && startDay < sequenceEndDay) {
                 return Collections.singletonList(new DoseInstance(scheduledDose, startDay));
@@ -114,8 +135,10 @@ public class AdherenceCalculator {
             patientDosesCorrectlyTaken = adherenceStatistics[0];
             patientDosesMissed = adherenceStatistics[1];
             patientDosesTakenIncorrectly = adherenceStatistics[2];
-            if (calculatingStreak && adherenceStatistics[3] >= queryStartDay) {
-                errantDays.add(schedule.getAssignedStartDate().toLocalDate().plusDays(adherenceStatistics[3]));
+            if (calculatingStreak) {
+                if (adherenceStatistics[3] >= queryStartDay) {
+                    errantDays.add(schedule.getAssignedStartDate().toLocalDate().plusDays(adherenceStatistics[3]));
+                }
                 scheduleStreakLength.put(schedule, calculateStreakLength(errantDays, scheduleStart));
             }
             scheduleFraction.put(schedule, calculateAdherenceFraction(adherenceStatistics[0], adherenceStatistics[1], adherenceStatistics[2]));
@@ -131,6 +154,9 @@ public class AdherenceCalculator {
     }
 
     private double calculateAdherenceFraction(int dosesCorrectlyTaken, int dosesNotTaken, int dosesTakenIncorrectly) {
+        if (dosesCorrectlyTaken + dosesNotTaken + dosesTakenIncorrectly == 0) {
+            return 1;
+        }
         return dosesCorrectlyTaken / (dosesCorrectlyTaken + dosesNotTaken);
     }
 
@@ -171,15 +197,17 @@ public class AdherenceCalculator {
         while (day < queryEndDay) {
             ArrayList<RecordedDose> dayRds = new ArrayList<>();
             ArrayList<DoseInstance> daySds = new ArrayList<>();
-            while(recordedDoses.get(currentRdIndex).getDayTaken() <= day) {
+            while(currentRdIndex < recordedDoses.size() && recordedDoses.get(currentRdIndex).getDayTaken() <= day) {
                 if (recordedDoses.get(currentRdIndex).getDayTaken() == day) {
                     dayRds.add(recordedDoses.get(currentRdIndex));
                 }
+                currentRdIndex++;
             }
-            while(doseInstances.get(currentSdIndex).getDay() <= day) {
+            while(currentSdIndex < doseInstances.size() && doseInstances.get(currentSdIndex).getDay() <= day) {
                 if (doseInstances.get(currentSdIndex).getDay() == day) {
                     daySds.add(doseInstances.get(currentSdIndex));
                 }
+                currentSdIndex++;
             }
             int[] adherenceResults = calculate_day_adherence(daySds, dayRds);
             if (calculatingStreak && !dayQualifiesForStreak(adherenceResults[0], adherenceResults[1], adherenceResults[2])) {

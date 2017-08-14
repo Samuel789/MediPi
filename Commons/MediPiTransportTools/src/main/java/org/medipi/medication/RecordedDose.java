@@ -50,16 +50,6 @@ public class RecordedDose implements Serializable {
     private int dayTaken;
     private Time timeTaken;
 
-    public boolean isAdherent() {
-        return adherent;
-    }
-
-    public void setAdherent(boolean adherent) {
-        this.adherent = adherent;
-    }
-
-    private boolean adherent;
-
     @XmlTransient
     public Schedule getSchedule() {
         return schedule;

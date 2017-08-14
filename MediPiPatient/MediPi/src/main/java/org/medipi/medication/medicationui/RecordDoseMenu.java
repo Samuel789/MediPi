@@ -19,10 +19,12 @@ import org.medipi.medication.reminders.ReminderEventInterface;
 import org.medipi.medication.reminders.ReminderService;
 import org.medipi.ui.*;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
@@ -181,10 +183,8 @@ class DoseDetailsScreen extends TileMenu {
 
         saveButton.setOnButtonClick((ActionEvent) -> {
             if (getUserConfirmation()) {
-                Timestamp ts = Timestamp.valueOf(doseTime.atDate(doseDay));
-                System.out.println(ts);
-                System.out.println(ts.getTime());
-                medicationSchedule.getRecordedDoses().add(new RecordedDose(Timestamp.valueOf(doseTime.atDate(doseDay).atZone(ZoneId.of("Europe/London")).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()), doseValue, medicationSchedule));
+                int doseDayOfSchedule = (int) medicationSchedule.getAssignedStartDate().toLocalDate().until(LocalDate.now(), ChronoUnit.DAYS);
+                medicationSchedule.getRecordedDoses().add(new RecordedDose(doseDayOfSchedule, Time.valueOf(doseTime), doseValue, medicationSchedule));
                 if (correspondingDose != null) {
                     ReminderService reminderService = ((MedicationManager) mediPi.getElement("Medication")).getReminderService();
                     for (ReminderEventInterface event: reminderService.getTodayActiveEvents()) {

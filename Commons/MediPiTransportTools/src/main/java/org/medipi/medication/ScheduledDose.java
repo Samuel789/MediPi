@@ -57,25 +57,7 @@ public class ScheduledDose implements Serializable {
         this.defaultReminderTime = defaultReminderTime;
     }
 
-    public Date getDeviceStartDate() {
-        return deviceStartDate;
-    }
-
-    public void setDeviceStartDate(Date deviceStartDate) {
-        this.deviceStartDate = deviceStartDate;
-    }
-
-    public Date getDeviceEndDate() {
-        return deviceEndDate;
-    }
-
-    public void setDeviceEndDate(Date deviceEndDate) {
-        this.deviceEndDate = deviceEndDate;
-    }
-
     private Time defaultReminderTime;
-    private Date deviceStartDate;
-    private Date deviceEndDate;
     private Time reminderTime;
 
     public void setDoseValue(double doseValue) {

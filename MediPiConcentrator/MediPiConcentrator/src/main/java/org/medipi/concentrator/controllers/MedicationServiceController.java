@@ -56,4 +56,14 @@ public class MedicationServiceController {
         return this.medicationDownloadService.synchronize(uploadedData);
     }
 
+    @RequestMapping(value="/clinician/getPatientData/{patientUuid}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ResponseEntity<MedicationDO> getMedicationData(@PathVariable("patientUuid") String patientUuid) {
+        System.out.println("Hit");
+//Removed to Reduce Logs size        logger.log(DownloadServiceController.class.getName(), new Date().toString() + " get DownloadableList called by patientUuid: " + patientUuid + " using hardwareName: " + hardwareName);
+        return this.medicationDownloadService.getMedicationData(patientUuid);
+    }
+
+
 }

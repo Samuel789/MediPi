@@ -4,6 +4,7 @@ import org.medipi.concentrator.dao.*;
 import org.medipi.concentrator.exception.NotFound404Exception;
 import org.medipi.concentrator.logic.AdherenceCalculator;
 import org.medipi.concentrator.utilities.Utilities;
+import org.medipi.medication.PatientAdherence;
 import org.medipi.medication.RecordedDose;
 import org.medipi.medication.Schedule;
 import org.medipi.medication.ScheduledDose;
@@ -35,10 +36,13 @@ public class MedicationDownloadService {
     private PatientAdherenceDAOImpl patientAdherenceDAOimpl;
 
     @Autowired
+    private ScheduleAdherenceDAOImpl scheduleAdherenceDAOimpl;
+
+    @Autowired
     private RecordedDoseDAOImpl recordedDoseDAOimpl;
 
     @Transactional(rollbackFor = RuntimeException.class)
-    private MedicationDO getMedicationData(String patientUuid) {
+    public ResponseEntity<MedicationDO> getMedicationData(String patientUuid) {
 
         MedicationDO medicationInfo = new MedicationDO();
         List<ScheduledDose> doses = new ArrayList<>();
@@ -53,7 +57,12 @@ public class MedicationDownloadService {
         } catch (Exception e) {
             System.out.println(String.format("Failed to process query results (or none returned). Error was %s: %s", e.getClass(), e.getMessage()));
         }
-        return medicationInfo;
+        try {
+            return new ResponseEntity<MedicationDO>(medicationInfo, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(String.format("Creation of ResponseEntity failed. Error was %s: %s", e.getClass(), e.getMessage()));
+        }
+        return new ResponseEntity<MedicationDO>(medicationInfo, HttpStatus.OK);
     }
 
     @Transactional(rollbackFor = Throwable.class)
@@ -66,7 +75,6 @@ public class MedicationDownloadService {
         for (RecordedDose dose: doseData) {
             try{recordedDoseDAOimpl.findByRecordedDoseUUID(dose.getRecordedDoseUUID());
             } catch (EmptyResultDataAccessException e) {
-                dose.setAdherent(isDoseAdherent(dose));
                 recordedDoseDAOimpl.save(dose);
             }
         }
@@ -86,70 +94,41 @@ public class MedicationDownloadService {
         }
         uploadRecordedDoses(uploadedData);
         updateAdherence(patientUuid);
-        MedicationDO returnData = getMedicationData(patientUuid);
-        try {
-            return new ResponseEntity<MedicationDO>(returnData, HttpStatus.OK);
-        } catch (Exception e) {
-            System.out.println(String.format("Creation of ResponseEntity failed. Error was %s: %s", e.getClass(), e.getMessage()));
-        }
-        return new ResponseEntity<MedicationDO>(returnData, HttpStatus.OK);
+        return getMedicationData(patientUuid);
     }
 
     @Transactional(rollbackFor = Throwable.class)
     private void updateAdherence(String patientUuid) {
         LocalDate searchEndTime = LocalDate.now();
         LocalDate searchStartTime = searchEndTime.minusDays(7);
-        List<RecordedDose> orderedRecordedDoses = recordedDoseDAOimpl.findByPatientUuid(patientUuid);
-        HashMap<Schedule, Integer> recordedDoseCount = new HashMap<>();
-        HashMap<Schedule, Integer> takenDoseCount = new HashMap<>();
-        for (RecordedDose dose: orderedRecordedDoses) {
-            LocalDate dateTaken = dose.getTimeTaken().toLocalDateTime().toLocalDate();
-            if (dateTaken.isBefore(searchStartTime)) {
-                continue;
-            } else if (dateTaken.isAfter(searchEndTime)) {
-                break;
-            }
-            if (dose.isAdherent()) {
-                takenDoseCount.put(dose.getSchedule(), takenDoseCount.get(dose.getSchedule()) + 1);
-            }
+        Collection<Schedule> patientSchedules = scheduleDAOimpl.findByPatientUuid(patientUuid);
+        AdherenceCalculator adherenceCalculator = new AdherenceCalculator(patientSchedules, searchStartTime, searchEndTime, true);
+        for (Schedule schedule: patientSchedules) {
+            schedule.getScheduleAdherence().setSevenDayFraction(adherenceCalculator.getAdherenceFractionOf(schedule));
+            schedule.getScheduleAdherence().setStreakLength(adherenceCalculator.getStreakLengthOf(schedule));
+            scheduleAdherenceDAOimpl.update(schedule.getScheduleAdherence());
         }
-        for (Schedule schedule: scheduleDAOimpl.findAll()) {
-            for (ScheduledDose dose : schedule.getScheduledDoses()) {
-                int startDayOfSchedule = AdherenceCalculator.getDayOfSchedule(dose.getSchedule(), searchStartTime);
-                int endDayOfSchedule = AdherenceCalculator.getDayOfSchedule(dose.getSchedule(), searchEndTime);
-                if (!recordedDoseCount.containsKey(dose.getSchedule())) {
-                    recordedDoseCount.put(dose.getSchedule(), 0);
-                }
-                recordedDoseCount.put(dose.getSchedule(), recordedDoseCount.get(dose.getSchedule()) + AdherenceCalculator.countDosesBetween(startDayOfSchedule, endDayOfSchedule, dose));
-            }
-        }
+        PatientAdherence patientAdherence = patientAdherenceDAOimpl.findByPatientUuid(patientUuid);
+        patientAdherence.setSevenDayFraction(adherenceCalculator.getPatientFraction());
+        patientAdherence.setStreakLength(adherenceCalculator.getPatientStreaklength());
+        patientAdherenceDAOimpl.update(patientAdherence);
     }
 
-    private boolean isDoseAdherent(RecordedDose dose) {
-        LocalDateTime timeTaken = dose.getTimeTaken().toLocalDateTime();
-        // Check that dose is within Schedule boundaries
-        LocalDate scheduleStart = dose.getSchedule().getAssignedStartDate().toLocalDate();
-        LocalDate scheduleEnd = dose.getSchedule().getDeviceEndDate().toLocalDate();
-        if (timeTaken.isBefore(scheduleStart.atTime(0, 0)) || timeTaken.isAfter(scheduleEnd.atTime(0,0))) {
-            return false;
+
+    @Transactional(rollbackFor = Throwable.class)
+    public ResponseEntity<MedicationDO> getRegisteredPatients(MedicationDO uploadedData) {
+        assert patientDeviceValidationService != null;
+        String patientUuid = uploadedData.getPatientUuid();
+        String hardwareName = uploadedData.getHardwareName();
+        try {
+            // Check that the device and patient are registered with each other
+            this.patientDeviceValidationService.validate(hardwareName, patientUuid);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new NotFound404Exception("Hardware and/or patient not registered" + e.getLocalizedMessage());
         }
-        int dayOfSchedule = (int) scheduleStart.until(timeTaken, ChronoUnit.DAYS);
-        for (ScheduledDose scheduledDose: dose.getSchedule().getScheduledDoses()) {
-            if (dayOfSchedule != scheduledDose.getStartDay()) {
-                if (scheduledDose.getRepeatInterval() == null) {
-                    continue;
-                } else {
-                    if ((dayOfSchedule - scheduledDose.getStartDay()) % scheduledDose.getRepeatInterval() != 0) {
-                        continue;
-                    }
-                }
-            }
-            LocalTime timeTakenTime = timeTaken.toLocalTime();
-            LocalTime windowStartTime = scheduledDose.getWindowStartTime().toLocalTime();
-            LocalTime windowEndTime = scheduledDose.getWindowEndTime().toLocalTime();
-            if (timeTakenTime.isAfter(windowStartTime) && timeTakenTime.isBefore(windowEndTime)) {
-                return true;
-            }
-        }
+        uploadRecordedDoses(uploadedData);
+        updateAdherence(patientUuid);
+        return getMedicationData(patientUuid);
     }
 }

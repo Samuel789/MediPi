@@ -5,6 +5,6 @@ import org.medipi.medication.Schedule;
 
 import java.util.List;
 
-public interface PatientAdherenceDAO extends GenericDAO<Schedule> {
+public interface PatientAdherenceDAO extends GenericDAO<PatientAdherence> {
     PatientAdherence findByPatientUuid(String patientUuid);
 }

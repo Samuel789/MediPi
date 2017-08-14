@@ -18,6 +18,12 @@ from MedWeb.section import Section
 
 SITE_NAME = "MediPi MedWeb"
 STATIC_ROOT = "MedWeb/static"
+MEDIPI_CONCENTRATOR_ADDRESS = "https://localhost:5264/MediPiConcentrator/webresources/"
+
+TRUST_CERT_PATH = "/home/sam/Git/MediPi/MedManagementWeb/trust.cer"
+TRUST_KEY_PATH = "/home/sam/Git/MediPi/MedManagementWeb/trust.pub"
+SIGN_CERT_PATH = "/home/sam/Git/MediPi/MedManagementWeb/key.cer"
+SIGN_KEY_PATH = "/home/sam/Git/MediPi/MedManagementWeb/key.key"
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

@@ -1,5 +1,7 @@
 import json
+import requests
 import random
+import sys
 
 import django
 from django.http import HttpResponse
@@ -7,9 +9,12 @@ from django.template import RequestContext
 from django.template.loader import get_template
 
 from MedWeb import settings
+from MedWeb.medication import entityClasses
 from MedWeb.medication.data_placeholders import Patient, patients, medications, schedules
 
 from datetime import date
+
+from MedWeb.medication.entityClasses import Schedule
 
 sidebar_menu_urls = {"Medications": "/viewpatient",
                         "Schedule & History": "/schedule",
@@ -108,3 +113,15 @@ def modify_schedule(request):
                               "mode": 'modify'})
     return HttpResponse(output)
 
+def query_concentrator(request):
+    patient_uuid = request.GET.get("patient_uuid")
+    url = settings.MEDIPI_CONCENTRATOR_ADDRESS + 'medication/clinician/getPatientData/' + patient_uuid
+    print(url)
+    import logging
+
+    logging.basicConfig(level=logging.DEBUG)
+    response = requests.get(url, cert=(settings.SIGN_CERT_PATH, settings.SIGN_KEY_PATH), verify=False)
+    print(response.text)
+    medication_info = json.loads(response.text)
+    schedules = [entityClasses.fromDict(Schedule, schedule_data) for schedule_data in medication_info["schedules"]]
+    return HttpResponse(schedules)
