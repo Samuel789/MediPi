@@ -15,19 +15,12 @@
  */
 package org.medipi.concentrator.controllers;
 
-import java.util.Date;
-import java.util.List;
 import org.medipi.concentrator.logging.MediPiLogger;
-import org.medipi.concentrator.model.DownloadableDO;
-import org.medipi.concentrator.services.DownloadableListService;
-import org.medipi.concentrator.services.HardwareDownloadableService;
 import org.medipi.concentrator.services.MedicationDownloadService;
-import org.medipi.concentrator.services.PatientDownloadableService;
-import org.medipi.model.MedicationDO;
+import org.medipi.model.MedWebDO;
+import org.medipi.model.MedicationPatientDO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,18 +44,18 @@ public class MedicationServiceController {
     @RequestMapping(value="/synchronize", method = RequestMethod.POST, consumes = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ResponseEntity<MedicationDO> synchronize(@RequestBody MedicationDO uploadedData) {
+    public ResponseEntity<MedicationPatientDO> synchronize(@RequestBody MedicationPatientDO uploadedData) {
 //Removed to Reduce Logs size        logger.log(DownloadServiceController.class.getName(), new Date().toString() + " get DownloadableList called by patientUuid: " + patientUuid + " using hardwareName: " + hardwareName);
         return this.medicationDownloadService.synchronize(uploadedData);
     }
 
-    @RequestMapping(value="/clinician/getPatientData/{patientUuid}", method = RequestMethod.GET)
+    @RequestMapping(value="/clinician/getPatientData", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ResponseEntity<MedicationDO> getMedicationData(@PathVariable("patientUuid") String patientUuid) {
+    public ResponseEntity<MedWebDO> getMedicationData() {
         System.out.println("Hit");
 //Removed to Reduce Logs size        logger.log(DownloadServiceController.class.getName(), new Date().toString() + " get DownloadableList called by patientUuid: " + patientUuid + " using hardwareName: " + hardwareName);
-        return this.medicationDownloadService.getMedicationData(patientUuid);
+        return this.medicationDownloadService.getAllPatientData();
     }
 
 

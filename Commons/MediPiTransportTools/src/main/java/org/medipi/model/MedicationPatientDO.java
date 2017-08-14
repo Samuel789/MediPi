@@ -18,11 +18,8 @@ package org.medipi.model;
 import org.medipi.medication.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.Dictionary;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Class to hold medication information to be transmitted from the
@@ -30,52 +27,78 @@ import java.util.Set;
  *
  * @author sc7898@gmail.com
  */
-public class PatientRecordedDataDO implements Serializable {
+public class MedicationPatientDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String medicationPackageId;
     private String version;
+
+    public String getPatientUuid() {
+        return patientUuid;
+    }
+
+    public void setPatientUuid(String patientUuid) {
+        this.patientUuid = patientUuid;
+    }
+
+    public String getHardwareName() {
+        return hardwareName;
+    }
+
+    public void setHardwareName(String hardwareName) {
+        this.hardwareName = hardwareName;
+    }
+
+    private String patientUuid;
+    private String hardwareName;
     private String versionAuthor;
     private Date versionDate;
     private String signature;
+    private List<String> medicationPatientUuids;
 
+    public PatientAdherence getPatientAdherence() {
+        return patientAdherence;
+    }
 
-    private Set<RecordedDose> recordedDoseDictionary;
-    private Dictionary<Integer, String> medicationAlternateNames;
-    private Dictionary<Integer, LocalDate> scheduleStartDateCorrections;
-    private Dictionary<Integer, LocalDate> scheduleEndDateCorrections;
-    private Dictionary<Integer, LocalDate> doseStartDateCorrections;
-    private Dictionary<Integer, LocalDate> doseEndDateCorrections;
+    public void setPatientAdherence(PatientAdherence patientAdherence) {
+        this.patientAdherence = patientAdherence;
+    }
 
+    private PatientAdherence patientAdherence;
+
+    private List<Schedule> schedules;
     private Date downloadedDate;
 
     /**
      * Constructor
      */
-    public PatientRecordedDataDO() {
+    public MedicationPatientDO() {
     }
 
     /**
      * Constructor
+     *
      * @param downloadableUuid
      */
-    public PatientRecordedDataDO(String downloadableUuid) {
+    public MedicationPatientDO(String downloadableUuid) {
         this.medicationPackageId = downloadableUuid;
     }
 
     /**
      * Constructor
+     *
      * @param downloadableUuid
      * @param version
      * @param versionAuthor
      * @param versionDate
      */
-    public PatientRecordedDataDO(String downloadableUuid, String version, String versionAuthor, Date versionDate) {
+    public MedicationPatientDO(String downloadableUuid, String version, String versionAuthor, Date versionDate) {
         this.medicationPackageId = downloadableUuid;
         this.version = version;
         this.versionAuthor = versionAuthor;
         this.versionDate = versionDate;
     }
+
 
     public String getMedicationPackageId() {
         return medicationPackageId;
@@ -125,6 +148,31 @@ public class PatientRecordedDataDO implements Serializable {
         this.downloadedDate = downloadedDate;
     }
 
+    public void recreateReferences() {
+        for (Schedule schedule: schedules) {
+            for (ScheduledDose scheduledDose: schedule.getScheduledDoses()) {
+                if (scheduledDose.getScheduleId() != schedule.getScheduleId()) {
+                    throw new MedicationLogicException("Scheduled Dose ScheduleId (" + scheduledDose.getScheduleId() + ") does not match containing schedule (" + schedule.getScheduleId() + ")");
+                }
+                scheduledDose.setSchedule(schedule);
+            }
+            for (RecordedDose recordedDose: schedule.getRecordedDoses()) {
+                if (recordedDose.getScheduleId() != schedule.getScheduleId()) {
+                    throw new MedicationLogicException("RecordedDose ScheduleId (" + recordedDose.getScheduleId() + ") does not match containing schedule (" + schedule.getScheduleId() + ")");
+                }
+                recordedDose.setSchedule(schedule);
+            }
+        }
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -135,10 +183,10 @@ public class PatientRecordedDataDO implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PatientRecordedDataDO)) {
+        if (!(object instanceof MedicationPatientDO)) {
             return false;
         }
-        PatientRecordedDataDO other = (PatientRecordedDataDO) object;
+        MedicationPatientDO other = (MedicationPatientDO) object;
         if ((this.medicationPackageId == null && other.medicationPackageId != null) || (this.medicationPackageId != null && !this.medicationPackageId.equals(other.medicationPackageId))) {
             return false;
         }

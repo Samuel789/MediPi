@@ -5,23 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="00be176a-afd3-48f6-bdc2-57bc75f5c22d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/ScheduleAdherenceDAO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/ScheduleAdherenceDAOImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/medication/RecordedDose.java" afterPath="$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/medication/RecordedDose.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/model/MedWebDO.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/model/MedicationDO.java" afterPath="$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/model/MedicationPatientDO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/model/PatientRecordedDataDO.java" afterPath="$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/model/PatientRecordedDataDO.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/controllers/MedicationServiceController.java" afterPath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/controllers/MedicationServiceController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/PatientAdherenceDAO.java" afterPath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/PatientAdherenceDAO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/PatientAdherenceDAOImpl.java" afterPath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/PatientAdherenceDAOImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/ScheduleDAO.java" afterPath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/ScheduleDAO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/ScheduleDAOImpl.java" afterPath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/ScheduleDAOImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/logic/AdherenceCalculator.java" afterPath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/logic/AdherenceCalculator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/PatientDAOImpl.java" afterPath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/PatientDAOImpl.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/services/MedicationDownloadService.java" afterPath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/services/MedicationDownloadService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/recordedDose.hbm.xml" afterPath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/recordedDose.hbm.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/schedule.hbm.xml" afterPath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/schedule.hbm.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/scheduledDose.hbm.xml" afterPath="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/scheduledDose.hbm.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiConcentrator/config/application.properties" afterPath="$PROJECT_DIR$/MediPiConcentrator/config/application.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiPatient/MediPi/src/main/java/org/medipi/medication/Datastore.java" afterPath="$PROJECT_DIR$/MediPiPatient/MediPi/src/main/java/org/medipi/medication/Datastore.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiPatient/MediPi/src/main/java/org/medipi/medication/medicationui/RecordDoseMenu.java" afterPath="$PROJECT_DIR$/MediPiPatient/MediPi/src/main/java/org/medipi/medication/medicationui/RecordDoseMenu.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiPatient/MediPi/src/main/java/org/medipi/messaging/rest/RESTfulMessagingEngine.java" afterPath="$PROJECT_DIR$/MediPiPatient/MediPi/src/main/java/org/medipi/messaging/rest/RESTfulMessagingEngine.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MediPiPatient/MediPi/src/main/java/org/medipi/medication/Synchronizer.java" afterPath="$PROJECT_DIR$/MediPiPatient/MediPi/src/main/java/org/medipi/medication/Synchronizer.java" />
     </list>
     <ignored path="$PROJECT_DIR$/MediPiPatient/target/" />
     <ignored path="$PROJECT_DIR$/MediPiPatient/MediPi/target/" />
@@ -86,9 +77,110 @@
       <file leaf-file-name="MedicationDownloadService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/services/MedicationDownloadService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="109">
-              <caret line="113" column="12" lean-forward="true" selection-start-line="113" selection-start-column="12" selection-end-line="113" selection-end-column="12" />
-              <folding />
+            <state relative-caret-position="2184">
+              <caret line="123" column="0" lean-forward="false" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MedicationPatientDO.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/model/MedicationPatientDO.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="630">
+              <caret line="56" column="48" lean-forward="false" selection-start-line="56" selection-start-column="48" selection-end-line="56" selection-end-column="48" />
+              <folding>
+                <element signature="e#0#5803#0" expanded="false" />
+                <element signature="imports" expanded="false" />
+                <element signature="e#1125#1126#0" expanded="false" />
+                <element signature="e#1159#1160#0" expanded="false" />
+                <element signature="e#1213#1214#0" expanded="false" />
+                <element signature="e#1259#1260#0" expanded="false" />
+                <element signature="e#1298#1299#0" expanded="false" />
+                <element signature="e#1333#1334#0" expanded="false" />
+                <element signature="e#1389#1390#0" expanded="false" />
+                <element signature="e#1437#1438#0" expanded="false" />
+                <element signature="e#1699#1700#0" expanded="false" />
+                <element signature="e#1738#1739#0" expanded="false" />
+                <element signature="e#1812#1813#0" expanded="false" />
+                <element signature="e#1868#1869#0" expanded="false" />
+                <element signature="e#2197#2198#0" expanded="false" />
+                <element signature="e#2256#2257#0" expanded="false" />
+                <element signature="e#2742#2743#0" expanded="false" />
+                <element signature="e#2784#2785#0" expanded="false" />
+                <element signature="e#2854#2855#0" expanded="false" />
+                <element signature="e#2916#2917#0" expanded="false" />
+                <element signature="e#2950#2951#0" expanded="false" />
+                <element signature="e#2980#2981#0" expanded="false" />
+                <element signature="e#3026#3027#0" expanded="false" />
+                <element signature="e#3064#3065#0" expanded="false" />
+                <element signature="e#3104#3105#0" expanded="false" />
+                <element signature="e#3140#3141#0" expanded="false" />
+                <element signature="e#3284#3285#0" expanded="false" />
+                <element signature="e#3318#3319#0" expanded="false" />
+                <element signature="e#3452#3453#0" expanded="false" />
+                <element signature="e#3484#3485#0" expanded="false" />
+                <element signature="e#3534#3535#0" expanded="false" />
+                <element signature="e#3576#3577#0" expanded="false" />
+                <element signature="e#4777#4778#0" expanded="false" />
+                <element signature="e#4809#4810#0" expanded="false" />
+                <element signature="e#4867#4868#0" expanded="false" />
+                <element signature="e#4909#4910#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Patient.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/entities/Patient.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="43" column="13" lean-forward="false" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
+              <folding>
+                <element signature="e#0#3732#0" expanded="false" />
+                <element signature="imports" expanded="false" />
+                <element signature="e#2246#2247#0" expanded="false" />
+                <element signature="e#2292#2293#0" expanded="false" />
+                <element signature="e#2330#2331#0" expanded="false" />
+                <element signature="e#2364#2365#0" expanded="false" />
+                <element signature="e#2418#2419#0" expanded="false" />
+                <element signature="e#2464#2465#0" expanded="false" />
+                <element signature="e#2513#2514#0" expanded="false" />
+                <element signature="e#2552#2553#0" expanded="false" />
+                <element signature="e#2622#2623#0" expanded="false" />
+                <element signature="e#2678#2679#0" expanded="false" />
+                <element signature="e#3363#3364#0" expanded="false" />
+                <element signature="e#3463#3464#0" expanded="false" />
+                <element signature="e#3540#3541#0" expanded="false" />
+                <element signature="e#3581#3582#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MedWebDO.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/model/MedWebDO.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-437">
+              <caret line="73" column="46" lean-forward="false" selection-start-line="73" selection-start-column="46" selection-end-line="73" selection-end-column="46" />
+              <folding>
+                <element signature="e#2084#2085#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PatientDAOImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/PatientDAOImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="33" column="1" lean-forward="false" selection-start-line="33" selection-start-column="1" selection-end-line="33" selection-end-column="1" />
+              <folding>
+                <element signature="e#0#1234#0" expanded="false" />
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -96,9 +188,14 @@
       <file leaf-file-name="Schedule.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/medication/Schedule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="924">
-              <caret line="67" column="5" lean-forward="false" selection-start-line="67" selection-start-column="5" selection-end-line="67" selection-end-column="5" />
-              <folding />
+            <state relative-caret-position="294">
+              <caret line="26" column="25" lean-forward="false" selection-start-line="26" selection-start-column="25" selection-end-line="26" selection-end-column="25" />
+              <folding>
+                <element signature="e#1535#1550#0" expanded="true" />
+                <element signature="e#1709#1710#0" expanded="true" />
+                <element signature="e#1759#1760#0" expanded="true" />
+                <element signature="e#1819#1833#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -106,8 +203,8 @@
       <file leaf-file-name="schedule.hbm.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/schedule.hbm.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="672">
-              <caret line="32" column="14" lean-forward="false" selection-start-line="32" selection-start-column="14" selection-end-line="32" selection-end-column="14" />
+            <state relative-caret-position="903">
+              <caret line="43" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -116,51 +213,45 @@
       <file leaf-file-name="RecordedDose.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/medication/RecordedDose.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-248">
+            <state relative-caret-position="525">
               <caret line="50" column="27" lean-forward="false" selection-start-line="50" selection-start-column="27" selection-end-line="50" selection-end-column="27" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#409#410#0" expanded="false" />
+                <element signature="e#448#449#0" expanded="false" />
+                <element signature="e#510#511#0" expanded="false" />
+                <element signature="e#564#565#0" expanded="false" />
+                <element signature="e#600#601#0" expanded="false" />
+                <element signature="e#632#633#0" expanded="false" />
+                <element signature="e#682#683#0" expanded="false" />
+                <element signature="e#724#725#0" expanded="false" />
+                <element signature="e#758#759#0" expanded="false" />
+                <element signature="e#790#791#0" expanded="false" />
+                <element signature="e#838#839#0" expanded="false" />
+                <element signature="e#880#881#0" expanded="false" />
+                <element signature="e#980#981#0" expanded="false" />
+                <element signature="e#1011#1012#0" expanded="false" />
+                <element signature="e#1056#1057#0" expanded="false" />
+                <element signature="e#1096#1097#0" expanded="false" />
+                <element signature="e#1206#1207#0" expanded="false" />
+                <element signature="e#1237#1238#0" expanded="false" />
+                <element signature="e#1305#1306#0" expanded="false" />
+                <element signature="e#1345#1346#0" expanded="false" />
+                <element signature="e#1443#1444#0" expanded="false" />
+                <element signature="e#1476#1477#0" expanded="false" />
+                <element signature="e#1529#1530#0" expanded="false" />
+                <element signature="e#1573#1574#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ScheduledDose.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/medication/ScheduledDose.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="59" column="37" lean-forward="false" selection-start-line="59" selection-start-column="37" selection-end-line="59" selection-end-column="37" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="scheduledDose.hbm.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="scheduledDose.hbm.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/scheduledDose.hbm.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="36" column="19" lean-forward="false" selection-start-line="36" selection-start-column="19" selection-end-line="36" selection-end-column="19" />
+            <state relative-caret-position="693">
+              <caret line="33" column="19" lean-forward="false" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HardwareDownloadableService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/services/HardwareDownloadableService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1130">
-              <caret line="57" column="13" lean-forward="false" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RESTfulMessagingEngine.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MediPiPatient/MediPi/src/main/java/org/medipi/messaging/rest/RESTfulMessagingEngine.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2058">
-              <caret line="135" column="36" lean-forward="false" selection-start-line="135" selection-start-column="36" selection-end-line="135" selection-end-column="36" />
-              <folding>
-                <element signature="e#0#10514#0" expanded="false" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -168,21 +259,12 @@
       <file leaf-file-name="MedicationServiceController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/controllers/MedicationServiceController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="411">
-              <caret line="67" column="0" lean-forward="true" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+            <state relative-caret-position="630">
+              <caret line="51" column="52" lean-forward="false" selection-start-line="51" selection-start-column="52" selection-end-line="51" selection-end-column="52" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#0#2663#0" expanded="false" />
+                <element signature="imports" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DownloadServiceController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/controllers/DownloadServiceController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1730">
-              <caret line="68" column="117" lean-forward="false" selection-start-line="68" selection-start-column="117" selection-end-line="68" selection-end-column="166" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -199,8 +281,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getspecif</find>
-      <find>getspecificde</find>
       <find>init</find>
       <find>getDashbo</find>
       <find>setonmo</find>
@@ -229,6 +309,8 @@
       <find>streak</find>
       <find>port</find>
       <find>dei</find>
+      <find>patient</find>
+      <find>adhere</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -242,9 +324,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/MediPiPatient/MediPi/src/main/java/org/medipi/PollDownloads.java" />
-        <option value="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/services/PatientDeviceValidationService.java" />
-        <option value="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/services/PatientUploadService.java" />
         <option value="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/services/HardwareDownloadableService.java" />
         <option value="$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/medication/DoseUnitInterface.java" />
         <option value="$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/medication/MedicationInterface.java" />
@@ -287,12 +366,15 @@
         <option value="$PROJECT_DIR$/Clinician/MediPiClinical/src/main/java/org/medipi/clinical/services/SSLClientHttpRequestFactory.java" />
         <option value="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/HttpSecurityConfig.java" />
         <option value="$PROJECT_DIR$/MediPiPatient/MediPi/src/main/java/org/medipi/messaging/rest/RESTfulMessagingEngine.java" />
-        <option value="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/services/MedicationDownloadService.java" />
         <option value="$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/medication/Schedule.java" />
         <option value="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/schedule.hbm.xml" />
-        <option value="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/controllers/MedicationServiceController.java" />
         <option value="$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/medication/ScheduledDose.java" />
         <option value="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/scheduledDose.hbm.xml" />
+        <option value="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/PatientDAOImpl.java" />
+        <option value="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/controllers/MedicationServiceController.java" />
+        <option value="$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/model/MedicationPatientDO.java" />
+        <option value="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/services/MedicationDownloadService.java" />
+        <option value="$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/model/MedWebDO.java" />
       </list>
     </option>
   </component>
@@ -379,6 +461,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1319,7 +1402,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -1343,11 +1425,11 @@
       <recent name="org.medipi.medication" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.medipi.model" />
       <recent name="org.medipi.concentrator.dao" />
       <recent name="org.medipi.concentrator.dataformat" />
       <recent name="org.medipi.concentrator.entities" />
       <recent name="org.medipi.medication" />
-      <recent name="org.medipi.model" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication" />
@@ -1902,6 +1984,9 @@
       <workItem from="1502627953493" duration="11610000" />
       <workItem from="1502646216038" duration="1646000" />
       <workItem from="1502699418065" duration="4701000" />
+      <workItem from="1502713102964" duration="58000" />
+      <workItem from="1502713436396" duration="6413000" />
+      <workItem from="1502735727511" duration="1249000" />
     </task>
     <task id="LOCAL-00001" summary="Force test certificate Mac address for testing">
       <created>1497117948332</created>
@@ -1991,7 +2076,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="183812000" />
+    <option name="totallyTimeSpent" value="191532000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -2008,7 +2093,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3723077" sideWeight="0.53418803" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32820514" sideWeight="0.42521366" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -2024,12 +2109,12 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3723077" sideWeight="0.4636752" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32832834" sideWeight="0.49791667" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3723077" sideWeight="0.46581197" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32923076" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15224358" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25641027" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -2039,7 +2124,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32820514" sideWeight="0.58004385" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32820514" sideWeight="0.5747863" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -2146,7 +2231,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/services/MedicationDownloadService.java</url>
-          <line>50</line>
+          <line>57</line>
           <properties />
           <option name="timeStamp" value="48" />
         </line-breakpoint>
@@ -2175,28 +2260,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/MediPiPatient/MediPi/src/main/java/org/medipi/medication/medicationui/MedicationReminder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1113">
-          <caret line="76" column="71" lean-forward="false" selection-start-line="76" selection-start-column="71" selection-end-line="76" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/RecordedDoseDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="28" column="46" lean-forward="false" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/RecordedDoseDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="13" column="59" lean-forward="false" selection-start-line="13" selection-start-column="59" selection-end-line="13" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/logic/MedicationLogic.java" />
     <entry file="file://$PROJECT_DIR$/MediPiPatient/MediPi/src/main/java/org/medipi/medication/medicationui/RecordDoseMenu.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="314">
@@ -2257,7 +2320,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
           <caret line="7" column="43" lean-forward="false" selection-start-line="7" selection-start-column="43" selection-end-line="7" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2265,7 +2327,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
           <caret line="4" column="25" lean-forward="false" selection-start-line="4" selection-start-column="25" selection-end-line="4" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2273,7 +2334,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="546">
           <caret line="26" column="43" lean-forward="false" selection-start-line="26" selection-start-column="43" selection-end-line="26" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2281,7 +2341,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2296,7 +2355,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2304,7 +2362,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
           <caret line="133" column="21" lean-forward="false" selection-start-line="133" selection-start-column="21" selection-end-line="133" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2329,19 +2386,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/model/MedicationDO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="153" column="30" lean-forward="false" selection-start-line="153" selection-start-column="30" selection-end-line="153" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/recordedDose.hbm.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="15" column="41" lean-forward="false" selection-start-line="15" selection-start-column="41" selection-end-line="15" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2356,7 +2404,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="483">
           <caret line="35" column="0" lean-forward="true" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2427,7 +2474,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="525">
           <caret line="51" column="49" lean-forward="false" selection-start-line="51" selection-start-column="49" selection-end-line="51" selection-end-column="49" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2435,7 +2481,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
           <caret line="24" column="80" lean-forward="false" selection-start-line="24" selection-start-column="80" selection-end-line="24" selection-end-column="80" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2443,7 +2488,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1134">
           <caret line="97" column="0" lean-forward="false" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2470,10 +2514,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1575">
           <caret line="105" column="14" lean-forward="false" selection-start-line="105" selection-start-column="14" selection-end-line="105" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#7393#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2483,13 +2523,14 @@
           <caret line="135" column="36" lean-forward="false" selection-start-line="135" selection-start-column="36" selection-end-line="135" selection-end-column="36" />
           <folding>
             <element signature="e#0#10514#0" expanded="false" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/services/HardwareDownloadableService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1130">
+        <state relative-caret-position="420">
           <caret line="57" column="13" lean-forward="false" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
           <folding />
         </state>
@@ -2497,67 +2538,249 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/controllers/DownloadServiceController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1730">
+        <state relative-caret-position="819">
           <caret line="68" column="117" lean-forward="false" selection-start-line="68" selection-start-column="117" selection-end-line="68" selection-end-column="166" />
+          <folding>
+            <element signature="e#0#9217#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/medication/ScheduledDose.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="693">
+          <caret line="59" column="37" lean-forward="false" selection-start-line="59" selection-start-column="37" selection-end-line="59" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#326#327#0" expanded="false" />
+            <element signature="e#358#359#0" expanded="false" />
+            <element signature="e#455#456#0" expanded="false" />
+            <element signature="e#486#487#0" expanded="false" />
+            <element signature="e#520#521#0" expanded="false" />
+            <element signature="e#549#550#0" expanded="false" />
+            <element signature="e#591#592#0" expanded="false" />
+            <element signature="e#628#629#0" expanded="false" />
+            <element signature="e#668#669#0" expanded="false" />
+            <element signature="e#706#707#0" expanded="false" />
+            <element signature="e#744#745#0" expanded="false" />
+            <element signature="e#780#781#0" expanded="false" />
+            <element signature="e#817#818#0" expanded="false" />
+            <element signature="e#852#853#0" expanded="false" />
+            <element signature="e#890#891#0" expanded="false" />
+            <element signature="e#923#924#0" expanded="false" />
+            <element signature="e#1158#1159#0" expanded="false" />
+            <element signature="e#1200#1201#0" expanded="false" />
+            <element signature="e#1268#1269#0" expanded="false" />
+            <element signature="e#1330#1331#0" expanded="false" />
+            <element signature="e#1450#1451#0" expanded="false" />
+            <element signature="e#1492#1493#0" expanded="false" />
+            <element signature="e#1541#1542#0" expanded="false" />
+            <element signature="e#1581#1582#0" expanded="false" />
+            <element signature="e#1626#1627#0" expanded="false" />
+            <element signature="e#1662#1663#0" expanded="false" />
+            <element signature="e#1723#1724#0" expanded="false" />
+            <element signature="e#1775#1776#0" expanded="false" />
+            <element signature="e#1835#1836#0" expanded="false" />
+            <element signature="e#1889#1890#0" expanded="false" />
+            <element signature="e#1945#1946#0" expanded="false" />
+            <element signature="e#1995#1996#0" expanded="false" />
+            <element signature="e#2050#2051#0" expanded="false" />
+            <element signature="e#2081#2082#0" expanded="false" />
+            <element signature="e#2149#2150#0" expanded="false" />
+            <element signature="e#2189#2190#0" expanded="false" />
+            <element signature="e#2304#2305#0" expanded="false" />
+            <element signature="e#2352#2353#0" expanded="false" />
+            <element signature="e#2405#2406#0" expanded="false" />
+            <element signature="e#2449#2450#0" expanded="false" />
+            <element signature="e#2525#2526#0" expanded="false" />
+            <element signature="e#2563#2564#0" expanded="false" />
+            <element signature="e#2626#2627#0" expanded="false" />
+            <element signature="e#2680#2681#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/scheduledDose.hbm.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="693">
+          <caret line="33" column="19" lean-forward="false" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/services/MedicationDownloadService.java">
+    <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/GenericDAOImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="113" column="12" lean-forward="true" selection-start-line="113" selection-start-column="12" selection-end-line="113" selection-end-column="12" />
+        <state relative-caret-position="208">
+          <caret line="77" column="13" lean-forward="false" selection-start-line="77" selection-start-column="13" selection-end-line="77" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/schedule.hbm.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="672">
-          <caret line="32" column="14" lean-forward="false" selection-start-line="32" selection-start-column="14" selection-end-line="32" selection-end-column="14" />
+        <state relative-caret-position="903">
+          <caret line="43" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/controllers/MedicationServiceController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="411">
-          <caret line="67" column="0" lean-forward="true" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/medication/RecordedDose.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-248">
+        <state relative-caret-position="525">
           <caret line="50" column="27" lean-forward="false" selection-start-line="50" selection-start-column="27" selection-end-line="50" selection-end-column="27" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#409#410#0" expanded="false" />
+            <element signature="e#448#449#0" expanded="false" />
+            <element signature="e#510#511#0" expanded="false" />
+            <element signature="e#564#565#0" expanded="false" />
+            <element signature="e#600#601#0" expanded="false" />
+            <element signature="e#632#633#0" expanded="false" />
+            <element signature="e#682#683#0" expanded="false" />
+            <element signature="e#724#725#0" expanded="false" />
+            <element signature="e#758#759#0" expanded="false" />
+            <element signature="e#790#791#0" expanded="false" />
+            <element signature="e#838#839#0" expanded="false" />
+            <element signature="e#880#881#0" expanded="false" />
+            <element signature="e#980#981#0" expanded="false" />
+            <element signature="e#1011#1012#0" expanded="false" />
+            <element signature="e#1056#1057#0" expanded="false" />
+            <element signature="e#1096#1097#0" expanded="false" />
+            <element signature="e#1206#1207#0" expanded="false" />
+            <element signature="e#1237#1238#0" expanded="false" />
+            <element signature="e#1305#1306#0" expanded="false" />
+            <element signature="e#1345#1346#0" expanded="false" />
+            <element signature="e#1443#1444#0" expanded="false" />
+            <element signature="e#1476#1477#0" expanded="false" />
+            <element signature="e#1529#1530#0" expanded="false" />
+            <element signature="e#1573#1574#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/controllers/MedicationServiceController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="51" column="52" lean-forward="false" selection-start-line="51" selection-start-column="52" selection-end-line="51" selection-end-column="52" />
+          <folding>
+            <element signature="e#0#2663#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/dao/PatientDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="33" column="1" lean-forward="false" selection-start-line="33" selection-start-column="1" selection-end-line="33" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#1234#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/entities/Patient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="43" column="13" lean-forward="false" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#3732#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#2246#2247#0" expanded="false" />
+            <element signature="e#2292#2293#0" expanded="false" />
+            <element signature="e#2330#2331#0" expanded="false" />
+            <element signature="e#2364#2365#0" expanded="false" />
+            <element signature="e#2418#2419#0" expanded="false" />
+            <element signature="e#2464#2465#0" expanded="false" />
+            <element signature="e#2513#2514#0" expanded="false" />
+            <element signature="e#2552#2553#0" expanded="false" />
+            <element signature="e#2622#2623#0" expanded="false" />
+            <element signature="e#2678#2679#0" expanded="false" />
+            <element signature="e#3363#3364#0" expanded="false" />
+            <element signature="e#3463#3464#0" expanded="false" />
+            <element signature="e#3540#3541#0" expanded="false" />
+            <element signature="e#3581#3582#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/model/MedicationPatientDO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="56" column="48" lean-forward="false" selection-start-line="56" selection-start-column="48" selection-end-line="56" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#5803#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#1125#1126#0" expanded="false" />
+            <element signature="e#1159#1160#0" expanded="false" />
+            <element signature="e#1213#1214#0" expanded="false" />
+            <element signature="e#1259#1260#0" expanded="false" />
+            <element signature="e#1298#1299#0" expanded="false" />
+            <element signature="e#1333#1334#0" expanded="false" />
+            <element signature="e#1389#1390#0" expanded="false" />
+            <element signature="e#1437#1438#0" expanded="false" />
+            <element signature="e#1699#1700#0" expanded="false" />
+            <element signature="e#1738#1739#0" expanded="false" />
+            <element signature="e#1812#1813#0" expanded="false" />
+            <element signature="e#1868#1869#0" expanded="false" />
+            <element signature="e#2197#2198#0" expanded="false" />
+            <element signature="e#2256#2257#0" expanded="false" />
+            <element signature="e#2742#2743#0" expanded="false" />
+            <element signature="e#2784#2785#0" expanded="false" />
+            <element signature="e#2854#2855#0" expanded="false" />
+            <element signature="e#2916#2917#0" expanded="false" />
+            <element signature="e#2950#2951#0" expanded="false" />
+            <element signature="e#2980#2981#0" expanded="false" />
+            <element signature="e#3026#3027#0" expanded="false" />
+            <element signature="e#3064#3065#0" expanded="false" />
+            <element signature="e#3104#3105#0" expanded="false" />
+            <element signature="e#3140#3141#0" expanded="false" />
+            <element signature="e#3284#3285#0" expanded="false" />
+            <element signature="e#3318#3319#0" expanded="false" />
+            <element signature="e#3452#3453#0" expanded="false" />
+            <element signature="e#3484#3485#0" expanded="false" />
+            <element signature="e#3534#3535#0" expanded="false" />
+            <element signature="e#3576#3577#0" expanded="false" />
+            <element signature="e#4777#4778#0" expanded="false" />
+            <element signature="e#4809#4810#0" expanded="false" />
+            <element signature="e#4867#4868#0" expanded="false" />
+            <element signature="e#4909#4910#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/java/org/medipi/concentrator/services/MedicationDownloadService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2184">
+          <caret line="123" column="0" lean-forward="false" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/medication/Schedule.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="924">
-          <caret line="67" column="5" lean-forward="false" selection-start-line="67" selection-start-column="5" selection-end-line="67" selection-end-column="5" />
-          <folding />
+        <state relative-caret-position="294">
+          <caret line="26" column="25" lean-forward="false" selection-start-line="26" selection-start-column="25" selection-end-line="26" selection-end-column="25" />
+          <folding>
+            <element signature="e#1535#1550#0" expanded="true" />
+            <element signature="e#1709#1710#0" expanded="true" />
+            <element signature="e#1759#1760#0" expanded="true" />
+            <element signature="e#1819#1833#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/medication/ScheduledDose.java">
+    <entry file="file://$PROJECT_DIR$/Commons/MediPiTransportTools/src/main/java/org/medipi/model/MedWebDO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="59" column="37" lean-forward="false" selection-start-line="59" selection-start-column="37" selection-end-line="59" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MediPiConcentrator/MediPiConcentrator/src/main/resources/org.medipi.concentrator.medication/scheduledDose.hbm.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="36" column="19" lean-forward="false" selection-start-line="36" selection-start-column="19" selection-end-line="36" selection-end-column="19" />
-          <folding />
+        <state relative-caret-position="-437">
+          <caret line="73" column="46" lean-forward="false" selection-start-line="73" selection-start-column="46" selection-end-line="73" selection-end-column="46" />
+          <folding>
+            <element signature="e#2084#2085#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

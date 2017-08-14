@@ -160,13 +160,22 @@
     line-height: 25px;
 }
 
+.sidebar-bottom {
+    position: absolute;
+    bottom: 0;
+    margin: 10px;
+    width:inherit;
+}
+
+
 .patient-summary-smallbox {
     width: 40%;
     border-color: #2aabd2;
     border-width: 1px;
     border-style: solid;
-    text-align: center;
+    text-align: left;
     padding: 0px;
+    padding-left: 5px;
     height: 25px;
     float: left;
     vertical-align: middle;
@@ -182,7 +191,7 @@
 
 .sidebar .btn {
     margin: 2.5px 5px;
-    width: 95%;
+    width: 88%;
 }
 
 .sidebar .container {

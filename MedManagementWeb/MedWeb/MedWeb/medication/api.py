@@ -2,7 +2,6 @@ import json
 
 from django.http import HttpResponse
 
-from MedWeb.medication.data_placeholders import medications
 
 
 def get_medication_details(request):

@@ -17,8 +17,11 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django import VERSION
 
+from MedWeb.concentrator_interface.interface import update_from_concentrator
 from MedWeb.home.views import about_view
 import MedWeb.medication
+
+update_from_concentrator()
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

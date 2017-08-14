@@ -27,19 +27,13 @@ import java.util.List;
  *
  * @author sc7898@gmail.com
  */
-public class MedicationDO implements Serializable {
+public class MedWebDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String medicationPackageId;
     private String version;
 
-    public String getPatientUuid() {
-        return patientUuid;
-    }
 
-    public void setPatientUuid(String patientUuid) {
-        this.patientUuid = patientUuid;
-    }
 
     public String getHardwareName() {
         return hardwareName;
@@ -49,29 +43,48 @@ public class MedicationDO implements Serializable {
         this.hardwareName = hardwareName;
     }
 
-    private String patientUuid;
     private String hardwareName;
     private String versionAuthor;
     private Date versionDate;
     private String signature;
 
-    public PatientAdherence getPatientAdherence() {
-        return patientAdherence;
+    public List<String> getPatientUuids() {
+        return patientUuids;
     }
 
-    public void setPatientAdherence(PatientAdherence patientAdherence) {
-        this.patientAdherence = patientAdherence;
+    public void setPatientUuids(List<String> patientUuids) {
+        this.patientUuids = patientUuids;
     }
 
-    private PatientAdherence patientAdherence;
+    private List<String> patientUuids;
+
+    public List<PatientAdherence> getPatientAdherenceList() {
+        return patientAdherenceList;
+    }
+
+    public void setPatientAdherenceList(List<PatientAdherence> patientAdherenceList) {
+        this.patientAdherenceList = patientAdherenceList;
+    }
+
+    private List<PatientAdherence> patientAdherenceList;
 
     private List<Schedule> schedules;
     private Date downloadedDate;
 
+    public List<Medication> getMedications() {
+        return medications;
+    }
+
+    public void setMedications(List<Medication> medications) {
+        this.medications = medications;
+    }
+
+    private List<Medication> medications;
+
     /**
      * Constructor
      */
-    public MedicationDO() {
+    public MedWebDO() {
     }
 
     /**
@@ -79,7 +92,7 @@ public class MedicationDO implements Serializable {
      *
      * @param downloadableUuid
      */
-    public MedicationDO(String downloadableUuid) {
+    public MedWebDO(String downloadableUuid) {
         this.medicationPackageId = downloadableUuid;
     }
 
@@ -91,7 +104,7 @@ public class MedicationDO implements Serializable {
      * @param versionAuthor
      * @param versionDate
      */
-    public MedicationDO(String downloadableUuid, String version, String versionAuthor, Date versionDate) {
+    public MedWebDO(String downloadableUuid, String version, String versionAuthor, Date versionDate) {
         this.medicationPackageId = downloadableUuid;
         this.version = version;
         this.versionAuthor = versionAuthor;
@@ -147,22 +160,6 @@ public class MedicationDO implements Serializable {
         this.downloadedDate = downloadedDate;
     }
 
-    public void recreateReferences() {
-        for (Schedule schedule: schedules) {
-            for (ScheduledDose scheduledDose: schedule.getScheduledDoses()) {
-                if (scheduledDose.getScheduleId() != schedule.getScheduleId()) {
-                    throw new MedicationLogicException("Scheduled Dose ScheduleId (" + scheduledDose.getScheduleId() + ") does not match containing schedule (" + schedule.getScheduleId() + ")");
-                }
-                scheduledDose.setSchedule(schedule);
-            }
-            for (RecordedDose recordedDose: schedule.getRecordedDoses()) {
-                if (recordedDose.getScheduleId() != schedule.getScheduleId()) {
-                    throw new MedicationLogicException("RecordedDose ScheduleId (" + recordedDose.getScheduleId() + ") does not match containing schedule (" + schedule.getScheduleId() + ")");
-                }
-                recordedDose.setSchedule(schedule);
-            }
-        }
-    }
 
     public List<Schedule> getSchedules() {
         return schedules;
@@ -182,10 +179,10 @@ public class MedicationDO implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof MedicationDO)) {
+        if (!(object instanceof MedWebDO)) {
             return false;
         }
-        MedicationDO other = (MedicationDO) object;
+        MedWebDO other = (MedWebDO) object;
         if ((this.medicationPackageId == null && other.medicationPackageId != null) || (this.medicationPackageId != null && !this.medicationPackageId.equals(other.medicationPackageId))) {
             return false;
         }
@@ -194,7 +191,7 @@ public class MedicationDO implements Serializable {
 
     @Override
     public String toString() {
-        return "org.medipi.model.MedicationDO[ medicationPackageId=" + medicationPackageId + " ]";
+        return "org.medipi.model.MedicationPatientDO[ medicationPackageId=" + medicationPackageId + " ]";
     }
 
 }

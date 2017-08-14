@@ -21,16 +21,14 @@ import org.medipi.MediPiMessageBox;
 import org.medipi.logging.MediPiLogger;
 import org.medipi.messaging.rest.RESTfulMessagingEngine;
 import org.medipi.messaging.vpn.VPNServiceManager;
-import org.medipi.model.MedicationDO;
+import org.medipi.model.MedicationPatientDO;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.UUID;
 
 /**
@@ -72,7 +70,7 @@ public class Synchronizer
 
     }
 
-    private MedicationDO downloadScheduleData() throws Exception {
+    private MedicationPatientDO downloadScheduleData() throws Exception {
         RESTfulMessagingEngine rme = new RESTfulMessagingEngine(resourcePath + "medication/download", new String[] {"{deviceId}", "{patientId}"});
         UUID uuid = UUID.randomUUID();
         VPNServiceManager vpnm = null;
@@ -95,18 +93,18 @@ public class Synchronizer
         //
         String jsonResponse = response.readEntity(String.class);
         System.out.println(jsonResponse);
-        MedicationDO recievedData = new ObjectMapper().readValue(jsonResponse, MedicationDO.class);
+        MedicationPatientDO recievedData = new ObjectMapper().readValue(jsonResponse, MedicationPatientDO.class);
 
         return recievedData;
 
     }
 
-    private List<Schedule> processScheduleData(MedicationDO recievedData) {
+    private List<Schedule> processScheduleData(MedicationPatientDO recievedData) {
         recievedData.recreateReferences();
         List<Schedule> newSchedules = recievedData.getSchedules();
         return newSchedules;
     }
-    private MedicationDO performDataExchange(MedicationDO uploadData) throws Exception {
+    private MedicationPatientDO performDataExchange(MedicationPatientDO uploadData) throws Exception {
         HashMap<String, Object> params = new HashMap<>();
         String patientCertName = System.getProperty(MEDIPIPATIENTCERTNAME);
         uploadData.setHardwareName(deviceCertName);
@@ -120,9 +118,9 @@ public class Synchronizer
         System.out.println(jsonResponse);
         System.out.println("////");
 
-        return new ObjectMapper().readValue(jsonResponse, MedicationDO.class);
+        return new ObjectMapper().readValue(jsonResponse, MedicationPatientDO.class);
     }
-    private void uploadDoseData(MedicationDO doses) throws Exception {
+    private void uploadDoseData(MedicationPatientDO doses) throws Exception {
         HashMap<String, Object> params = new HashMap<>();
         String patientCertName = System.getProperty(MEDIPIPATIENTCERTNAME);
         params.put("deviceId", deviceCertName);
@@ -140,9 +138,9 @@ public class Synchronizer
         Datastore datastore = medicationManager.getDatestore();
         System.out.println("MedUpdate run at: " + Instant.now());
         try {
-            MedicationDO uploadData = new MedicationDO();
+            MedicationPatientDO uploadData = new MedicationPatientDO();
             uploadData.setSchedules(datastore.getPatientSchedules());
-            MedicationDO recievedData = performDataExchange(uploadData);
+            MedicationPatientDO recievedData = performDataExchange(uploadData);
             List<Schedule> schedules = processScheduleData(recievedData);
             datastore.replacePatientSchedules(schedules);
             datastore.setPatientAdherence(recievedData.getPatientAdherence());

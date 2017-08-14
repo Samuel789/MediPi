@@ -1,6 +1,7 @@
 package org.medipi.concentrator.services;
 
 import org.medipi.concentrator.dao.*;
+import org.medipi.concentrator.entities.Patient;
 import org.medipi.concentrator.exception.NotFound404Exception;
 import org.medipi.concentrator.logic.AdherenceCalculator;
 import org.medipi.concentrator.utilities.Utilities;
@@ -8,7 +9,8 @@ import org.medipi.medication.PatientAdherence;
 import org.medipi.medication.RecordedDose;
 import org.medipi.medication.Schedule;
 import org.medipi.medication.ScheduledDose;
-import org.medipi.model.MedicationDO;
+import org.medipi.model.MedWebDO;
+import org.medipi.model.MedicationPatientDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -17,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.*;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -33,18 +34,24 @@ public class MedicationDownloadService {
     private ScheduleDAOImpl scheduleDAOimpl;
 
     @Autowired
+    private PatientDAOImpl patientDAOimpl;
+
+    @Autowired
     private PatientAdherenceDAOImpl patientAdherenceDAOimpl;
 
     @Autowired
     private ScheduleAdherenceDAOImpl scheduleAdherenceDAOimpl;
 
     @Autowired
+    private MedicationDAOImpl medicationDAOImpl;
+
+    @Autowired
     private RecordedDoseDAOImpl recordedDoseDAOimpl;
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public ResponseEntity<MedicationDO> getMedicationData(String patientUuid) {
+    public ResponseEntity<MedicationPatientDO> getMedicationData(String patientUuid) {
 
-        MedicationDO medicationInfo = new MedicationDO();
+        MedicationPatientDO medicationInfo = new MedicationPatientDO();
         List<ScheduledDose> doses = new ArrayList<>();
         System.out.println(org.hibernate.Version.getVersionString());
         try {
@@ -58,15 +65,15 @@ public class MedicationDownloadService {
             System.out.println(String.format("Failed to process query results (or none returned). Error was %s: %s", e.getClass(), e.getMessage()));
         }
         try {
-            return new ResponseEntity<MedicationDO>(medicationInfo, HttpStatus.OK);
+            return new ResponseEntity<MedicationPatientDO>(medicationInfo, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(String.format("Creation of ResponseEntity failed. Error was %s: %s", e.getClass(), e.getMessage()));
         }
-        return new ResponseEntity<MedicationDO>(medicationInfo, HttpStatus.OK);
+        return new ResponseEntity<MedicationPatientDO>(medicationInfo, HttpStatus.OK);
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    private void uploadRecordedDoses(MedicationDO uploadedData) {
+    private void uploadRecordedDoses(MedicationPatientDO uploadedData) {
         List<RecordedDose> doseData = new ArrayList<>();
         for (Schedule schedule: uploadedData.getSchedules()) {
             doseData.addAll(schedule.getRecordedDoses());
@@ -81,7 +88,7 @@ public class MedicationDownloadService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public ResponseEntity<MedicationDO> synchronize(MedicationDO uploadedData) {
+    public ResponseEntity<MedicationPatientDO> synchronize(MedicationPatientDO uploadedData) {
         assert patientDeviceValidationService != null;
         String patientUuid = uploadedData.getPatientUuid();
         String hardwareName = uploadedData.getHardwareName();
@@ -116,19 +123,23 @@ public class MedicationDownloadService {
 
 
     @Transactional(rollbackFor = Throwable.class)
-    public ResponseEntity<MedicationDO> getRegisteredPatients(MedicationDO uploadedData) {
-        assert patientDeviceValidationService != null;
-        String patientUuid = uploadedData.getPatientUuid();
-        String hardwareName = uploadedData.getHardwareName();
-        try {
-            // Check that the device and patient are registered with each other
-            this.patientDeviceValidationService.validate(hardwareName, patientUuid);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw new NotFound404Exception("Hardware and/or patient not registered" + e.getLocalizedMessage());
+    public ResponseEntity<MedWebDO> getAllPatientData() {
+        List<Patient> medicationPatients = patientDAOimpl.findByGroup("MedWeb");
+        List<Schedule> schedules = new ArrayList<Schedule>();
+        List<PatientAdherence> adherence = new ArrayList<PatientAdherence>();
+        List<String> patientUuids = new ArrayList<String>();
+        for (Patient patient: medicationPatients) {
+            schedules.addAll(scheduleDAOimpl.findByPatientUuid(patient.getPatientUuid()));
+            adherence.add(patientAdherenceDAOimpl.findByPatientUuid(patient.getPatientUuid()));
+            patientUuids.add(patient.getPatientUuid());
         }
-        uploadRecordedDoses(uploadedData);
-        updateAdherence(patientUuid);
-        return getMedicationData(patientUuid);
+        MedWebDO responseData = new MedWebDO();
+        responseData.setPatientAdherenceList(adherence);
+        responseData.setPatientUuids(patientUuids);
+        responseData.setSchedules(schedules);
+        responseData.setMedications(medicationDAOImpl.findAll());
+        return new ResponseEntity<MedWebDO>(responseData, HttpStatus.OK);
     }
+
+
 }

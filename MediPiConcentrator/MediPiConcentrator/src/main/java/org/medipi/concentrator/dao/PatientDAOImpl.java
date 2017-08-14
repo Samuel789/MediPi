@@ -31,6 +31,4 @@ public class PatientDAOImpl extends GenericDAOImpl<Patient> implements PatientDA
                 .setParameter("patientGroupUuid", patientGroupUuid)
                 .getResultList();
     }
-
-    
 }
