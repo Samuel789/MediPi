@@ -3,7 +3,8 @@ package org.medipi.concentrator.services;
 import org.medipi.concentrator.dao.*;
 import org.medipi.concentrator.entities.Patient;
 import org.medipi.concentrator.exception.NotFound404Exception;
-import org.medipi.concentrator.logic.AdherenceCalculator;
+import org.medipi.concentrator.logic.PatientAdherenceCalculator;
+import org.medipi.concentrator.logic.ScheduleAdherenceCalculator;
 import org.medipi.concentrator.utilities.Utilities;
 import org.medipi.medication.PatientAdherence;
 import org.medipi.medication.RecordedDose;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.time.*;
 import java.util.*;
 
@@ -109,15 +111,17 @@ public class MedicationDownloadService {
         LocalDate searchEndTime = LocalDate.now();
         LocalDate searchStartTime = searchEndTime.minusDays(7);
         Collection<Schedule> patientSchedules = scheduleDAOimpl.findByPatientUuid(patientUuid);
-        AdherenceCalculator adherenceCalculator = new AdherenceCalculator(patientSchedules, searchStartTime, searchEndTime, true);
+        PatientAdherenceCalculator patientAdherenceCalculator = new PatientAdherenceCalculator(patientSchedules, searchStartTime, searchEndTime, true);
+        patientAdherenceCalculator.calculatePatientAdherence();
         for (Schedule schedule: patientSchedules) {
-            schedule.getScheduleAdherence().setSevenDayFraction(adherenceCalculator.getAdherenceFractionOf(schedule));
-            schedule.getScheduleAdherence().setStreakLength(adherenceCalculator.getStreakLengthOf(schedule));
+            ScheduleAdherenceCalculator scheduleAdherenceCalculator = patientAdherenceCalculator.getScheduleAdherenceCalculators().get(schedule);
+            schedule.getScheduleAdherence().setSevenDayFraction(scheduleAdherenceCalculator.getAdherenceFraction());
+            schedule.getScheduleAdherence().setStreakLength(scheduleAdherenceCalculator.getStreakLength());
             scheduleAdherenceDAOimpl.update(schedule.getScheduleAdherence());
         }
         PatientAdherence patientAdherence = patientAdherenceDAOimpl.findByPatientUuid(patientUuid);
-        patientAdherence.setSevenDayFraction(adherenceCalculator.getPatientFraction());
-        patientAdherence.setStreakLength(adherenceCalculator.getPatientStreaklength());
+        patientAdherence.setSevenDayFraction(patientAdherenceCalculator.getAdherenceFraction());
+        patientAdherence.setStreakLength(patientAdherenceCalculator.getStreakLength());
         patientAdherenceDAOimpl.update(patientAdherence);
     }
 
@@ -141,5 +145,38 @@ public class MedicationDownloadService {
         return new ResponseEntity<MedWebDO>(responseData, HttpStatus.OK);
     }
 
+    @Transactional(rollbackFor = Throwable.class)
+    public void addSchedule(Schedule new_schedule, List<ScheduledDose> new_doses, int medicationId) {
+        Schedule existing_schedule = scheduleDAOimpl.findByPrimaryKey(new_schedule.getScheduleId());
+        if(existing_schedule == null) {
+            new_schedule.setMedication(medicationDAOImpl.findByMedicationId(medicationId));
+            scheduleDAOimpl.save(new_schedule);
+            for (ScheduledDose new_dose: new_doses) {
+                new_dose.setScheduleId(new_schedule.getScheduleId());
+                new_schedule.getScheduledDoses().add(new_dose);
+            }
+            scheduleDAOimpl.save(new_schedule);
+        } else {
+            assert(existing_schedule.getMedication() == new_schedule.getMedication());
+            assert(existing_schedule.getPatientUuid().equals(new_schedule.getPatientUuid()));
+            boolean doses_changed = !existing_schedule.getScheduledDoses().equals(new_doses);
+            if (doses_changed) {
+                if (existing_schedule.getAssignedEndDate().getTime() > Date.valueOf(LocalDate.now().plusDays(1)).getTime()) {
+                    existing_schedule.setAssignedEndDate(Date.valueOf(LocalDate.now().plusDays(1)));
+                }
+                new_schedule.setAssignedStartDate(new Date(Math.max(Date.valueOf(LocalDate.now()).getTime(), new_schedule.getAssignedStartDate().getTime())));
+                new_schedule.setAlternateName(existing_schedule.getAlternateName());
+                if (existing_schedule.getAssignedEndDate().equals(existing_schedule.getAssignedStartDate())) {
+                    scheduleDAOimpl.delete(existing_schedule);
+                }
+            } else {
+                existing_schedule.setPurposeStatement(new_schedule.getPurposeStatement());
+                existing_schedule.setAssignedStartDate(new_schedule.getAssignedStartDate());
+                existing_schedule.setAssignedEndDate(new_schedule.getAssignedEndDate());
+                scheduleDAOimpl.save(existing_schedule);
+            }
+            //TODO - if doses change, new schedule, else modify schedule
+        }
+    }
 
 }

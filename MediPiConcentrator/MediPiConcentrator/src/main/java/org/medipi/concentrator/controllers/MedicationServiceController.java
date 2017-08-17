@@ -19,6 +19,7 @@ import org.medipi.concentrator.logging.MediPiLogger;
 import org.medipi.concentrator.services.MedicationDownloadService;
 import org.medipi.model.MedWebDO;
 import org.medipi.model.MedicationPatientDO;
+import org.medipi.model.MedicationScheduleDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,9 +54,17 @@ public class MedicationServiceController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ResponseEntity<MedWebDO> getMedicationData() {
-        System.out.println("Hit");
 //Removed to Reduce Logs size        logger.log(DownloadServiceController.class.getName(), new Date().toString() + " get DownloadableList called by patientUuid: " + patientUuid + " using hardwareName: " + hardwareName);
         return this.medicationDownloadService.getAllPatientData();
+    }
+
+    @RequestMapping(value="/clinician/addSchedule", method = RequestMethod.POST, consumes = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void addSchedule(@RequestBody MedicationScheduleDO content) {
+
+//Removed to Reduce Logs size        logger.log(DownloadServiceController.class.getName(), new Date().toString() + " get DownloadableList called by patientUuid: " + patientUuid + " using hardwareName: " + hardwareName);
+        this.medicationDownloadService.addSchedule(content.getSchedule(), content.getDoses(), content.getMedicationId());
     }
 
 

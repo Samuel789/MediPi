@@ -15,6 +15,9 @@ class Medication:
         self.dose_unit = dose_unit
         self.dose_unit_id = dose_unit_id
 
+    def __str__(self):
+        return "Medication %d: %s" % (self.id, self.full_name)
+
 class DoseUnit:
     json_name = "doseUnit"
     json_attribute_map = {"doseUnitId": "id",

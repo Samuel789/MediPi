@@ -5,11 +5,13 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 
 from MedWeb import settings
+from MedWeb.clinical_database.clinical_database import medications
 from MedWeb.concentrator_interface import entities
 from MedWeb.concentrator_interface.entities import Schedule
 
 from MedWeb.concentrator_interface.interface import update_from_concentrator
-from MedWeb.concentrator_interface.interface import patients, medications, schedules
+from MedWeb.concentrator_interface.interface import schedules
+from MedWeb.patient_database.patient_database import patients
 
 sidebar_menu_urls = {"Medications": "/viewpatient",
                         "Schedule & History": "/schedule",
@@ -83,7 +85,7 @@ def create_new_schedule(request):
                               "active_sidebar_entry": "Add Medication",
                               "active_patient": patients[patient_uuid],
                               "active_medication": medications[medication_id],
-                              "mode": 'create'})
+                              "mode": 'create'}, request)
     return HttpResponse(output)
 
 
@@ -92,6 +94,8 @@ def modify_schedule(request):
     if schedule_id_str is None:
         return patient_summary(request)
     schedule_id = int(schedule_id_str)
+    print(schedule_id)
+    print(schedules)
     template = get_template("medication/schedule_editor.html")
     output = template.render({"title": settings.SITE_NAME,
                               "version": settings.version_string,
@@ -103,8 +107,9 @@ def modify_schedule(request):
                               "active_patient": schedules[schedule_id].patient,
                               "active_schedule": schedules[schedule_id],
                               "active_medication": schedules[schedule_id].medication,
-                              "mode": 'modify'})
+                              "mode": 'modify'}, request)
     return HttpResponse(output)
 
 def query_concentrator(request):
     update_from_concentrator()
+

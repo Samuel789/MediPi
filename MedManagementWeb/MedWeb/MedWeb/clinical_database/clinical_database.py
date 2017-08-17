@@ -10,5 +10,5 @@ for id, name in dose_unit_data.items():
 
 for medication in medication_data:
     medication["dose_unit"] = dose_units[medication["dose_unit_id"]]
-    medications[id] = Medication(**medication)
+    medications[medication["id"]] = Medication(**medication)
 

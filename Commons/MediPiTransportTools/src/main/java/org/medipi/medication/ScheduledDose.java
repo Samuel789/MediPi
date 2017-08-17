@@ -1,5 +1,7 @@
 package org.medipi.medication;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.sql.Time;
@@ -12,7 +14,6 @@ public class ScheduledDose implements Serializable {
     public double getDoseValue() {
         return doseValue;
     }
-    private final long MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
 
     public Integer getStartDay() {
         return startDay;
@@ -49,6 +50,31 @@ public class ScheduledDose implements Serializable {
     private Time windowStartTime;
     private Time windowEndTime;
 
+
+    @Override
+    public int hashCode() {
+        return scheduleId.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ScheduledDose that = (ScheduledDose) o;
+
+        if (Double.compare(that.doseValue, doseValue) != 0) return false;
+        if (!startDay.equals(that.startDay)) return false;
+        if (endDay != null ? !endDay.equals(that.endDay) : that.endDay != null) return false;
+        if (repeatInterval != null ? !repeatInterval.equals(that.repeatInterval) : that.repeatInterval != null)
+            return false;
+        if (!windowStartTime.equals(that.windowStartTime)) return false;
+        if (!windowEndTime.equals(that.windowEndTime)) return false;
+        if (!defaultReminderTime.equals(that.defaultReminderTime)) return false;
+        if (!scheduleId.equals(that.scheduleId)) return false;
+        return scheduledDoseId.equals(that.scheduledDoseId);
+    }
+
     public Time getDefaultReminderTime() {
         return defaultReminderTime;
     }
@@ -73,6 +99,10 @@ public class ScheduledDose implements Serializable {
     }
 
     public void setRepeatInterval(Integer repeatInterval) {
+        if (repeatInterval != null && repeatInterval == 0) {
+            System.out.println(repeatInterval);
+            throw new IllegalArgumentException("Repeat Interval cannot be zero. Set to 'null' for no repeat.");
+        }
         this.repeatInterval = repeatInterval;
     }
 

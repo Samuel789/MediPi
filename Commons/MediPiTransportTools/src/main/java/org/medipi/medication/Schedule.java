@@ -111,6 +111,4 @@ public class Schedule implements Serializable {
         }
     }
 
-
-
 }

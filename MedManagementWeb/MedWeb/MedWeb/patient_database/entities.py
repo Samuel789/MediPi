@@ -9,11 +9,11 @@ class Status(Enum):
     not_synched_recently = 3
 
 class Patient:
-    json_name = "patient"
+    _json_name = "patient"
     def __init__(self, uuid, first_name, last_name, dob, nhs_no):
         self.uuid = uuid
         self.adherence = None
-        self.schedules = None
+        self.schedules = set()
         self.first_name = first_name
         self.last_name = last_name
         self.dob = dob
