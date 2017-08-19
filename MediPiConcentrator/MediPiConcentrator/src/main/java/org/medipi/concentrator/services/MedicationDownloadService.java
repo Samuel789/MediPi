@@ -1,14 +1,17 @@
 package org.medipi.concentrator.services;
 
+import com.google.inject.internal.cglib.core.Local;
 import org.medipi.concentrator.dao.*;
 import org.medipi.concentrator.entities.Patient;
 import org.medipi.concentrator.exception.NotFound404Exception;
 import org.medipi.concentrator.logic.PatientAdherenceCalculator;
 import org.medipi.concentrator.logic.ScheduleAdherenceCalculator;
+import org.medipi.concentrator.logic.ScheduledDoseUnpacker;
 import org.medipi.concentrator.utilities.Utilities;
 import org.medipi.medication.*;
 import org.medipi.model.MedWebDO;
 import org.medipi.model.MedicationPatientDO;
+import org.medipi.model.UnpackedDoseDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -190,5 +194,23 @@ public class MedicationDownloadService {
             //TODO - if doses change, new schedule, else modify schedule
         }
     }
+
+    @Transactional(rollbackFor = Throwable.class)
+    public UnpackedDoseDO unpackedDoses(String patientUuid, String startDateString, String endDateString) {
+        LocalDate startDate = LocalDate.parse(startDateString);
+        LocalDate endDate = LocalDate.parse(endDateString);
+        List<DoseInstance> doseInstances = new ArrayList<DoseInstance>;
+        for (Schedule schedule: scheduleDAOimpl.findByPatientUuid(patientUuid)) {
+            int startDay = (int) schedule.getAssignedStartDate().toLocalDate().until(startDate, ChronoUnit.DAYS);
+            int endDay = (int) schedule.getAssignedStartDate().toLocalDate().until(endDate, ChronoUnit.DAYS);
+            for (ScheduledDose dose: schedule.getScheduledDoses()) {
+                doseInstances.addAll(ScheduledDoseUnpacker.unpack(dose, startDay, endDay));
+            }
+        }
+        UnpackedDoseDO response = new UnpackedDoseDO();
+        response.setDoseInstances(doseInstances);
+        return response;
+    }
+
 
 }

@@ -36,6 +36,8 @@ def _update_patient_data(registered_patients, patient_adherence_objects):
     for patient_uuid in registered_patients:
         try:
             patients[patient_uuid].status = Status.never_synched
+            patients[patient_uuid].adherence = None
+            patients[patient_uuid].schedules.clear()
         except (KeyError):
             print("WARNING: Patient " + patient_uuid + " registered with Concentrator but not in patient database")
     for adherence_object in patient_adherence_objects:
@@ -44,6 +46,7 @@ def _update_patient_data(registered_patients, patient_adherence_objects):
         patients[patient_uuid].adherence = adherence_object
 
 def _update_schedule_data(schedule_list):
+    schedules.clear()
     for schedule in schedule_list:
         schedule.patient = patients[schedule.patient_uuid]
         schedule.patient.schedules.add(schedule)

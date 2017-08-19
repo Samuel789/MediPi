@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from MedWeb.clinical_database.clinical_database import medications
 from MedWeb.clinical_database.entities import Medication
 from MedWeb.concentrator_interface.entities import Schedule, from_dict, ScheduledDose
-from MedWeb.concentrator_interface.interface import schedules, send_to_concentrator
+from MedWeb.concentrator_interface.interface import schedules, send_to_concentrator, update_from_concentrator
 from MedWeb.patient_database.patient_database import patients
 
 def get_medication_details(request):
@@ -48,6 +48,10 @@ def add_patient_schedule(request):
         doses.append(dose)
     schedule = Schedule(schedule_data["id"], schedule_data["start_date"], schedule_data["end_date"], schedule_data["alternate_name"], schedule_data["purpose_statement"], patient_uuid, medication_id,None,None,None)
     send_to_concentrator(schedule, doses)
+    return HttpResponse()
+
+def update(request):
+    update_from_concentrator()
     return HttpResponse()
 
 

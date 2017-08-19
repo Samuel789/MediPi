@@ -29,7 +29,7 @@ def browse_patients(request):
                               "active_section": "patients",
                               "sidebar_menu_entries": sidebar_menu_entries,
                               "patients": patients.values(),
-                              "active_patient": None})
+                              "active_patient": None}, request)
     return HttpResponse(output)
 
 def patient_summary(request):
@@ -45,7 +45,7 @@ def patient_summary(request):
                               "sidebar_menu_urls": sidebar_menu_urls,
                               "active_sidebar_entry": "Medications",
                               "active_section": "patients",
-                              "active_patient": patients[patient_uuid]})
+                              "active_patient": patients[patient_uuid]}, request)
     return HttpResponse(output)
 
 def assign_medication(request):

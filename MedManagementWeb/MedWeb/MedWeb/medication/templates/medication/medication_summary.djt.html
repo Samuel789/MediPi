@@ -6,7 +6,7 @@
 <h3>Patient Medications: {{ active_patient.name }}</h3>
     </div>
 <div class="container">
-
+    <div id='timeline'></div>
     {% if active_patient.schedules|length > 0 %}
 
   <table class="table table-hover">
@@ -29,7 +29,8 @@
         <td>{{ schedule.adherence.seven_day_fraction|as_percentage }}</td>
         <td>{{ schedule.adherence.streak_length }}</td>
           <td>{% if schedule.alternate_name is None %}<i>None</i>{% else %}{{ schedule.alternate_name }}{% endif %}</td>
-          <td><a class="btn btn-default" href="{{ siteurl }}/patients/modifyschedule?schedule_id={{ schedule.id }}">View</a></td>
+          <td><a class="btn btn-default" href="{{ siteurl }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
+          <a class="btn btn-default" href="{{ siteurl }}/patients/viewschedule?schedule_id={{ schedule.id }}">View</a></td>
       </tr>
     {% endfor %}
 
@@ -44,5 +45,38 @@
 <a class="button btn btn-primary" href="{{ site_url }}/patients/assignmedication?patient_uuid={{ active_patient.uuid }}">Add Medication</a>
 
 </div>
+{% comment %}{% load static %}
+    <script src='{% static "js/moment.min.js" %}'></script>
+<script src='{% static "js/fullcalendar.js" %}'></script>
+
+<script>
+    $(document).ready(function() {
+        $('#calendar').fullCalendar({
+            // put your options and callbacks here
+        })
+
+    });
+</script>{% endcomment %}
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['timeline']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+          var container = document.getElementById('timeline');
+          var chart = new google.visualization.Timeline(container);
+          var dataTable = new google.visualization.DataTable();
+
+          dataTable.addColumn({type: 'string', id: 'President'});
+          dataTable.addColumn({type: 'date', id: 'Start'});
+          dataTable.addColumn({type: 'date', id: 'End'});
+          {% for schedule in active_patient.schedules %}
+              {%  for dose in schedule.scheduled_doses %}
+                  console.log("{{ dose|dose_start_date|date:"Y-m-d" }}");
+              {% endfor %}
+          {% endfor %}
+      }
+    </script>
+
 
 {% endblock %}

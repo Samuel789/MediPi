@@ -42,7 +42,7 @@
     </div>
     {%  endif %}
     <div class="sidebar-bottom">
-        <a class="btn btn-large btn-primary">Update</a>
+        <a class="btn btn-large btn-primary" onclick="updateFromConcentrator()">Update</a>
     </div>
 </div>
     <div class="main-pane">
@@ -74,6 +74,17 @@
               search_results.insertAdjacentHTML('beforeend',"No Results");
 
         }
+    }
+
+    function updateFromConcentrator() {
+        var promise = $.post({
+            url:"{{ siteurl }}/patients/api/update",
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}'},
+            timeout: 5000});
+        promise.done(function (data) {
+            window.location.reload();
+        });
     }
 
     </script>
