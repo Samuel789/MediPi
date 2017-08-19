@@ -22,6 +22,13 @@ schedules = {}
 last_synched = None
 sync_status = SyncStatus.not_yet_synched
 
+def _reset_existing_data():
+    schedules.clear()
+    for patient_uuid in patients:
+        patients[patient_uuid].status = Status.not_registered_with_concentrator
+        patients[patient_uuid].adherence = None
+        patients[patient_uuid].schedules.clear()
+
 def _download_concentrator_data():
     url = settings.MEDIPI_CONCENTRATOR_ADDRESS + 'medication/clinician/getPatientData'
     response = requests.get(url, cert=(settings.SIGN_CERT_PATH, settings.SIGN_KEY_PATH), verify=False)
@@ -33,20 +40,18 @@ def _download_concentrator_data():
     return deserialized_data
 
 def _update_patient_data(registered_patients, patient_adherence_objects):
+
     for patient_uuid in registered_patients:
         try:
             patients[patient_uuid].status = Status.never_synched
-            patients[patient_uuid].adherence = None
-            patients[patient_uuid].schedules.clear()
-        except (KeyError):
-            print("WARNING: Patient " + patient_uuid + " registered with Concentrator but not in patient database")
+        except KeyError as e:
+            print("Patient with UUID '%s' not registered with MedWeb but present in Concentrator, ignoring." % patient_uuid)
     for adherence_object in patient_adherence_objects:
         patient_uuid = adherence_object.patient_uuid
         patients[patient_uuid].status = Status.normal
         patients[patient_uuid].adherence = adherence_object
 
 def _update_schedule_data(schedule_list):
-    schedules.clear()
     for schedule in schedule_list:
         schedule.patient = patients[schedule.patient_uuid]
         schedule.patient.schedules.add(schedule)
@@ -60,6 +65,7 @@ def _update_schedule_data(schedule_list):
 
 def update_from_concentrator():
     try:
+        _reset_existing_data()
         concentrator_data = _download_concentrator_data()
         _update_patient_data(concentrator_data["registered_patient_uuids"], concentrator_data["patient_adherence_objects"])
         _update_schedule_data(concentrator_data["schedules"])
@@ -79,6 +85,12 @@ def send_to_concentrator(schedule, doses):
     json = medicationDo.as_JSON()
     requests.post(url, data = json, cert=(settings.SIGN_CERT_PATH, settings.SIGN_KEY_PATH), verify=False, headers={'Content-type': 'application/json'}, timeout=7000)
     update_from_concentrator()
+
+def get_patient_dose_instances(patient_uuid, start_date, end_date):
+    url = settings.MEDIPI_CONCENTRATOR_ADDRESS + 'medication/clinician/unpackPatientSchedules'
+    data = json.loads(requests.get(url, params={"patientUuid": patient_uuid, "startDate": start_date, "endDate": end_date}, cert=(settings.SIGN_CERT_PATH, settings.SIGN_KEY_PATH), verify=False).text)
+    dose_instances = [entities.from_dict(entities.DoseInstance, dose_instance_data) for dose_instance_data in data]
+    return dose_instances
 
 class MedicationScheduleDO:
     def __init__(self, schedule, doses):

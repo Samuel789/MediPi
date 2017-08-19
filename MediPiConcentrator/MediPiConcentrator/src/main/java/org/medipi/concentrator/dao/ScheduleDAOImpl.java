@@ -15,6 +15,7 @@
  */
 package org.medipi.concentrator.dao;
 
+import org.medipi.medication.Medication;
 import org.medipi.medication.Schedule;
 import org.springframework.stereotype.Repository;
 
@@ -28,8 +29,8 @@ import java.util.List;
 @Repository
 public class ScheduleDAOImpl extends GenericDAOImpl<Schedule> implements ScheduleDAO {
     @Override
-    public Schedule findByMedicationId(int medicationId) {
-        return this.getEntityManager().createNamedQuery("Schedule.findByScheduleId", Schedule.class)
+    public Schedule findByScheduleId(int medicationId) {
+        return this.getEntityManager().createNamedQuery("Schedule.findByfineduleId", Schedule.class)
                 .setParameter("id", medicationId)
                 .getSingleResult();
     }
@@ -38,6 +39,14 @@ public class ScheduleDAOImpl extends GenericDAOImpl<Schedule> implements Schedul
     public List<Schedule> findByPatientUuid(String patientUuid) {
         return this.getEntityManager().createNamedQuery("Schedule.findByPatientUuid", Schedule.class)
                 .setParameter("uuid", patientUuid)
+                .getResultList();
+    }
+
+    @Override
+    public List<Schedule> findByMedicationAndPatient(Medication medication, String patientUuid) {
+        return this.getEntityManager().createNamedQuery("Schedule.findByMedicationAndPatient", Schedule.class)
+                .setParameter("uuid", patientUuid)
+                .setParameter("medication", medication)
                 .getResultList();
     }
 

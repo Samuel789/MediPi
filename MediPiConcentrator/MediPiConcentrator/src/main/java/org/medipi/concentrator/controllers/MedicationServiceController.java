@@ -17,13 +17,18 @@ package org.medipi.concentrator.controllers;
 
 import org.medipi.concentrator.logging.MediPiLogger;
 import org.medipi.concentrator.services.MedicationDownloadService;
+import org.medipi.concentrator.services.MedicationScheduleUpdateService;
+import org.medipi.medication.DoseInstance;
 import org.medipi.model.MedWebDO;
 import org.medipi.model.MedicationPatientDO;
 import org.medipi.model.MedicationScheduleDO;
+import org.medipi.model.UnpackedDoseDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Class for controlling the download service for the MediPi patient units .
@@ -40,13 +45,15 @@ public class MedicationServiceController {
     private MedicationDownloadService medicationDownloadService;
 
     @Autowired
+    private MedicationScheduleUpdateService medicationScheduleUpdateService;
+
+    @Autowired
     private MediPiLogger logger;
 
     @RequestMapping(value="/synchronize", method = RequestMethod.POST, consumes = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ResponseEntity<MedicationPatientDO> synchronize(@RequestBody MedicationPatientDO uploadedData) {
-//Removed to Reduce Logs size        logger.log(DownloadServiceController.class.getName(), new Date().toString() + " get DownloadableList called by patientUuid: " + patientUuid + " using hardwareName: " + hardwareName);
         return this.medicationDownloadService.synchronize(uploadedData);
     }
 
@@ -54,7 +61,6 @@ public class MedicationServiceController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ResponseEntity<MedWebDO> getMedicationData() {
-//Removed to Reduce Logs size        logger.log(DownloadServiceController.class.getName(), new Date().toString() + " get DownloadableList called by patientUuid: " + patientUuid + " using hardwareName: " + hardwareName);
         return this.medicationDownloadService.getAllPatientData();
     }
 
@@ -62,9 +68,14 @@ public class MedicationServiceController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public void addSchedule(@RequestBody MedicationScheduleDO content) {
+        this.medicationScheduleUpdateService.addSchedule(content.getSchedule(), content.getDoses(), content.getMedicationId());
+    }
 
-//Removed to Reduce Logs size        logger.log(DownloadServiceController.class.getName(), new Date().toString() + " get DownloadableList called by patientUuid: " + patientUuid + " using hardwareName: " + hardwareName);
-        this.medicationDownloadService.addSchedule(content.getSchedule(), content.getDoses(), content.getMedicationId());
+    @RequestMapping(value="/clinician/unpackPatientSchedules", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ResponseEntity<List<DoseInstance>> unpackPatientSchedules(@RequestParam("patientUuid") String patientUuid, @RequestParam("startDate") String startDateString, @RequestParam("endDate") String endDateString) {
+        return this.medicationDownloadService.unpackedDoses(patientUuid, startDateString, endDateString);
     }
 
 

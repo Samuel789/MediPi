@@ -6,9 +6,15 @@
 <h3>Patient Medications: {{ active_patient.name }}</h3>
     </div>
 <div class="container">
-    <div id='timeline'></div>
-    {% if active_patient.schedules|length > 0 %}
 
+
+{% if active_patient.status.value == 1 %}
+    <div class="alert alert-danger">
+  <strong>Warning!</strong> This patient is not registered with the Concentrator.
+</div>
+{% else %}
+    {% if active_patient.schedules|length > 0 %}
+    <div id='timeline'></div>
   <table class="table table-hover">
     <thead>
       <tr>
@@ -28,9 +34,11 @@
         <td>{{ schedule.medication.full_name }}</td>
         <td>{{ schedule.adherence.seven_day_fraction|as_percentage }}</td>
         <td>{{ schedule.adherence.streak_length }}</td>
-          <td>{% if schedule.alternate_name is None %}<i>None</i>{% else %}{{ schedule.alternate_name }}{% endif %}</td>
-          <td><a class="btn btn-default" href="{{ siteurl }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
-          <a class="btn btn-default" href="{{ siteurl }}/patients/viewschedule?schedule_id={{ schedule.id }}">View</a></td>
+        <td>{% if schedule.alternate_name is None %}<i>None</i>{% else %}{{ schedule.alternate_name }}{% endif %}</td>
+        <td>
+            <a class="btn btn-default" href="{{ siteurl }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
+            <a class="btn btn-default" href="{{ siteurl }}/patients/viewschedule?schedule_id={{ schedule.id }}">View</a>
+        </td>
       </tr>
     {% endfor %}
 
@@ -43,7 +51,7 @@
 
     {% endif %}
 <a class="button btn btn-primary" href="{{ site_url }}/patients/assignmedication?patient_uuid={{ active_patient.uuid }}">Add Medication</a>
-
+{% endif %}
 </div>
 {% comment %}{% load static %}
     <script src='{% static "js/moment.min.js" %}'></script>
@@ -68,13 +76,15 @@
           var dataTable = new google.visualization.DataTable();
 
           dataTable.addColumn({type: 'string', id: 'President'});
+          dataTable.addColumn({type: 'string', id: 'Value'});
           dataTable.addColumn({type: 'date', id: 'Start'});
           dataTable.addColumn({type: 'date', id: 'End'});
-          {% for schedule in active_patient.schedules %}
-              {%  for dose in schedule.scheduled_doses %}
-                  console.log("{{ dose|dose_start_date|date:"Y-m-d" }}");
+          dataTable.addRows([
+              {%  for dose in dose_instances %}
+                  ["{{ dose.schedule.medication.full_name }}", {{ dose.dose_value }} + " " + "{{ dose.schedule.medication.dose_unit.name }}", new Date("{{ dose|dose_start_date|date:"Y-m-d H:i" }}"), new Date("{{ dose|dose_end_date|date:"Y-m-d H:i" }}")],
               {% endfor %}
-          {% endfor %}
+      ]);
+          chart.draw(dataTable);
       }
     </script>
 

@@ -161,55 +161,25 @@ public class MedicationDownloadService {
         return new ResponseEntity<MedWebDO>(responseData, HttpStatus.OK);
     }
 
-    @Transactional(rollbackFor = Throwable.class)
-    public void addSchedule(Schedule new_schedule, List<ScheduledDose> new_doses, int medicationId) {
-        Schedule existing_schedule = scheduleDAOimpl.findByPrimaryKey(new_schedule.getScheduleId());
-        if(existing_schedule == null) {
-            new_schedule.setMedication(medicationDAOImpl.findByMedicationId(medicationId));
-            scheduleDAOimpl.save(new_schedule);
-            for (ScheduledDose new_dose: new_doses) {
-                new_dose.setScheduleId(new_schedule.getScheduleId());
-                new_schedule.getScheduledDoses().add(new_dose);
-            }
-            scheduleDAOimpl.save(new_schedule);
-        } else {
-            assert(existing_schedule.getMedication() == new_schedule.getMedication());
-            assert(existing_schedule.getPatientUuid().equals(new_schedule.getPatientUuid()));
-            boolean doses_changed = !existing_schedule.getScheduledDoses().equals(new_doses);
-            if (doses_changed) {
-                if (existing_schedule.getAssignedEndDate().getTime() > Date.valueOf(LocalDate.now().plusDays(1)).getTime()) {
-                    existing_schedule.setAssignedEndDate(Date.valueOf(LocalDate.now().plusDays(1)));
-                }
-                new_schedule.setAssignedStartDate(new Date(Math.max(Date.valueOf(LocalDate.now()).getTime(), new_schedule.getAssignedStartDate().getTime())));
-                new_schedule.setAlternateName(existing_schedule.getAlternateName());
-                if (existing_schedule.getAssignedEndDate().equals(existing_schedule.getAssignedStartDate())) {
-                    scheduleDAOimpl.delete(existing_schedule);
-                }
-            } else {
-                existing_schedule.setPurposeStatement(new_schedule.getPurposeStatement());
-                existing_schedule.setAssignedStartDate(new_schedule.getAssignedStartDate());
-                existing_schedule.setAssignedEndDate(new_schedule.getAssignedEndDate());
-                scheduleDAOimpl.save(existing_schedule);
-            }
-            //TODO - if doses change, new schedule, else modify schedule
-        }
-    }
+
 
     @Transactional(rollbackFor = Throwable.class)
-    public UnpackedDoseDO unpackedDoses(String patientUuid, String startDateString, String endDateString) {
+    public ResponseEntity<List<DoseInstance>> unpackedDoses(String patientUuid, String startDateString, String endDateString) {
         LocalDate startDate = LocalDate.parse(startDateString);
         LocalDate endDate = LocalDate.parse(endDateString);
-        List<DoseInstance> doseInstances = new ArrayList<DoseInstance>;
+        List<DoseInstance> doseInstances = new ArrayList<>();
         for (Schedule schedule: scheduleDAOimpl.findByPatientUuid(patientUuid)) {
-            int startDay = (int) schedule.getAssignedStartDate().toLocalDate().until(startDate, ChronoUnit.DAYS);
-            int endDay = (int) schedule.getAssignedStartDate().toLocalDate().until(endDate, ChronoUnit.DAYS);
+            int startDay = Math.max(0, (int) schedule.getAssignedStartDate().toLocalDate().until(startDate, ChronoUnit.DAYS));
+            int endDay = Math.max(0, (int) schedule.getAssignedStartDate().toLocalDate().until(endDate, ChronoUnit.DAYS));
             for (ScheduledDose dose: schedule.getScheduledDoses()) {
+                dose.setSchedule(schedule);
                 doseInstances.addAll(ScheduledDoseUnpacker.unpack(dose, startDay, endDay));
+                dose.setSchedule(null);
             }
         }
         UnpackedDoseDO response = new UnpackedDoseDO();
         response.setDoseInstances(doseInstances);
-        return response;
+        return new ResponseEntity<List<DoseInstance>>(doseInstances, HttpStatus.OK);
     }
 
 

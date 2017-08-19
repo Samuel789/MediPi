@@ -246,4 +246,6 @@ public class TestScheduledDoseUnpacker {
         expectedResult.add(new DoseInstance(intervalTwoDose, 8));
         assert ScheduledDoseUnpacker.unpack(intervalTwoDose, 3, 10).equals(expectedResult);
     }
+
+    //TODO - zero range test
 }

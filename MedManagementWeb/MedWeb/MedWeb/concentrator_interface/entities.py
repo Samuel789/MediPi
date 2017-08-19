@@ -4,6 +4,8 @@ import sys
 from datetime import time, datetime
 
 
+
+
 class Schedule:
     _json_name = "schedule"
     _json_attribute_map = {"scheduleId": "id",
@@ -96,6 +98,27 @@ class ScheduleAdherenceObject(AdherenceObject):
     def __init__(self, streak_length, seven_day_fraction, schedule_id):
         super().__init__(streak_length, seven_day_fraction)
 
+class DoseInstance:
+    _json_name = "doseInstance"
+    _json_attribute_map = {"dose": "scheduled_dose_id <- scheduledDoseId",
+                           "takenDose": "taken_dose_id <- recordedDoseId",
+                           "day" : "day",
+                           "timeStart": "start_time",
+                           "timeEnd": "end_time",
+                           "doseValue": "dose_value",
+                           "scheduleId": "schedule_id"}
+    def __init__(self, day, start_time, end_time, schedule_id, scheduled_dose_id, taken_dose_id, dose_value):
+        self.day = day
+        self.start_time = start_time
+        self.end_time = end_time
+        self.schedule_id = schedule_id
+        from MedWeb.concentrator_interface.interface import schedules
+        self.schedule = schedules[schedule_id]
+        self.scheduled_dose_id = scheduled_dose_id
+        self.taken_dose_id = taken_dose_id
+        self.dose_value = dose_value
+
+
 clsmembers = inspect.getmembers(sys.modules[__name__], inspect.isclass)
 names = {}
 for member in clsmembers:
@@ -123,7 +146,8 @@ def from_dict(object_class, json_properties_dict):
                 value = value[field_redirect]
             except(KeyError) as e:
                 raise JSONMappingException("Field redirect failed for class %s, target %s has no gettable %s" % (object_class.__name__, value.__class__, field_redirect))
-
+            except(TypeError) as e:
+                value = None
         if type(value) == type({}):
             try:
                 object_value = from_dict(names[key], value)

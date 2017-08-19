@@ -20,26 +20,26 @@
         <property name="purposeStatement" type="java.lang.String" not-null="true">
             <column name="purpose_statement" />
         </property>
-        <many-to-one lazy="false" name="medication" class="org.medipi.medication.Medication" column="medication_id" cascade="all" not-null="true" />
+        <many-to-one lazy="false" name="medication" class="org.medipi.medication.Medication" column="medication_id" not-null="true" />
         <property name="patientUuid" type="java.lang.String" not-null="true">
             <column name="patient_uuid" />
         </property>
         <set name="recordedDoses" table="recorded_dose"
-             inverse="true" lazy="false" cascade="all">
+             inverse="true" lazy="false">
             <key>
                 <column name="schedule_id" not-null="true" />
             </key>
             <one-to-many class="org.medipi.medication.RecordedDose" />
         </set>
         <set name="scheduledDoses" table="scheduled_dose"
-             inverse="true" lazy="false" cascade="all">
+             inverse="true" lazy="false" >
             <key>
                 <column name="schedule_id" not-null="true" />
             </key>
             <one-to-many class="org.medipi.medication.ScheduledDose" />
         </set>
         <one-to-one name="scheduleAdherence" class="org.medipi.medication.ScheduleAdherence"
-                    cascade="save-update"></one-to-one>
+                   ></one-to-one>
     </class>
 
     <query name="Schedule.findByScheduleId">
@@ -47,6 +47,9 @@
     </query>
     <query name="Schedule.findByPatientUuid">
         <![CDATA[SELECT s FROM Schedule s WHERE s.patientUuid = :uuid]]>
+    </query>
+    <query name="Schedule.findByMedicationAndPatient">
+        <![CDATA[SELECT s FROM Schedule s WHERE s.patientUuid = :uuid AND s.medication = :medication]]>
     </query>
     <query name="Schedule.findAll">
         <![CDATA[SELECT s FROM Schedule s ORDER BY assignedStartDate]]>

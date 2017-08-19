@@ -35,8 +35,6 @@ def validate_scheduled_dose(dose):
 
 
 def add_patient_schedule(request):
-    print(request.POST)
-
     schedule_data = json.loads(request.POST["schedule"])
     patient_uuid = request.POST["patient_uuid"]
     medication_id = request.POST["medication_id"]

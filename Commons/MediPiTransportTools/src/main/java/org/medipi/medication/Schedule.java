@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 public class Schedule implements Serializable {
 
@@ -32,7 +33,7 @@ public class Schedule implements Serializable {
     private String alternateName;
     private String purposeStatement;
     private String patientUuid;
-    private int scheduleId;
+    private Integer scheduleId;
     private Medication medication;
 
     public ScheduleAdherence getScheduleAdherence() {
@@ -75,11 +76,11 @@ public class Schedule implements Serializable {
         this.patientUuid = patientUuid;
     }
 
-    public int getScheduleId() {
+    public Integer getScheduleId() {
         return scheduleId;
     }
 
-    public void setScheduleId(int scheduleId) {
+    public void setScheduleId(Integer scheduleId) {
         this.scheduleId = scheduleId;
     }
 

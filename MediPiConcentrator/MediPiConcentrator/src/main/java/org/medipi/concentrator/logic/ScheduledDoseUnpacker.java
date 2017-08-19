@@ -1,7 +1,9 @@
 package org.medipi.concentrator.logic;
 
+import org.medipi.concentrator.dao.ScheduleDAOImpl;
 import org.medipi.medication.DoseInstance;
 import org.medipi.medication.ScheduledDose;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
@@ -10,6 +12,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ScheduledDoseUnpacker {
+    @Autowired
+    private ScheduleDAOImpl scheduleDAOimpl;
+
     public static List<DoseInstance> unpack(ScheduledDose scheduledDose, int startDay, int endDay) {
         validateArguments(scheduledDose, startDay, endDay);
         int sequenceStartDay = Math.max(startDay, scheduledDose.getStartDay());
@@ -39,8 +44,8 @@ public class ScheduledDoseUnpacker {
     private static void validateArguments(ScheduledDose scheduledDose, int startDay, int endDay) {
         if (startDay < 0) {
             throw new IllegalArgumentException("Start day cannot be less than zero (" + startDay + " provided)");
-        } else if (startDay >= endDay) {
-            throw new IllegalArgumentException("End day must be greater than start day (" + startDay + ", " + endDay + " provided)");
+        } else if (startDay > endDay) {
+            throw new IllegalArgumentException("End day cannot be before (" + startDay + ", " + endDay + " provided)");
         }
     }
 

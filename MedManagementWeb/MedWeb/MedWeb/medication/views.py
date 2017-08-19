@@ -1,3 +1,4 @@
+import datetime
 import json
 
 import requests
@@ -9,7 +10,7 @@ from MedWeb.clinical_database.clinical_database import medications
 from MedWeb.concentrator_interface import entities
 from MedWeb.concentrator_interface.entities import Schedule
 
-from MedWeb.concentrator_interface.interface import update_from_concentrator
+from MedWeb.concentrator_interface.interface import update_from_concentrator, get_patient_dose_instances
 from MedWeb.concentrator_interface.interface import schedules
 from MedWeb.patient_database.patient_database import patients
 
@@ -34,8 +35,10 @@ def browse_patients(request):
 
 def patient_summary(request):
     patient_uuid = request.GET.get("patient_uuid", None)
+    todayDate = datetime.date.today()
     if patient_uuid is None:
         return browse_patients(request)
+    print(patients[patient_uuid].status)
     template = get_template("medication/medication_summary.djt.html")
     output = template.render({"title": settings.SITE_NAME,
                               "version": settings.version_string,
@@ -45,7 +48,8 @@ def patient_summary(request):
                               "sidebar_menu_urls": sidebar_menu_urls,
                               "active_sidebar_entry": "Medications",
                               "active_section": "patients",
-                              "active_patient": patients[patient_uuid]}, request)
+                              "active_patient": patients[patient_uuid],
+                              "dose_instances": get_patient_dose_instances(patient_uuid, todayDate - datetime.timedelta(todayDate.weekday()), todayDate - datetime.timedelta(todayDate.weekday()) + datetime.timedelta(days=7))}, request)
     return HttpResponse(output)
 
 def assign_medication(request):

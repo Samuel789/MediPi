@@ -55,7 +55,7 @@
     var patient_search_box = document.getElementById("patient-search");
     var search_results = document.getElementById("search-results");
     {% for patient in patients %}
-    patients.push({name:"{{patient.name|safe}}", dob:"{{patient.dob|safe}}", nhsnumber:"{{patient.nhs_number|safe}}", id:{{patient.id|safe}}});
+    patients.push({name:"{{patient.name|safe}}", dob:"{{patient.dob|safe}}", nhsnumber:"{{patient.nhs_number|safe}}", id:"{{patient.id|safe}}"});
     {% endfor %}
     function search_patients() {
         var text = patient_search_box.value;

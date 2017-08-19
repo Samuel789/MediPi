@@ -1,7 +1,5 @@
 package org.medipi.medication;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.sql.Time;
@@ -49,12 +47,6 @@ public class ScheduledDose implements Serializable {
     private Integer repeatInterval;
     private Time windowStartTime;
     private Time windowEndTime;
-
-
-    @Override
-    public int hashCode() {
-        return scheduleId.hashCode();
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -29,6 +29,16 @@ public class DoseInstance {
 
     private int scheduleId;
 
+    public double getDoseValue() {
+        return doseValue;
+    }
+
+    public void setDoseValue(double doseValue) {
+        this.doseValue = doseValue;
+    }
+
+    private double doseValue;
+
     public int getDay() {
         return day;
     }
@@ -66,6 +76,7 @@ public class DoseInstance {
         this.timeStart = dose.getWindowStartTime();
         this.timeEnd = dose.getWindowEndTime();
         this.scheduleId = dose.getScheduleId();
+        this.doseValue = dose.getDoseValue();
     }
 
     public String toString() {

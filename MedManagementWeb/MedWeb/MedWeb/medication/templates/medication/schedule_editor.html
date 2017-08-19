@@ -142,13 +142,14 @@
 
         {% else %}
             var schedule_start_day = new Date();
+            schedule_start_day.setDate(schedule_start_day.getDate() + 1);
             schedule["id"] = null;
             schedule["purpose_statement"] = "";
             schedule["alternate_name"] = "";
         {% endif %}
         {% load static %}
         start_date_picker.datepicker({date: schedule_start_day,
-                                      minDate: new Date(Math.min(schedule_start_day, new Date())),
+                                      minDate: function() {minDate = new Date(); minDate.setDate(Math.min(schedule_start_day.getDate(), new Date().getDate() + 1)); return minDate} (),
                                       dateFormat: "yy-mm-dd",
                                       buttonText: "Select date",
                                       onSelect: function(fieldText) {
