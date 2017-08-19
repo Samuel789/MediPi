@@ -1,14 +1,22 @@
-package org.medipi.concentrator.logic;
-
-import org.medipi.medication.ScheduledDose;
+package org.medipi.medication;
 
 import java.sql.Time;
 
-class DoseInstance {
+public class DoseInstance {
     public ScheduledDose getDose() {
         return dose;
     }
 
+
+    public RecordedDose getTakenDose() {
+        return takenDose;
+    }
+
+    public void setTakenDose(RecordedDose takenDose) {
+        this.takenDose = takenDose;
+    }
+
+    public RecordedDose takenDose;
     private ScheduledDose dose;
 
     public int getDay() {
@@ -42,7 +50,7 @@ class DoseInstance {
 
     private Time timeEnd;
 
-    DoseInstance(ScheduledDose dose, int day) {
+    public DoseInstance(ScheduledDose dose, int day) {
         this.dose = dose;
         this.day = day;
         this.timeStart = dose.getWindowStartTime();

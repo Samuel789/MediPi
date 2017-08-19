@@ -141,6 +141,7 @@ public class PatientAdherenceCalculator {
         this.numDosesMissed = numDosesMissed;
         this.numDosesTakenIncorrectly = numDosesTakenIncorrectly;
         this.numDosesToTake = numDosesToTake;
+        this.scheduleAdherenceCalculators = scheduleAdherenceCalculators;
         this.adherenceFraction = adherenceFraction;
         this.streakLength = streakLength;
     }

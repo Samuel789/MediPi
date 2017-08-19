@@ -1,4 +1,5 @@
 {% extends 'medication/patient_template.djt.html' %}
+{% load display_utils %}
 
 {% block main-pane %}
 <div class="title">
@@ -25,10 +26,10 @@
       <tr>
         <td>{{ schedule.medication.short_name }}</td>
         <td>{{ schedule.medication.full_name }}</td>
-        <td>{{ schedule.adherence_percentage  }}%</td>
-        <td>{{ schedule.adherence_streak }}</td>
+        <td>{{ schedule.adherence.seven_day_fraction|as_percentage }}</td>
+        <td>{{ schedule.adherence.streak_length }}</td>
           <td>{% if schedule.alternate_name is None %}<i>None</i>{% else %}{{ schedule.alternate_name }}{% endif %}</td>
-          <td><a class="btn btn-default" href="{{ siteurl }}/patients/modifyschedule?sid={{ schedule.id }}">View</a></td>
+          <td><a class="btn btn-default" href="{{ siteurl }}/patients/modifyschedule?schedule_id={{ schedule.id }}">View</a></td>
       </tr>
     {% endfor %}
 
@@ -40,7 +41,7 @@
 </div>
 
     {% endif %}
-<a class="button btn btn-primary" href="{{ site_url }}/patients/assignmedication?pid={{ active_patient.id }}">Add Medication</a>
+<a class="button btn btn-primary" href="{{ site_url }}/patients/assignmedication?patient_uuid={{ active_patient.uuid }}">Add Medication</a>
 
 </div>
 

@@ -5,12 +5,14 @@
     {% load static %}
     <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
     <link rel="stylesheet" href="{% static "css/site.css" %}">
+    <link rel="stylesheet" href="{% static "css/jquery-ui.min.css" %}">
     <title>{{ title }}</title>
     {% block extra_head %}{% endblock %}
 </head>
 <body id="master">
 <script src="{% static "js/jquery-3.2.1.js" %}"></script>
 <script src="{% static "js/bootstrap.js" %}"></script>
+<script src="{% static "js/jquery-ui.min.js" %}"></script>
 <div class="navbar transparent navbar-default">
     <div id="leftBox">
         <div class="alert-danger" id="topText">This is {{ title }} running on Django {{ version }}.</div>

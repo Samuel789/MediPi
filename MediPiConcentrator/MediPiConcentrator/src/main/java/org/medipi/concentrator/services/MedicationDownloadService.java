@@ -6,10 +6,7 @@ import org.medipi.concentrator.exception.NotFound404Exception;
 import org.medipi.concentrator.logic.PatientAdherenceCalculator;
 import org.medipi.concentrator.logic.ScheduleAdherenceCalculator;
 import org.medipi.concentrator.utilities.Utilities;
-import org.medipi.medication.PatientAdherence;
-import org.medipi.medication.RecordedDose;
-import org.medipi.medication.Schedule;
-import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.*;
 import org.medipi.model.MedWebDO;
 import org.medipi.model.MedicationPatientDO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,20 +108,35 @@ public class MedicationDownloadService {
         LocalDate searchEndTime = LocalDate.now();
         LocalDate searchStartTime = searchEndTime.minusDays(7);
         Collection<Schedule> patientSchedules = scheduleDAOimpl.findByPatientUuid(patientUuid);
+        for (Schedule schedule: patientSchedules) {
+            for (ScheduledDose dose: schedule.getScheduledDoses()) {
+                dose.setSchedule(schedule);
+            }
+        }
         PatientAdherenceCalculator patientAdherenceCalculator = new PatientAdherenceCalculator(patientSchedules, searchStartTime, searchEndTime, true);
         patientAdherenceCalculator.calculatePatientAdherence();
         for (Schedule schedule: patientSchedules) {
             ScheduleAdherenceCalculator scheduleAdherenceCalculator = patientAdherenceCalculator.getScheduleAdherenceCalculators().get(schedule);
+            if (schedule.getScheduleAdherence() == null) {
+                ScheduleAdherence scheduleAdherence = new ScheduleAdherence();
+                scheduleAdherence.setScheduleId(schedule.getScheduleId());
+                schedule.setScheduleAdherence(scheduleAdherence);
+            }
             schedule.getScheduleAdherence().setSevenDayFraction(scheduleAdherenceCalculator.getAdherenceFraction());
             schedule.getScheduleAdherence().setStreakLength(scheduleAdherenceCalculator.getStreakLength());
-            scheduleAdherenceDAOimpl.update(schedule.getScheduleAdherence());
+            scheduleAdherenceDAOimpl.save(schedule.getScheduleAdherence());
         }
         PatientAdherence patientAdherence = patientAdherenceDAOimpl.findByPatientUuid(patientUuid);
         patientAdherence.setSevenDayFraction(patientAdherenceCalculator.getAdherenceFraction());
         patientAdherence.setStreakLength(patientAdherenceCalculator.getStreakLength());
         patientAdherenceDAOimpl.update(patientAdherence);
+        //TODO - find a better way than setting and unsetting the schedule
+        for (Schedule schedule: patientSchedules) {
+            for (ScheduledDose dose: schedule.getScheduledDoses()) {
+                dose.setSchedule(null);
+            }
+        }
     }
-
 
     @Transactional(rollbackFor = Throwable.class)
     public ResponseEntity<MedWebDO> getAllPatientData() {

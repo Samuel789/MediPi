@@ -1,7 +1,9 @@
 package org.medipi.concentrator.logic;
 
+import org.medipi.medication.DoseInstance;
 import org.medipi.medication.ScheduledDose;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +19,9 @@ public class ScheduledDoseUnpacker {
         } else {
             sequenceEndDay = endDay;
         }
+        if (scheduledDose.getSchedule().getAssignedEndDate() != null) {
+            sequenceEndDay = (int) scheduledDose.getSchedule().getAssignedStartDate().toLocalDate().until(scheduledDose.getSchedule().getAssignedEndDate().toLocalDate(), ChronoUnit.DAYS);
+        }
         if (scheduledDose.getRepeatInterval() == null) {
             if (scheduledDose.getStartDay() >= sequenceStartDay && scheduledDose.getStartDay() < sequenceEndDay) {
                 return Collections.singletonList(new DoseInstance(scheduledDose, scheduledDose.getStartDay()));
@@ -26,7 +31,7 @@ public class ScheduledDoseUnpacker {
         }
         int offset = (sequenceStartDay - scheduledDose.getStartDay()) % scheduledDose.getRepeatInterval();
         int startOffset = (scheduledDose.getRepeatInterval() - offset) % scheduledDose.getRepeatInterval();
-        int endOffset = ((sequenceEndDay - sequenceStartDay) % scheduledDose.getRepeatInterval() > 0) ? scheduledDose.getRepeatInterval() : 0;
+        int endOffset = ((sequenceEndDay - scheduledDose.getStartDay()) % scheduledDose.getRepeatInterval() > 0) ? scheduledDose.getRepeatInterval() : 0;
         List<DoseInstance> doses = range(sequenceStartDay + startOffset, sequenceEndDay + endOffset, scheduledDose.getRepeatInterval()).mapToObj(day -> new DoseInstance(scheduledDose, day)).collect(Collectors.toList());
         return doses;
     }

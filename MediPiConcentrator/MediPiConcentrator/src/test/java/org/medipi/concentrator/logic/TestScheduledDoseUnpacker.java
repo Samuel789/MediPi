@@ -1,8 +1,8 @@
 package org.medipi.concentrator.logic;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.medipi.medication.DoseInstance;
 import org.medipi.medication.Schedule;
 import org.medipi.medication.ScheduledDose;
 
@@ -12,20 +12,26 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TestScheduledDoseUnpacker {
 
-    Schedule schedule;
+    Schedule unboundSchedule = new Schedule();
+    Schedule boundSchedule = new Schedule();
     ScheduledDose simpleDailyDose;
     ScheduledDose threeDayIntervalDose;
+    ScheduledDose intervalTwoDose;
     ScheduledDose singleDayDose;
     ScheduledDose nullEndDayDose;
 
     @Before
-    public void setUpSchedule() {
-        schedule = new Schedule();
-        schedule.setAssignedStartDate(Date.valueOf(LocalDate.of(2016, 2, 22)));
+    public void setUpUnboundSchedule() {
+        unboundSchedule.setAssignedStartDate(Date.valueOf(LocalDate.of(2016, 2, 22)));
+    }
+
+    @Before
+    public void setUpBoundSchedule() {
+        boundSchedule.setAssignedStartDate(Date.valueOf(LocalDate.of(2016, 2, 22)));
+        boundSchedule.setAssignedEndDate(Date.valueOf(LocalDate.of(2016, 2, 26)));
     }
 
     @Before
@@ -33,6 +39,7 @@ public class TestScheduledDoseUnpacker {
         Time startTime = Time.valueOf("08:00:00");
         Time endTime = Time.valueOf("14:00:00");
         simpleDailyDose = new ScheduledDose();
+        simpleDailyDose.setSchedule(unboundSchedule);
         simpleDailyDose.setStartDay(2);
         simpleDailyDose.setEndDay(8);
         simpleDailyDose.setRepeatInterval(1);
@@ -45,6 +52,7 @@ public class TestScheduledDoseUnpacker {
         Time startTime = Time.valueOf("08:00:00");
         Time endTime = Time.valueOf("14:00:00");
         threeDayIntervalDose = new ScheduledDose();
+        threeDayIntervalDose.setSchedule(unboundSchedule);
         threeDayIntervalDose.setStartDay(2);
         threeDayIntervalDose.setEndDay(15);
         threeDayIntervalDose.setRepeatInterval(3);
@@ -57,11 +65,25 @@ public class TestScheduledDoseUnpacker {
         Time startTime = Time.valueOf("08:00:00");
         Time endTime = Time.valueOf("14:00:00");
         singleDayDose = new ScheduledDose();
+        singleDayDose.setSchedule(unboundSchedule);
         singleDayDose.setStartDay(5);
         singleDayDose.setEndDay(null);
         singleDayDose.setRepeatInterval(null);
         singleDayDose.setWindowStartTime(startTime);
         singleDayDose.setWindowEndTime(endTime);
+    }
+
+    @Before
+    public void createIntervalTwoDose() {
+        Time startTime = Time.valueOf("08:00:00");
+        Time endTime = Time.valueOf("14:00:00");
+        intervalTwoDose = new ScheduledDose();
+        intervalTwoDose.setSchedule(unboundSchedule);
+        intervalTwoDose.setStartDay(2);
+        intervalTwoDose.setEndDay(null);
+        intervalTwoDose.setRepeatInterval(2);
+        intervalTwoDose.setWindowStartTime(startTime);
+        intervalTwoDose.setWindowEndTime(endTime);
     }
 
 
@@ -70,6 +92,7 @@ public class TestScheduledDoseUnpacker {
         Time startTime = Time.valueOf("08:00:00");
         Time endTime = Time.valueOf("14:00:00");
         nullEndDayDose = new ScheduledDose();
+        nullEndDayDose.setSchedule(unboundSchedule);
         nullEndDayDose.setStartDay(3);
         nullEndDayDose.setEndDay(null);
         nullEndDayDose.setRepeatInterval(2);
@@ -87,6 +110,15 @@ public class TestScheduledDoseUnpacker {
         expectedResult.add(new DoseInstance(simpleDailyDose, 6));
         expectedResult.add(new DoseInstance(simpleDailyDose, 7));
         assert ScheduledDoseUnpacker.unpack(simpleDailyDose, 0, 14).equals(expectedResult);
+    }
+
+    @Test
+    public void testWindowBoundsResult() {
+        List<DoseInstance> expectedResult = new ArrayList<>();
+        expectedResult.add(new DoseInstance(simpleDailyDose, 2));
+        expectedResult.add(new DoseInstance(simpleDailyDose, 3));
+        expectedResult.add(new DoseInstance(simpleDailyDose, 4));
+        assert ScheduledDoseUnpacker.unpack(simpleDailyDose, 0, 5).equals(expectedResult);
     }
 
     @Test
@@ -152,6 +184,7 @@ public class TestScheduledDoseUnpacker {
     @Test(expected = IllegalArgumentException.class)
     public void zeroRepeatUnitIsInvalid() {
         singleDayDose = new ScheduledDose();
+        singleDayDose.setSchedule(unboundSchedule);
         singleDayDose.setStartDay(5);
         singleDayDose.setEndDay(null);
         singleDayDose.setRepeatInterval(0);
@@ -188,5 +221,29 @@ public class TestScheduledDoseUnpacker {
         ArrayList<Integer> results = new ArrayList<>();
         ScheduledDoseUnpacker.range(4, 8, 1).forEach(results::add);
         assert(results.equals(Arrays.asList(expected_result)));
+    }
+
+    @Test
+    public void scheduleEndDateBoundsWindow() {
+        List<DoseInstance> expectedResult = new ArrayList<>();
+        ScheduledDose boundDose = new ScheduledDose();
+        boundDose.setStartDay(2);
+        boundDose.setEndDay(null);
+        boundDose.setSchedule(boundSchedule);
+        boundDose.setRepeatInterval(1);
+        boundDose.setWindowStartTime(Time.valueOf("14:00:00"));
+        boundDose.setWindowStartTime(Time.valueOf("16:00:00"));
+        expectedResult.add(new DoseInstance(boundDose, 2));
+        expectedResult.add(new DoseInstance(boundDose, 3));
+        assert ScheduledDoseUnpacker.unpack(boundDose, 1, 12).equals(expectedResult);
+    }
+
+    @Test
+    public void windowConstrainsDoseWithIntervalGTOne() {
+        List<DoseInstance> expectedResult = new ArrayList<>();
+        expectedResult.add(new DoseInstance(intervalTwoDose, 4));
+        expectedResult.add(new DoseInstance(intervalTwoDose, 6));
+        expectedResult.add(new DoseInstance(intervalTwoDose, 8));
+        assert ScheduledDoseUnpacker.unpack(intervalTwoDose, 3, 10).equals(expectedResult);
     }
 }

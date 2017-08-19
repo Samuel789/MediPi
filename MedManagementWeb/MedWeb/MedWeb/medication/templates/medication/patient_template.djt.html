@@ -1,5 +1,6 @@
 {% extends 'home/main.djt.html' %}
 {% load dict_utils %}
+{% load display_utils %}
 
 {% block extra_head %}
     {% load static %}
@@ -28,18 +29,21 @@
         <a type="button" class="btn btn-primary" href="{{ site_url }}/patients">Back to All Patients</a>
         </div>
         <table class="clinical-table">
-            <tr><th>Patient: </th><th class="clinical-value">{{ active_patient.name }}</th></tr>
+            <tr><th>Patient: </th><th class="clinical-value">{{ active_patient|patient_display_name }}</th></tr>
         <tr><th>DOB: </th><th class="clinical-value">{{ active_patient.dob }}</th></tr>
-        <tr><th>NHS#: </th><th class="clinical-value">{{ active_patient.nhs_number }}</th></tr>
+        <tr><th>NHS#: </th><th class="clinical-value">{{ active_patient.nhs_no }}</th></tr>
     </table>
     <div>
     <ul class="nav nav-pills nav-stacked" style="max-width: 300px;">
         {% for entry in sidebar_menu_entries %}
-        <li {% if entry == active_sidebar_entry %}class="active"{% endif %}><a href="{{ siteurl }}/patients{{ sidebar_menu_urls|get_dict_value:entry }}?pid={{ active_patient.id }}">{{ entry }}</a></li>
+        <li {% if entry == active_sidebar_entry %}class="active"{% endif %}><a href="{{ siteurl }}/patients{{ sidebar_menu_urls|get_dict_value:entry }}?patient_uuid={{ active_patient.uuid }}">{{ entry }}</a></li>
         {% endfor %}
       </ul>
     </div>
     {%  endif %}
+    <div class="sidebar-bottom">
+        <a class="btn btn-large btn-primary">Update</a>
+    </div>
 </div>
     <div class="main-pane">
         {% block main-pane %}{% endblock %}
@@ -62,7 +66,7 @@
         var match = false;
         for (var i = 0; i < patients.length; i += 1) {
             if (patients[i].name.toLowerCase().includes(text.toLowerCase())) {
-                search_results.insertAdjacentHTML('beforeend', "<div  class=\"search-result\"><a href=\"{{ siteurl }}/patients/viewpatient?pid=" + patients[i].id + "\"> " + patients[i].name + "</a></div>");
+                search_results.insertAdjacentHTML('beforeend', "<div  class=\"search-result\"><a href=\"{{ siteurl }}/patients/viewpatient?patient_uuid=" + patients[i].id + "\"> " + patients[i].name + "</a></div>");
                 match = true;
             }
         }

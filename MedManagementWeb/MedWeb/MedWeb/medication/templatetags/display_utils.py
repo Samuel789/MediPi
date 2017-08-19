@@ -4,7 +4,7 @@ register = template.Library()
 
 @register.filter
 def as_percentage(value):
-    if value == "":
+    if value == None:
         return ""
     return "%d%%" % (value*100)
 

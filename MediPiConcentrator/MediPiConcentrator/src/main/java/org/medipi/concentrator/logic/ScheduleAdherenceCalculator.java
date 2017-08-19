@@ -1,5 +1,6 @@
 package org.medipi.concentrator.logic;
 
+import org.medipi.medication.DoseInstance;
 import org.medipi.medication.RecordedDose;
 import org.medipi.medication.Schedule;
 
@@ -19,6 +20,12 @@ public class ScheduleAdherenceCalculator {
     private Integer streakLength;
     private int queryStartDay;
     private Schedule schedule;
+
+    public List<DoseInstance> getDoseInstances() {
+        return doseInstances;
+    }
+
+    private List<DoseInstance> doseInstances;
     private int queryEndDay;
     private boolean calculatingStreak;
 
@@ -30,11 +37,16 @@ public class ScheduleAdherenceCalculator {
         if (queryStartDate.isBefore(schedule.getAssignedStartDate().toLocalDate())) {
             queryStartDate = schedule.getAssignedStartDate().toLocalDate();
         }
-        initialize(schedule, toDayOfSchedule(schedule, queryStartDate), toDayOfSchedule(schedule, queryEndDate), calculatingStreak);
+        if (queryEndDate.isBefore(queryStartDate)) {
+            throw new IllegalArgumentException("Query end date cannot be before start date");
+        }
+        Integer queryStartDay = toDayOfSchedule(schedule, queryStartDate);
+        Integer queryEndDay = toDayOfSchedule(schedule, queryEndDate);
+        initialize(schedule, queryStartDay, queryEndDay, calculatingStreak);
     }
 
     private static Integer toDayOfSchedule(Schedule schedule, LocalDate date) {
-        if (date.isBefore(schedule.getAssignedStartDate().toLocalDate()) || date.isAfter(schedule.getAssignedEndDate().toLocalDate()) || date.equals(schedule.getAssignedEndDate().toLocalDate())) {
+        if (date.isBefore(schedule.getAssignedStartDate().toLocalDate())) {
             return null;
         }
         return (int) schedule.getAssignedStartDate().toLocalDate().until(date, ChronoUnit.DAYS);
@@ -52,6 +64,7 @@ public class ScheduleAdherenceCalculator {
         for (DoseInstance doseToTake : dosesToTake) {
             for (RecordedDose takenDose : takenDoses) {
                 if (takenDose.getTimeTaken().after(doseToTake.getTimeStart()) && takenDose.getTimeTaken().before(doseToTake.getTimeEnd()) && takenDose.getDoseValue() == doseToTake.getDose().getDoseValue()) {
+                    doseToTake.setTakenDose(takenDose);
                     countHit++;
                     break;
                 }
@@ -145,9 +158,32 @@ public class ScheduleAdherenceCalculator {
         numDosesMissed = null;
         numDosesTakenIncorrectly = null;
         lastErrantDay = null;
+        doseInstances = null;
         streakLength = null;
         adherenceFraction = null;
         numDosesToTake = null;
+    }
+
+    public String toString() {
+        if (numDosesToTake == null) {
+            return "ScheduleAdherenceCalculator: not yet run";
+        }
+        return "ScheduleAdherenceCalculator: with results";
+    }
+
+    public String getSummary() {
+        if (numDosesToTake == null) {
+            return "Not yet run, call calculateScheduleAdherence()";
+        }
+        String results = "ScheduleAdherenceCalculator Results:";
+        results += "\n Doses taken correctly: " + numDosesTakenCorrectly;
+        results += "\n Doses taken incorrectly: " + numDosesTakenIncorrectly;
+        results += "\n Doses missed: " + numDosesMissed;
+        results += "\n Total doses to take: " + numDosesToTake;
+        results += "\n Total doses taken: " + schedule.getRecordedDoses().size();
+        results += "\n Adherence fraction: " + adherenceFraction;
+        results += "\n Streak length: " + streakLength;
+        return results;
     }
 
     public void calculateScheduleAdherence() {
@@ -155,9 +191,8 @@ public class ScheduleAdherenceCalculator {
         int numDosesMissed = 0;
         int numDosesTakenIncorrectly = 0;
         int lastErrantDay = -1;
-        int streakLength = 0;
+        Integer streakLength = calculatingStreak ? 0 : null;
         int numDosesToTake = 0;
-        this.calculatingStreak = calculatingStreak;
         int actualStartDay;
         // If the streak length is being calculated, must start counting from schedule start day even if values are not used for fractional adherence
         if (calculatingStreak) {
@@ -205,8 +240,10 @@ public class ScheduleAdherenceCalculator {
         this.numDosesTakenIncorrectly = numDosesTakenIncorrectly;
         this.streakLength = streakLength;
         this.lastErrantDay = lastErrantDay;
+        this.doseInstances = doseInstances;
+        this.numDosesToTake = numDosesToTake;
         if (numDosesToTake != 0) {
-            this.adherenceFraction = (numDosesTakenCorrectly - numDosesTakenIncorrectly) / ((double) numDosesToTake);
+            this.adherenceFraction = Math.max(numDosesTakenCorrectly - numDosesTakenIncorrectly, 0) / ((double) numDosesToTake);
         }
     }
 }
