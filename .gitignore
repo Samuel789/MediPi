@@ -7,3 +7,7 @@
 /Clinician/MediPiClinical/.project
 /MedManagamentWeb/env
 MedManagementWeb/MedWeb/MedWeb/static
+*.log
+*.idea/*
+*.pyc
+
