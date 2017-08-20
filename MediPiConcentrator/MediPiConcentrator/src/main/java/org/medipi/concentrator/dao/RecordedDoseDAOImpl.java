@@ -16,13 +16,13 @@
 package org.medipi.concentrator.dao;
 
 import org.medipi.medication.RecordedDose;
-import org.medipi.medication.ScheduledDose;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * Data Access Object for Hardware
+ *
  * @author rick@robinsonhq.com
  */
 @Repository

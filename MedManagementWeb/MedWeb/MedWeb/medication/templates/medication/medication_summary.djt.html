@@ -2,58 +2,63 @@
 {% load display_utils %}
 
 {% block main-pane %}
-<div class="title">
-<h3>Patient Medications: {{ active_patient.name }}</h3>
+    <div class="title">
+        <h3>Patient Medications: {{ active_patient.name }}</h3>
     </div>
-<div class="container">
+    <div class="container">
 
 
-{% if active_patient.status.value == 1 %}
-    <div class="alert alert-danger">
-  <strong>Warning!</strong> This patient is not registered with the Concentrator.
-</div>
-{% else %}
-    {% if active_patient.schedules|length > 0 %}
-    <div id='timeline'></div>
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Medication</th>
-        <th>Full Name</th>
-          <th>Last 7 Days</th>
-          <th>Streak</th>
-        <th>Alternate Name</th>
-          <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
+        {% if active_patient.status.value == 1 %}
+            <div class="alert alert-danger">
+                <strong>Warning!</strong> This patient is not registered with the Concentrator.
+            </div>
+        {% else %}
+            {% if active_patient.schedules|length > 0 %}
+                <div id='timeline'></div>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Medication</th>
+                        <th>Full Name</th>
+                        <th>Last 7 Days</th>
+                        <th>Streak</th>
+                        <th>Alternate Name</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-    {% for schedule in active_patient.schedules %}
-      <tr>
-        <td>{{ schedule.medication.short_name }}</td>
-        <td>{{ schedule.medication.full_name }}</td>
-        <td>{{ schedule.adherence.seven_day_fraction|as_percentage }}</td>
-        <td>{{ schedule.adherence.streak_length }}</td>
-        <td>{% if schedule.alternate_name is None %}<i>None</i>{% else %}{{ schedule.alternate_name }}{% endif %}</td>
-        <td>
-            <a class="btn btn-default" href="{{ siteurl }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
-            <a class="btn btn-default" href="{{ siteurl }}/patients/viewschedule?schedule_id={{ schedule.id }}">View</a>
-        </td>
-      </tr>
-    {% endfor %}
+                    {% for schedule in active_patient.schedules %}
+                        <tr>
+                            <td>{{ schedule.medication.short_name }}</td>
+                            <td>{{ schedule.medication.full_name }}</td>
+                            <td>{{ schedule.adherence.seven_day_fraction|as_percentage }}</td>
+                            <td>{{ schedule.adherence.streak_length }}</td>
+                            <td>{% if schedule.alternate_name is None %}<i>None</i>{% else %}
+                                {{ schedule.alternate_name }}{% endif %}</td>
+                            <td>
+                                <a class="btn btn-default"
+                                   href="{{ siteurl }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
+                                <a class="btn btn-default"
+                                   href="{{ siteurl }}/patients/viewschedule?schedule_id={{ schedule.id }}">View</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
 
-    </tbody>
-  </table>
-{% else %}
-    <div class="alert alert-info">
-  <strong>Info!</strong> No medications have been assigned to this patient. Click the Add Medication button to assign a new medication.
-</div>
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-info">
+                    <strong>Info!</strong> No medications have been assigned to this patient. Click the Add Medication
+                    button to assign a new medication.
+                </div>
 
-    {% endif %}
-<a class="button btn btn-primary" href="{{ site_url }}/patients/assignmedication?patient_uuid={{ active_patient.uuid }}">Add Medication</a>
-{% endif %}
-</div>
-{% comment %}{% load static %}
+            {% endif %}
+            <a class="button btn btn-primary"
+               href="{{ site_url }}/patients/assignmedication?patient_uuid={{ active_patient.uuid }}">Add Medication</a>
+        {% endif %}
+    </div>
+    {% comment %}{% load static %}
     <script src='{% static "js/moment.min.js" %}'></script>
 <script src='{% static "js/fullcalendar.js" %}'></script>
 
@@ -68,24 +73,24 @@
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['timeline']});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
-          var container = document.getElementById('timeline');
-          var chart = new google.visualization.Timeline(container);
-          var dataTable = new google.visualization.DataTable();
+        google.charts.load('current', {'packages': ['timeline']});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var container = document.getElementById('timeline');
+            var chart = new google.visualization.Timeline(container);
+            var dataTable = new google.visualization.DataTable();
 
-          dataTable.addColumn({type: 'string', id: 'President'});
-          dataTable.addColumn({type: 'string', id: 'Value'});
-          dataTable.addColumn({type: 'date', id: 'Start'});
-          dataTable.addColumn({type: 'date', id: 'End'});
-          dataTable.addRows([
-              {%  for dose in dose_instances %}
-                  ["{{ dose.schedule.medication.full_name }}", {{ dose.dose_value }} + " " + "{{ dose.schedule.medication.dose_unit.name }}", new Date("{{ dose|dose_start_date|date:"Y-m-d H:i" }}"), new Date("{{ dose|dose_end_date|date:"Y-m-d H:i" }}")],
-              {% endfor %}
-      ]);
-          chart.draw(dataTable);
-      }
+            dataTable.addColumn({type: 'string', id: 'President'});
+            dataTable.addColumn({type: 'string', id: 'Value'});
+            dataTable.addColumn({type: 'date', id: 'Start'});
+            dataTable.addColumn({type: 'date', id: 'End'});
+            dataTable.addRows([
+                {%  for dose in dose_instances %}
+                    ["{{ dose.schedule.medication.full_name }}", {{ dose.dose_value }} +" " + "{{ dose.schedule.medication.dose_unit.name }}", new Date("{{ dose|dose_start_date|date:"Y-m-d H:i" }}"), new Date("{{ dose|dose_end_date|date:"Y-m-d H:i" }}")],
+                {% endfor %}
+            ]);
+            chart.draw(dataTable);
+        }
     </script>
 
 

@@ -1,4 +1,3 @@
-
 class Section():
     def __init__(self, name, display_name, url):
         self.name = name

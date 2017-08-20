@@ -4,15 +4,12 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.medipi.MediPi;
-import org.medipi.medication.Schedule;
 import org.medipi.medication.ScheduledDose;
 import org.medipi.medication.medicationui.MedicationReminder;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.TemporalUnit;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -22,6 +19,17 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class MedicationReminderEvent implements ReminderEventInterface {
 
     private LocalTime alarmTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private boolean frozen = false;
+    private ScheduledDose dose;
+
+    public MedicationReminderEvent(ScheduledDose dose) {
+        alarmTime = dose.getReminderTime().toLocalTime();
+        startTime = dose.getWindowStartTime().toLocalTime();
+        endTime = dose.getWindowEndTime().toLocalTime();
+        this.dose = dose;
+    }
 
     public LocalTime getStartTime() {
         return startTime;
@@ -31,9 +39,6 @@ public class MedicationReminderEvent implements ReminderEventInterface {
         return endTime;
     }
 
-    private LocalTime startTime;
-    private LocalTime endTime;
-
     public ScheduledDose getDose() {
         return dose;
     }
@@ -41,17 +46,6 @@ public class MedicationReminderEvent implements ReminderEventInterface {
     @Override
     public boolean isFrozen() {
         return frozen;
-    }
-
-    private boolean frozen = false;
-    private ScheduledDose dose;
-
-
-    public MedicationReminderEvent(ScheduledDose dose) {
-        alarmTime = dose.getReminderTime().toLocalTime();
-        startTime = dose.getWindowStartTime().toLocalTime();
-        endTime = dose.getWindowEndTime().toLocalTime();
-        this.dose = dose;
     }
 
     @Override
@@ -96,7 +90,9 @@ public class MedicationReminderEvent implements ReminderEventInterface {
         LocalDate scheduleStartDate = dose.getSchedule().getAssignedStartDate().toLocalDate();
         long dayOfSchedule = scheduleStartDate.until(date, DAYS);
         // Check that date lies within schedule boundaries
-        if (dayOfSchedule < 0) {return false;}
+        if (dayOfSchedule < 0) {
+            return false;
+        }
         Date scheduleEndDateSql = dose.getSchedule().getAssignedEndDate();
         if (scheduleEndDateSql != null) {
             LocalDate scheduleEndDate = scheduleEndDateSql.toLocalDate();

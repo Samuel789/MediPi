@@ -5,13 +5,13 @@
 <hibernate-mapping>
     <class name="org.medipi.medication.ScheduleAdherence" table="schedule_adherence">
         <id name="scheduleId" type="int">
-            <column name="schedule_id"  />
+            <column name="schedule_id"/>
         </id>
         <property name="sevenDayFraction" type="double">
-            <column name="seven_day_fraction" />
+            <column name="seven_day_fraction"/>
         </property>
         <property name="streakLength" type="int">
-            <column name="streak_length" />
+            <column name="streak_length"/>
         </property>
     </class>
 </hibernate-mapping>

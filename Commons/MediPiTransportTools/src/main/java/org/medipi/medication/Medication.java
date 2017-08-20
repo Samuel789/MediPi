@@ -7,6 +7,15 @@ public class Medication implements Serializable {
     private String fullName;
     private String cautionaryText;
     private String icon_name;
+    private int medicationId;
+    private DoseUnit doseUnit;
+
+    public Medication() {
+        doseUnit = new DoseUnit();
+        shortName = "TestShortName";
+        fullName = "TestFullName";
+        cautionaryText = "! Item 1\n ! Item 2";
+    }
 
     public int getMedicationId() {
         return medicationId;
@@ -16,54 +25,43 @@ public class Medication implements Serializable {
         this.medicationId = id;
     }
 
-    private int medicationId;
-
     public String getShortName() {
         return shortName;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public String getCautionaryText() {
-        return cautionaryText;
-    }
-
-    public String getIconName() {
-        return icon_name;
-    }
-
-    public DoseUnit getDoseUnit() {
-        return doseUnit;
     }
 
     public void setShortName(String shortName) {
         this.shortName = shortName;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getCautionaryText() {
+        return cautionaryText;
     }
 
     public void setCautionaryText(String cautionaryText) {
         this.cautionaryText = cautionaryText;
     }
 
+    public String getIconName() {
+        return icon_name;
+    }
+
     public void setIconName(String icon) {
         this.icon_name = icon;
     }
 
-    public void setDoseUnit(DoseUnit doseUnit) {
-        this.doseUnit = doseUnit;
+    public DoseUnit getDoseUnit() {
+        return doseUnit;
     }
 
-    private DoseUnit doseUnit;
-
-    public Medication() {
-        doseUnit = new DoseUnit();
-        shortName = "TestShortName";
-        fullName = "TestFullName";
-        cautionaryText = "! Item 1\n ! Item 2";
+    public void setDoseUnit(DoseUnit doseUnit) {
+        this.doseUnit = doseUnit;
     }
 }

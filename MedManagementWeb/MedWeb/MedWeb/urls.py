@@ -15,12 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django import VERSION
 
-from MedWeb.clinical_database.clinical_database import medications
 from MedWeb.concentrator_interface.interface import update_from_concentrator
 from MedWeb.home.views import about_view
-import MedWeb.medication
 
 update_from_concentrator()
 

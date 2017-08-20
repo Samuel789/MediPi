@@ -22,6 +22,7 @@ import java.util.List;
 
 /**
  * Data Access Object for Hardware
+ *
  * @author rick@robinsonhq.com
  */
 @Repository

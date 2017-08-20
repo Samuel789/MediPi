@@ -5,41 +5,42 @@
 <hibernate-mapping>
     <class name="org.medipi.medication.Schedule" table="schedule">
         <id name="scheduleId" type="int">
-            <column name="schedule_id" />
-            <generator class="increment" />
+            <column name="schedule_id"/>
+            <generator class="increment"/>
         </id>
         <property name="assignedStartDate" type="date" not-null="true">
-            <column name="assigned_start_date" />
+            <column name="assigned_start_date"/>
         </property>
         <property name="assignedEndDate" type="date" not-null="true">
-            <column name="assigned_end_date" />
+            <column name="assigned_end_date"/>
         </property>
         <property name="alternateName" type="java.lang.String" not-null="true">
-            <column name="alternate_name" />
+            <column name="alternate_name"/>
         </property>
         <property name="purposeStatement" type="java.lang.String" not-null="true">
-            <column name="purpose_statement" />
+            <column name="purpose_statement"/>
         </property>
-        <many-to-one lazy="false" name="medication" class="org.medipi.medication.Medication" column="medication_id" not-null="true" />
+        <many-to-one lazy="false" name="medication" class="org.medipi.medication.Medication" column="medication_id"
+                     not-null="true"/>
         <property name="patientUuid" type="java.lang.String" not-null="true">
-            <column name="patient_uuid" />
+            <column name="patient_uuid"/>
         </property>
         <set name="recordedDoses" table="recorded_dose"
              inverse="true" lazy="false">
             <key>
-                <column name="schedule_id" not-null="true" />
+                <column name="schedule_id" not-null="true"/>
             </key>
-            <one-to-many class="org.medipi.medication.RecordedDose" />
+            <one-to-many class="org.medipi.medication.RecordedDose"/>
         </set>
         <set name="scheduledDoses" table="scheduled_dose"
-             inverse="true" lazy="false" >
+             inverse="true" lazy="false">
             <key>
-                <column name="schedule_id" not-null="true" />
+                <column name="schedule_id" not-null="true"/>
             </key>
-            <one-to-many class="org.medipi.medication.ScheduledDose" />
+            <one-to-many class="org.medipi.medication.ScheduledDose"/>
         </set>
         <one-to-one name="scheduleAdherence" class="org.medipi.medication.ScheduleAdherence"
-                   ></one-to-one>
+        ></one-to-one>
     </class>
 
     <query name="Schedule.findByScheduleId">

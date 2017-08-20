@@ -15,7 +15,6 @@
  */
 package org.medipi.concentrator.dao;
 
-import org.medipi.concentrator.entities.Hardware;
 import org.medipi.medication.Medication;
 import org.springframework.stereotype.Repository;
 
@@ -23,6 +22,7 @@ import java.util.List;
 
 /**
  * Data Access Object for Hardware
+ *
  * @author rick@robinsonhq.com
  */
 @Repository

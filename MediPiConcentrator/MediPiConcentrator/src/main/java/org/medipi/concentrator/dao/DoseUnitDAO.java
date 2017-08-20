@@ -16,15 +16,16 @@
 package org.medipi.concentrator.dao;
 
 import org.medipi.medication.DoseUnit;
-import org.medipi.medication.Medication;
 
 import java.util.List;
 
 /**
  * Data Access Object interface for Hardware
+ *
  * @author rick@robinsonhq.com
  */
 public interface DoseUnitDAO extends GenericDAO<DoseUnit> {
     public DoseUnit findByDoseUnitId(int doseUnitId);
+
     public List<DoseUnit> findAll();
 }

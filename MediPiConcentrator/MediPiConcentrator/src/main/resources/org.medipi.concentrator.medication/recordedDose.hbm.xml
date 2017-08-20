@@ -5,10 +5,10 @@
 <hibernate-mapping>
     <class name="org.medipi.medication.RecordedDose" table="recorded_dose">
         <id name="recordedDoseUUID" type="java.lang.String">
-            <column name="recorded_dose_uuid" />
+            <column name="recorded_dose_uuid"/>
         </id>
         <property name="doseValue" type="double" not-null="true">
-            <column name="value" />
+            <column name="value"/>
         </property>
         <property name="timeTaken" type="java.sql.Time" not-null="true">
             <column name="time_taken"/>
@@ -17,7 +17,7 @@
             <column name="day_taken"/>
         </property>
         <property name="scheduleId" type="int" not-null="true">
-            <column name="schedule_id" />
+            <column name="schedule_id"/>
         </property>
 
     </class>

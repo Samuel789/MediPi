@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
     <link rel="stylesheet" href="{% static "css/site.css" %}">
     <link rel="stylesheet" href="{% static "css/jquery-ui.min.css" %}">
-    <link rel='stylesheet' href='{% static "css/fullcalendar.css" %}' />
+    <link rel='stylesheet' href='{% static "css/fullcalendar.css" %}'/>
     <title>{{ title }}</title>
     {% block extra_head %}{% endblock %}
 </head>
@@ -20,7 +20,9 @@
 
         <ul class="navbar-nav nav nav-tabs">
             {% for section in sections %}
-                <li><a href="{{ site_url }}/{{ section.url }}" {% if section.name == active_section %}class="nav-tab-selected"{% endif %}>{{ section.display_name }}</a></li>
+                <li><a href="{{ site_url }}/{{ section.url }}"
+                       {% if section.name == active_section %}class="nav-tab-selected"{% endif %}>{{ section.display_name }}</a>
+                </li>
             {% endfor %}
         </ul>
     </div>

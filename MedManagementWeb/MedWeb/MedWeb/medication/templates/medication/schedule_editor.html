@@ -54,12 +54,16 @@
                             <div class="panel panel-info">
                                 <div class="panel-heading">Dose</div>
                                 <div class="panel-text">Take <input type="number" id="dose-value-input"
-                                       placeholder="Dose Value">{{ active_medication.dose_unit }}<br/>
-                                between <input type="time" id="start-time-input" placeholder="Start Time"> and
-                                <input type="time" id="end-time-input" placeholder="End Time"><br/>
-                                Default reminder time: <input type="time" id="reminder-time-input" placeholder="Default Reminder Time"><br/>
-                                Starting on day: <input type="number" id="start-day-input" onchange="recalculate_clarifiers()"
-                                       placeholder="Start Day"> (<span id="start-day-clarifier"></span>)</div>
+                                                                    placeholder="Dose Value">{{ active_medication.dose_unit }}<br/>
+                                    between <input type="time" id="start-time-input" placeholder="Start Time"> and
+                                    <input type="time" id="end-time-input" placeholder="End Time"><br/>
+                                    Default reminder time: <input type="time" id="reminder-time-input"
+                                                                  placeholder="Default Reminder Time"><br/>
+                                    Starting on day: <input type="number" id="start-day-input"
+                                                            onchange="recalculate_clarifiers()"
+                                                            placeholder="Start Day"> (<span
+                                            id="start-day-clarifier"></span>)
+                                </div>
                             </div>
                             <div class="panel panel-info">
                                 <div class="panel-heading">Repeat Information</div>
@@ -73,9 +77,14 @@
                                 <div class="option-pane" id="scheduled-pane">
                                     <div class="radio">
                                         <label><input type="radio" name="optradio" id="repeat-radio"
-                                                      onchange="optradio_onchange()">Repeat every <input type="number" id="repeat-interval-input" placeholder="Repeat Interval"> days<br/>
-                                            up to (and not including) day <input type="number" id="end-day-input" onchange="recalculate_clarifiers()"
-                                           placeholder="End Day"> (<span id="end-day-clarifier"></span>). </label>
+                                                      onchange="optradio_onchange()">Repeat every <input type="number"
+                                                                                                         id="repeat-interval-input"
+                                                                                                         placeholder="Repeat Interval">
+                                            days<br/>
+                                            up to (and not including) day <input type="number" id="end-day-input"
+                                                                                 onchange="recalculate_clarifiers()"
+                                                                                 placeholder="End Day"> (<span
+                                                    id="end-day-clarifier"></span>). </label>
                                     </div>
                                 </div>
                             </div>
@@ -91,7 +100,7 @@
     </div>
 
     <script>
-    document.read
+        document.read
         var asneeded_radio = document.getElementById("asneeded-radio");
         var scheduled_radio = document.getElementById("scheduled-radio");
         var asneeded_pane = document.getElementById("asneeded-pane");
@@ -101,8 +110,8 @@
         var purpose_statement_field = document.getElementById("purpose-statement-field");
         var edit_dose_button = document.getElementById("edit-dose-button");
         var remove_dose_button = document.getElementById("remove-dose-button");
-        var start_date_picker = $( "#start-date-picker" );
-        var end_date_picker = $( "#end-date-picker" );
+        var start_date_picker = $("#start-date-picker");
+        var end_date_picker = $("#end-date-picker");
         var modinp_start_day = document.getElementById("start-day-input");
         var modinp_end_day = document.getElementById("end-day-input");
         var modinp_start_time = document.getElementById("start-time-input");
@@ -148,29 +157,35 @@
             schedule["alternate_name"] = "";
         {% endif %}
         {% load static %}
-        start_date_picker.datepicker({date: schedule_start_day,
-                                      minDate: function() {minDate = new Date(); minDate.setDate(Math.min(schedule_start_day.getDate(), new Date().getDate() + 1)); return minDate} (),
-                                      dateFormat: "yy-mm-dd",
-                                      buttonText: "Select date",
-                                      onSelect: function(fieldText) {
-                                          schedule_start_day = start_date_picker.datepicker("getDate");
-                                          schedule_start_day.setSeconds(3601);
-                                          schedule_end_day = new Date(Math.max(schedule_start_day, schedule_end_day));
-                                          end_date_picker.datepicker("setDate", schedule_end_day);
-                                          end_date_picker.datepicker("option", "minDate", schedule_start_day);
-                                      }
+        start_date_picker.datepicker({
+            date: schedule_start_day,
+            minDate: function () {
+                minDate = new Date();
+                minDate.setDate(Math.min(schedule_start_day.getDate(), new Date().getDate() + 1));
+                return minDate
+            }(),
+            dateFormat: "yy-mm-dd",
+            buttonText: "Select date",
+            onSelect: function (fieldText) {
+                schedule_start_day = start_date_picker.datepicker("getDate");
+                schedule_start_day.setSeconds(3601);
+                schedule_end_day = new Date(Math.max(schedule_start_day, schedule_end_day));
+                end_date_picker.datepicker("setDate", schedule_end_day);
+                end_date_picker.datepicker("option", "minDate", schedule_start_day);
+            }
         });
         start_date_picker.datepicker('setDate', schedule_start_day);
         schedule_start_day.setSeconds(3601);
         schedule_end_day = new Date(schedule_start_day);
-        end_date_picker.datepicker({date: schedule_start_day,
-                                      minDate: schedule_start_day,
-                                      dateFormat: "yy-mm-dd",
-                                      buttonText: "Select date",
-                                      onSelect: function(fieldText) {
-                                          schedule_end_day = start_end_picker.datepicker("getDate");
-                                          schedule_end_day.setSeconds(3601);
-                                      }
+        end_date_picker.datepicker({
+            date: schedule_start_day,
+            minDate: schedule_start_day,
+            dateFormat: "yy-mm-dd",
+            buttonText: "Select date",
+            onSelect: function (fieldText) {
+                schedule_end_day = start_end_picker.datepicker("getDate");
+                schedule_end_day.setSeconds(3601);
+            }
         });
         end_date_picker.datepicker('setDate', schedule_start_day);
         scheduled_radio.checked = true;
@@ -226,14 +241,22 @@
                 } else {
                     if (dose.repeat_interval === 1) {
                         var panel_header_text = "Every day from Day " + dose.start_day;
-                        if (dose.end_day === null || dose.repeat_interval === null) {panel_header_text += " onwards indefinitely";}
-                        else {panel_header_text += " to Day " + dose.end_day}
+                        if (dose.end_day === null || dose.repeat_interval === null) {
+                            panel_header_text += " onwards indefinitely";
+                        }
+                        else {
+                            panel_header_text += " to Day " + dose.end_day
+                        }
                     } else if (dose.repeat_interval === 0 || dose.repeat_interval === null) {
                         var panel_header_text = "Day " + dose.start_day + " only";
                     } else {
                         var panel_header_text = "Every " + dose.repeat_interval + " days from Day " + dose.start_day;
-                        if (dose.end_day === null || dose.repeat_interval === null) {panel_header_text += " onwards indefinitely";}
-                        else {panel_header_text += " to Day " + dose.end_day}
+                        if (dose.end_day === null || dose.repeat_interval === null) {
+                            panel_header_text += " onwards indefinitely";
+                        }
+                        else {
+                            panel_header_text += " to Day " + dose.end_day
+                        }
                     }
                 }
                 var panel = dose_date_panels[panel_header_text];
@@ -270,7 +293,7 @@
                 delete existing_doses[selected_dose];
                 repopulate_doses();
                 change_selected_dose(null);
-                window.onbeforeunload = function() {
+                window.onbeforeunload = function () {
                     return true;
                 };
             }
@@ -331,22 +354,22 @@
                 repeat_interval = Number(modinp_repeat_interval.value);
             }
             dose = {
-                'dose_value' : Number(modinp_dose_value.value),
-                'start_time' : modinp_start_time.value,
-                'end_time' : modinp_end_time.value,
-                'start_day' : Number(modinp_start_day.value),
-                'end_day' : end_day,
-                'repeat_interval' : repeat_interval,
-                'default_reminder_time' : modinp_reminder_time.value
+                'dose_value': Number(modinp_dose_value.value),
+                'start_time': modinp_start_time.value,
+                'end_time': modinp_end_time.value,
+                'start_day': Number(modinp_start_day.value),
+                'end_day': end_day,
+                'repeat_interval': repeat_interval,
+                'default_reminder_time': modinp_reminder_time.value
             };
             if (dose_editing === null) {
-                new_doses_count ++;
+                new_doses_count++;
                 dose.id = -new_doses_count;
                 existing_doses[dose.id] = dose;
             } else {
                 Object.assign(dose_editing, dose);
             }
-            window.onbeforeunload = function() {
+            window.onbeforeunload = function () {
                 return true;
             };
             repopulate_doses();
@@ -369,21 +392,24 @@
                 doses = JSON.stringify(Object.values(existing_doses));
             }
             var promise = $.post({
-            url:"{{ siteurl }}/patients/api/add_patient_schedule",
-            data: {
-                schedule: JSON.stringify(resolveScheduleData()),
-                doses: doses,
-                patient_uuid: patient_uuid,
-                medication_id: {{ active_medication.id }},
-                csrfmiddlewaretoken: '{{ csrf_token }}'},
-            timeout: 5000});
-        promise.done(function (data) {
-            window.onbeforeunload = null;
-            window.location.replace("{{ siteurl }}/patients/viewpatient?patient_uuid=" + patient_uuid)
-        });
-        promise.fail(function(error) {
-                    alert("fail")
-        });}
+                url: "{{ siteurl }}/patients/api/add_patient_schedule",
+                data: {
+                    schedule: JSON.stringify(resolveScheduleData()),
+                    doses: doses,
+                    patient_uuid: patient_uuid,
+                    medication_id: {{ active_medication.id }},
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                timeout: 5000
+            });
+            promise.done(function (data) {
+                window.onbeforeunload = null;
+                window.location.replace("{{ siteurl }}/patients/viewpatient?patient_uuid=" + patient_uuid)
+            });
+            promise.fail(function (error) {
+                alert("fail")
+            });
+        }
 
         function resolveScheduleData() {
             data = jQuery.extend({}, schedule);

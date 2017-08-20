@@ -3,15 +3,28 @@ package org.medipi.medication;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.UUID;
 
 public class RecordedDose implements Serializable {
+    private String recordedDoseUUID;
+    private double doseValue;
+    private int dayTaken;
+    private Time timeTaken;
+    @XmlTransient
+    private transient Schedule schedule;
+    private Integer scheduleId;
+
+    public RecordedDose() {
+    }
+    public RecordedDose(int dayTaken, Time timeTaken, double doseValue, Schedule schedule) {
+        recordedDoseUUID = UUID.randomUUID().toString();
+        this.dayTaken = dayTaken;
+        this.timeTaken = timeTaken;
+        this.doseValue = doseValue;
+        this.scheduleId = schedule.getScheduleId();
+        this.schedule = schedule;
+    }
+
     public String getRecordedDoseUUID() {
         return recordedDoseUUID;
     }
@@ -36,9 +49,6 @@ public class RecordedDose implements Serializable {
         this.timeTaken = timeTaken;
     }
 
-    private String recordedDoseUUID;
-    private double doseValue;
-
     public int getDayTaken() {
         return dayTaken;
     }
@@ -46,9 +56,6 @@ public class RecordedDose implements Serializable {
     public void setDayTaken(int dayTaken) {
         this.dayTaken = dayTaken;
     }
-
-    private int dayTaken;
-    private Time timeTaken;
 
     @XmlTransient
     public Schedule getSchedule() {
@@ -60,28 +67,12 @@ public class RecordedDose implements Serializable {
         this.schedule = schedule;
     }
 
-    @XmlTransient
-    private transient Schedule schedule;
-
     public Integer getScheduleId() {
         return scheduleId;
     }
 
     public void setScheduleId(Integer scheduleId) {
         this.scheduleId = scheduleId;
-    }
-
-    private Integer scheduleId;
-
-    public RecordedDose() {}
-
-    public RecordedDose(int dayTaken, Time timeTaken, double doseValue, Schedule schedule) {
-        recordedDoseUUID = UUID.randomUUID().toString();
-        this.dayTaken = dayTaken;
-        this.timeTaken = timeTaken;
-        this.doseValue = doseValue;
-        this.scheduleId = schedule.getScheduleId();
-        this.schedule = schedule;
     }
 
     public String toString() {

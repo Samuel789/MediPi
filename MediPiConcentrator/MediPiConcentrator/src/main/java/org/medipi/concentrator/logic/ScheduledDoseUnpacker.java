@@ -23,6 +23,7 @@ public class ScheduledDoseUnpacker {
             sequenceEndDay = Math.min(endDay, scheduledDose.getEndDay());
         } else {
             sequenceEndDay = endDay;
+
         }
         if (scheduledDose.getSchedule().getAssignedEndDate() != null) {
             sequenceEndDay = (int) scheduledDose.getSchedule().getAssignedStartDate().toLocalDate().until(scheduledDose.getSchedule().getAssignedEndDate().toLocalDate(), ChronoUnit.DAYS);
@@ -50,6 +51,6 @@ public class ScheduledDoseUnpacker {
     }
 
     static IntStream range(int start, int stop, int step) {
-        return IntStream.range(0, (stop - start)/step).map(i -> i*step + start);
+        return IntStream.range(0, (stop - start) / step).map(i -> i * step + start);
     }
 }

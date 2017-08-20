@@ -12,7 +12,7 @@
 
 .main-pane {
     background-color: white;
-        float: left;
+    float: left;
     width: calc(100% - 250px);
     height: 1000px;
     padding: 10px;
@@ -29,7 +29,7 @@
 }
 
 .title h3 {
-     border-bottom-style: solid;
+    border-bottom-style: solid;
     border-bottom-color: #5e5e5e;
     border-bottom-width: 1px;
     margin-left: auto;
@@ -37,6 +37,7 @@
     width: 95%;
     padding-bottom: 10px;
 }
+
 .title h4 {
     margin-left: auto;
     margin-right: auto;
@@ -44,28 +45,30 @@
     padding-bottom: 10px;
 }
 
-
 #patient-search {
-   margin : 0 auto;
-    display:block;
+    margin: 0 auto;
+    display: block;
 }
-.sidebar {padding: 2.5px 0px}
+
+.sidebar {
+    padding: 2.5px 0px
+}
 
 .sidebar div {
     padding: 5px 0px;
 }
 
-.sidebar input{
-             display: block;
-             margin : 5px auto;
-        }
+.sidebar input {
+    display: block;
+    margin: 5px auto;
+}
 
 .clinical-table {
-             display: block;
-             margin : 2.5px 5px;
+    display: block;
+    margin: 2.5px 5px;
     font-family: "Droid Sans Mono", "monospace";
 
-        }
+}
 
 .sidebar th {
     padding: 0px 2px;
@@ -105,14 +108,13 @@
     margin: 0px 0px !important;
 }
 
-
 .active a {
     background-color: white !important;
     color: black !important;
 }
 
 .main-pane table {
-    width: 90% ;
+    width: 90%;
 }
 
 .patient-summary-box {
@@ -122,7 +124,7 @@
     border-color: #2aabd2;
     border-width: 1px;
     border-style: solid;
-    float:left
+    float: left
 }
 
 .patient-summary-widebox {
@@ -149,7 +151,6 @@
     margin: 0px;
 }
 
-
 .patient-summary-largebox span {
     vertical-align: middle;
     margin: 0px;
@@ -164,9 +165,8 @@
     position: absolute;
     bottom: 0;
     margin: 10px;
-    width:inherit;
+    width: inherit;
 }
-
 
 .patient-summary-smallbox {
     width: 40%;
@@ -185,8 +185,15 @@
 .clinical-value {
     background-color: white;
     color: black;
-    padding-right: 5px;
-    margin-left: 5px;
+    padding: 2px 3px;
+}
+
+th.clinical-value {
+    padding-right: 10px;
+}
+
+.clinical-value-separated {
+    padding: 0 !important;
 }
 
 .sidebar .btn {
@@ -238,18 +245,19 @@
     background-color: #D1EBF4;
     border-radius: 10px;
 
-    padding:5px 5px;
+    padding: 5px 5px;
     margin: 10px;
 }
+
 .main-pane .option-pane {
     width: 800px;
-    padding:5px 15px;
+    padding: 5px 15px;
 }
 
 .button-row {
     margin: 10px 10px;
 }
 
-.panel-text{
+.panel-text {
     padding: 10px;
 }

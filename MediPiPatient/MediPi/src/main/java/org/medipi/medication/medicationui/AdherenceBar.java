@@ -19,23 +19,13 @@ public class AdherenceBar extends Group {
     Label streakText;
     Integer streakLength;
     Double progress;
-
-    public boolean isLongForm() {
-        return longForm;
-    }
-
-    public void setLongForm(boolean longForm) {
-        this.longForm = longForm;
-        updateLabel();
-    }
-
     boolean longForm = false;
 
-    public AdherenceBar(ScheduleAdherence scheduleAdherence){
+    public AdherenceBar(ScheduleAdherence scheduleAdherence) {
         this(scheduleAdherence.getSevenDayFraction(), scheduleAdherence.getStreakLength());
     }
 
-    public AdherenceBar(PatientAdherence patientAdherence){
+    public AdherenceBar(PatientAdherence patientAdherence) {
         this(patientAdherence.getSevenDayFraction(), patientAdherence.getStreakLength());
     }
 
@@ -77,6 +67,15 @@ public class AdherenceBar extends Group {
         this.getChildren().add(content);
     }
 
+    public boolean isLongForm() {
+        return longForm;
+    }
+
+    public void setLongForm(boolean longForm) {
+        this.longForm = longForm;
+        updateLabel();
+    }
+
     private void setProgress(Double value) {
         progress = value;
         if (value == null) {
@@ -102,7 +101,7 @@ public class AdherenceBar extends Group {
                 adherenceText.setText("Unknown");
                 streakText.setText("");
             } else {
-                adherenceText.setText(String.format("%d%% adherence", (int) (progressBar.getProgress()*100)));
+                adherenceText.setText(String.format("%d%% adherence", (int) (progressBar.getProgress() * 100)));
                 if (streakLength > 1) {
                     streakText.setText(streakLength.toString() + " perfect days!");
                 } else {

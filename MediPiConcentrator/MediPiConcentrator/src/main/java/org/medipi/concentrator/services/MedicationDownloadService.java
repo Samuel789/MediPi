@@ -1,6 +1,5 @@
 package org.medipi.concentrator.services;
 
-import com.google.inject.internal.cglib.core.Local;
 import org.medipi.concentrator.dao.*;
 import org.medipi.concentrator.entities.Patient;
 import org.medipi.concentrator.exception.NotFound404Exception;
@@ -15,14 +14,15 @@ import org.medipi.model.UnpackedDoseDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
-import java.time.*;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class MedicationDownloadService {
@@ -59,7 +59,7 @@ public class MedicationDownloadService {
         System.out.println(org.hibernate.Version.getVersionString());
         try {
             medicationInfo.setSchedules(scheduleDAOimpl.findAll());
-            for (Schedule schedule: medicationInfo.getSchedules()) {
+            for (Schedule schedule : medicationInfo.getSchedules()) {
                 System.out.println(schedule.getAssignedStartDate());
             }
             medicationInfo.setPatientAdherence(patientAdherenceDAOimpl.findByPatientUuid(patientUuid));
@@ -78,12 +78,13 @@ public class MedicationDownloadService {
     @Transactional(rollbackFor = Throwable.class)
     private void uploadRecordedDoses(MedicationPatientDO uploadedData) {
         List<RecordedDose> doseData = new ArrayList<>();
-        for (Schedule schedule: uploadedData.getSchedules()) {
+        for (Schedule schedule : uploadedData.getSchedules()) {
             doseData.addAll(schedule.getRecordedDoses());
         }
         System.out.println("RECEIVED UPLOAD: " + " " + doseData.size());
-        for (RecordedDose dose: doseData) {
-            try{recordedDoseDAOimpl.findByRecordedDoseUUID(dose.getRecordedDoseUUID());
+        for (RecordedDose dose : doseData) {
+            try {
+                recordedDoseDAOimpl.findByRecordedDoseUUID(dose.getRecordedDoseUUID());
             } catch (EmptyResultDataAccessException e) {
                 recordedDoseDAOimpl.save(dose);
             }
@@ -112,14 +113,14 @@ public class MedicationDownloadService {
         LocalDate searchEndTime = LocalDate.now();
         LocalDate searchStartTime = searchEndTime.minusDays(7);
         Collection<Schedule> patientSchedules = scheduleDAOimpl.findByPatientUuid(patientUuid);
-        for (Schedule schedule: patientSchedules) {
-            for (ScheduledDose dose: schedule.getScheduledDoses()) {
+        for (Schedule schedule : patientSchedules) {
+            for (ScheduledDose dose : schedule.getScheduledDoses()) {
                 dose.setSchedule(schedule);
             }
         }
         PatientAdherenceCalculator patientAdherenceCalculator = new PatientAdherenceCalculator(patientSchedules, searchStartTime, searchEndTime, true);
         patientAdherenceCalculator.calculatePatientAdherence();
-        for (Schedule schedule: patientSchedules) {
+        for (Schedule schedule : patientSchedules) {
             ScheduleAdherenceCalculator scheduleAdherenceCalculator = patientAdherenceCalculator.getScheduleAdherenceCalculators().get(schedule);
             if (schedule.getScheduleAdherence() == null) {
                 ScheduleAdherence scheduleAdherence = new ScheduleAdherence();
@@ -135,8 +136,8 @@ public class MedicationDownloadService {
         patientAdherence.setStreakLength(patientAdherenceCalculator.getStreakLength());
         patientAdherenceDAOimpl.update(patientAdherence);
         //TODO - find a better way than setting and unsetting the schedule
-        for (Schedule schedule: patientSchedules) {
-            for (ScheduledDose dose: schedule.getScheduledDoses()) {
+        for (Schedule schedule : patientSchedules) {
+            for (ScheduledDose dose : schedule.getScheduledDoses()) {
                 dose.setSchedule(null);
             }
         }
@@ -148,7 +149,7 @@ public class MedicationDownloadService {
         List<Schedule> schedules = new ArrayList<Schedule>();
         List<PatientAdherence> adherence = new ArrayList<PatientAdherence>();
         List<String> patientUuids = new ArrayList<String>();
-        for (Patient patient: medicationPatients) {
+        for (Patient patient : medicationPatients) {
             schedules.addAll(scheduleDAOimpl.findByPatientUuid(patient.getPatientUuid()));
             adherence.add(patientAdherenceDAOimpl.findByPatientUuid(patient.getPatientUuid()));
             patientUuids.add(patient.getPatientUuid());
@@ -162,16 +163,15 @@ public class MedicationDownloadService {
     }
 
 
-
     @Transactional(rollbackFor = Throwable.class)
     public ResponseEntity<List<DoseInstance>> unpackedDoses(String patientUuid, String startDateString, String endDateString) {
         LocalDate startDate = LocalDate.parse(startDateString);
         LocalDate endDate = LocalDate.parse(endDateString);
         List<DoseInstance> doseInstances = new ArrayList<>();
-        for (Schedule schedule: scheduleDAOimpl.findByPatientUuid(patientUuid)) {
+        for (Schedule schedule : scheduleDAOimpl.findByPatientUuid(patientUuid)) {
             int startDay = Math.max(0, (int) schedule.getAssignedStartDate().toLocalDate().until(startDate, ChronoUnit.DAYS));
             int endDay = Math.max(0, (int) schedule.getAssignedStartDate().toLocalDate().until(endDate, ChronoUnit.DAYS));
-            for (ScheduledDose dose: schedule.getScheduledDoses()) {
+            for (ScheduledDose dose : schedule.getScheduledDoses()) {
                 dose.setSchedule(schedule);
                 doseInstances.addAll(ScheduledDoseUnpacker.unpack(dose, startDay, endDay));
                 dose.setSchedule(null);

@@ -1,6 +1,5 @@
 package org.medipi.concentrator.services;
 
-import org.apache.tomcat.jni.Local;
 import org.medipi.concentrator.dao.MedicationDAOImpl;
 import org.medipi.concentrator.dao.PatientDAOImpl;
 import org.medipi.concentrator.dao.ScheduleDAOImpl;
@@ -13,10 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -44,33 +41,38 @@ public class MedicationScheduleUpdateService {
         }
         int dateDifference = (int) existingStartDate.until(newStartDate, ChronoUnit.DAYS);
         schedule.setAssignedStartDate(Date.valueOf(newStartDate));
-        List<ScheduledDose> removeDoses = new ArrayList<>();
-        for (ScheduledDose dose: schedule.getScheduledDoses()) {
-            Integer repeatUnit = dose.getRepeatInterval();
-            if (repeatUnit == null) {
-                if (dose.getStartDay() < dateDifference) {
-                    removeDoses.add(dose);
-                } else {
-                    dose.setStartDay(dose.getStartDay() - dateDifference);
-                }
-            } else {
-                dose.setStartDay(repeatUnit - (dateDifference % repeatUnit));
-                if (dose.getEndDay() != null) {
-                    dose.setEndDay(dose.getEndDay() - dateDifference);
-                    if (dose.getEndDay() <= dose.getStartDay()) {
-                        removeDoses.add(dose);
-                    }
-                }
+        for (ScheduledDose dose : schedule.getScheduledDoses()) {
+            try {
+                transposeDose(dose, dateDifference);
+            } catch (DoseOutOfBoundsException e) {
+                //
+                schedule.getScheduledDoses().remove(dose);
             }
         }
-        for (ScheduledDose dose: removeDoses) {
-            schedule.getScheduledDoses().remove(dose);
+    }
+
+    private void transposeDose(ScheduledDose dose, int days) throws DoseOutOfBoundsException {
+        Integer repeatUnit = dose.getRepeatInterval();
+        if (repeatUnit == null) {
+            if (dose.getStartDay() < days) {
+                throw new DoseOutOfBoundsException();
+            } else {
+                dose.setStartDay(dose.getStartDay() - days);
+            }
+        } else {
+            dose.setStartDay(repeatUnit - (days % repeatUnit));
+            if (dose.getEndDay() != null) {
+                dose.setEndDay(dose.getEndDay() - days);
+                if (dose.getEndDay() <= dose.getStartDay()) {
+                    throw new DoseOutOfBoundsException();
+                }
+            }
         }
     }
 
     private Schedule getExistingSchedule(LocalDate date, Medication medication, String patientUuid) {
         List<Schedule> existing_schedules = scheduleDAOimpl.findByMedicationAndPatient(medication, patientUuid);
-        for (Schedule schedule: existing_schedules) {
+        for (Schedule schedule : existing_schedules) {
             if (!schedule.getAssignedStartDate().toLocalDate().isAfter(date) && (schedule.getAssignedEndDate() == null || schedule.getAssignedEndDate().toLocalDate().isAfter(date))) {
                 return schedule;
             }
@@ -83,7 +85,7 @@ public class MedicationScheduleUpdateService {
             return null; // Take as needed
         }
         int maxDay = 0;
-        for (ScheduledDose dose: schedule.getScheduledDoses()) {
+        for (ScheduledDose dose : schedule.getScheduledDoses()) {
             if (dose.getRepeatInterval() != null) {
                 if (dose.getEndDay() == null) {
                     return null;
@@ -101,51 +103,40 @@ public class MedicationScheduleUpdateService {
 
 
     @Transactional(rollbackFor = Throwable.class)
-    public void addSchedule(Schedule newSchedule, List<ScheduledDose> new_doses, int medicationId) {
+    public void addSchedule(Schedule newSchedule, List<ScheduledDose> newDoses, int medicationId) {
         Medication medication = medicationDAOImpl.findByMedicationId(medicationId);
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         newSchedule.setScheduleId(null);
+        scheduleDAOimpl.save(newSchedule);
         newSchedule.setMedication(medication);
         Schedule existing_schedule = getExistingSchedule(tomorrow, medication, newSchedule.getPatientUuid());
-        if (existing_schedule == null) {
-            System.out.println("CREATING NEW SCHEDULE");
-            scheduleDAOimpl.save(newSchedule);
-            newSchedule.setScheduledDoses(new HashSet<ScheduledDose>());
-            for (ScheduledDose new_dose : new_doses) {
-                new_dose.setScheduleId(newSchedule.getScheduleId());
-                new_dose.setScheduledDoseId(null);
-                newSchedule.getScheduledDoses().add(new_dose);
-                scheduledDoseDAOimpl.save(new_dose);
-            }
-        } else {
-            System.out.println("UPDATING EXISTING SCHEDULE");
-            for (ScheduledDose dose: existing_schedule.getScheduledDoses()) {
-                scheduledDoseDAOimpl.delete(dose.getScheduledDoseId());
-            }
-            assert (existing_schedule.getMedication() == newSchedule.getMedication());
+        newSchedule.setScheduledDoses(new HashSet<>(newDoses));
+        if (existing_schedule != null) {
             assert (existing_schedule.getPatientUuid().equals(newSchedule.getPatientUuid()));
-            System.out.println("DOSES CHANGED");
-
-            if (existing_schedule.getAssignedEndDate().toLocalDate().isAfter(tomorrow)) {
-                existing_schedule.setAssignedEndDate(Date.valueOf(tomorrow));
-            }
-            scheduleDAOimpl.save(newSchedule);
-            System.out.println("New ID: " + newSchedule.getScheduleId());
-            newSchedule.setScheduledDoses(new HashSet<>());
-            for (ScheduledDose new_dose : new_doses) {
-                new_dose.setScheduleId(newSchedule.getScheduleId());
-                new_dose.setScheduledDoseId(null);
-                newSchedule.getScheduledDoses().add(new_dose);
-                scheduledDoseDAOimpl.save(new_dose);
-            }
+            existing_schedule.setAssignedEndDate(Date.valueOf(tomorrow));
             moveScheduleStartDate(newSchedule, tomorrow);
             scheduleDAOimpl.update(newSchedule);
             // Clean up previous schedule changes from today (which were never able to come into effect)
             if (existing_schedule.getAssignedEndDate().equals(existing_schedule.getAssignedStartDate())) {
-                scheduleDAOimpl.delete(existing_schedule.getScheduleId());
+                deleteSchedule(existing_schedule);
             }
+        }
+        for (ScheduledDose new_dose : newSchedule.getScheduledDoses()) {
+            new_dose.setScheduledDoseId(null);
+            new_dose.setScheduleId(newSchedule.getScheduleId());
+            scheduledDoseDAOimpl.save(new_dose);
         }
         newSchedule.setAssignedEndDate(getMaxEndDate(newSchedule));
         scheduleDAOimpl.update(newSchedule);
     }
+
+    private void deleteSchedule(Schedule schedule) {
+        for (ScheduledDose dose : schedule.getScheduledDoses()) {
+            scheduledDoseDAOimpl.delete(dose.getScheduledDoseId());
+        }
+        scheduleDAOimpl.delete(schedule.getScheduleId());
+    }
+}
+
+class DoseOutOfBoundsException extends Exception {
 }

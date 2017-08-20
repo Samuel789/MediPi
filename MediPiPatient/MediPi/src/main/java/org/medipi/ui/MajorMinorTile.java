@@ -43,8 +43,8 @@ public class MajorMinorTile extends Tile {
         super(bprop, widthUnits, heightUnits);
         content.setTop(majorButton);
         content.setBottom(minorButton);
-        content.setMargin(majorButton, new Insets(buttonPadding, buttonPadding, buttonPadding/2, buttonPadding));
-        content.setMargin(minorButton, new Insets(buttonPadding/2, buttonPadding, buttonPadding, buttonPadding));
+        content.setMargin(majorButton, new Insets(buttonPadding, buttonPadding, buttonPadding / 2, buttonPadding));
+        content.setMargin(minorButton, new Insets(buttonPadding / 2, buttonPadding, buttonPadding, buttonPadding));
         content.setAlignment(majorButton, Pos.CENTER);
         content.setAlignment(minorButton, Pos.CENTER);
     }
@@ -62,34 +62,34 @@ public class MajorMinorTile extends Tile {
         } else {
             widthUnitsToUse = widthUnits;
         }
-        int width = unitWidth*widthUnitsToUse;
-        int height = unitHeight*heightUnits;
+        int width = unitWidth * widthUnitsToUse;
+        int height = unitHeight * heightUnits;
         content.setPrefSize(width, height);
         content.setMaxSize(width, height);
         content.setMinSize(width, height);
         majorButton.getStyleClass().add("mp-button");
         minorButton.getStyleClass().add("mp-button");
-        majorButton.setPrefWidth(width - 2*buttonPadding);
-        minorButton.setPrefWidth((width - 2*buttonPadding)*0.7);
-        majorButton.setPrefHeight((height - 2*buttonPadding)/2);
-        minorButton.setPrefHeight((height - 2*buttonPadding)/2);
+        majorButton.setPrefWidth(width - 2 * buttonPadding);
+        minorButton.setPrefWidth((width - 2 * buttonPadding) * 0.7);
+        majorButton.setPrefHeight((height - 2 * buttonPadding) / 2);
+        minorButton.setPrefHeight((height - 2 * buttonPadding) / 2);
         return content;
-    }
-
-    public void setMajorText(String text) {
-        majorButton.setText(text);
     }
 
     public String getMajorText() {
         return majorButton.getText();
     }
 
-    public void setMinorText(String text) {
-        minorButton.setText(text);
+    public void setMajorText(String text) {
+        majorButton.setText(text);
     }
 
     public String getMinorText() {
         return minorButton.getText();
+    }
+
+    public void setMinorText(String text) {
+        minorButton.setText(text);
     }
 
     public void setOnMajorClick(EventHandler<? super MouseEvent> event) {

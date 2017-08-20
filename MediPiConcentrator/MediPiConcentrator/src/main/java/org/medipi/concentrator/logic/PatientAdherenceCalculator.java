@@ -7,7 +7,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 
 public class PatientAdherenceCalculator {
 
@@ -21,11 +20,6 @@ public class PatientAdherenceCalculator {
     private Collection<Schedule> schedules;
     private LocalDate queryEndDate;
     private boolean calculatingStreak;
-
-    public HashMap<Schedule, ScheduleAdherenceCalculator> getScheduleAdherenceCalculators() {
-        return scheduleAdherenceCalculators;
-    }
-
     private HashMap<Schedule, ScheduleAdherenceCalculator> scheduleAdherenceCalculators;
 
     public PatientAdherenceCalculator(Collection<Schedule> schedules, LocalDate startDate, LocalDate endDate, boolean calculatingStreak) {
@@ -34,6 +28,10 @@ public class PatientAdherenceCalculator {
         this.queryEndDate = endDate;
         this.calculatingStreak = calculatingStreak;
         resetResults();
+    }
+
+    public HashMap<Schedule, ScheduleAdherenceCalculator> getScheduleAdherenceCalculators() {
+        return scheduleAdherenceCalculators;
     }
 
     public Integer getNumDosesTakenCorrectly() {

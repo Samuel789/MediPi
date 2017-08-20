@@ -15,8 +15,6 @@
  */
 package org.medipi.ui;
 
-import java.util.ArrayList;
-
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -26,16 +24,12 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+
+import java.util.ArrayList;
 
 /**
  * Class to encapsulate a Dashboard Component node which is placed in the
@@ -56,7 +50,6 @@ public class EntityTile extends Tile {
 
     /**
      * Constructor
-     *
      */
     public EntityTile(BooleanProperty bprop, int widthUnits, int heightUnits) {
         super(bprop, widthUnits, heightUnits);
@@ -107,15 +100,15 @@ public class EntityTile extends Tile {
 
     /**
      * Method to add overlayed text to the EntityTile.
-     *
+     * <p>
      * Every successive addition of this overlay will add another line of text
      * on top of the tile - watch out that it doesn't exceed the limits of the
      * tile! When data is added to the StringProperty of the passed in Label,
      * the background image is made opaque
      *
      * @param measure a label containing a StringParameter so that the changing
-     * data can be displayed dynamically over the image.
-     * @param u units of measurement
+     *                data can be displayed dynamically over the image.
+     * @param u       units of measurement
      */
     public void addOverlay(Label measure, String u) {
         Label units = new Label(u);
@@ -127,24 +120,25 @@ public class EntityTile extends Tile {
             if (!newValue.equals("")) {
                 backgroundImage.setStyle("-fx-opacity:0.2;");
                 units.setVisible(true);
-            } else {if (backgroundImage != null) {
-            contentStack.getChildren().add(backgroundImage);
-        }
-        if (foregroundImage != null) {
-            contentStack.getChildren().add(foregroundImage);
-        }
-        VBox vbox = new VBox();
-        vbox.setAlignment(Pos.CENTER);
-        for (Label[] l : labels) {
-            HBox h = new HBox();
-            h.setAlignment(Pos.CENTER);
-            h.getChildren().addAll(
-                    l[0],
-                    l[1]);
-            vbox.getChildren().add(h);
-        }
-        contentStack.getChildren().add(vbox);
-        content.setCenter(contentStack);
+            } else {
+                if (backgroundImage != null) {
+                    contentStack.getChildren().add(backgroundImage);
+                }
+                if (foregroundImage != null) {
+                    contentStack.getChildren().add(foregroundImage);
+                }
+                VBox vbox = new VBox();
+                vbox.setAlignment(Pos.CENTER);
+                for (Label[] l : labels) {
+                    HBox h = new HBox();
+                    h.setAlignment(Pos.CENTER);
+                    h.getChildren().addAll(
+                            l[0],
+                            l[1]);
+                    vbox.getChildren().add(h);
+                }
+                contentStack.getChildren().add(vbox);
+                content.setCenter(contentStack);
                 backgroundImage.setStyle("-fx-opacity:1.0;");
                 units.setVisible(false);
             }
@@ -157,12 +151,12 @@ public class EntityTile extends Tile {
 
     /**
      * Method to add an overlayed Image to the EntityTile.
-     *
+     * <p>
      * To add an image on top of the background image
      *
      * @param image imageView of the alert to be superimposed over the tile
-     * @param bp BooleanProperty to dynamically control whether the Image is
-     * visible
+     * @param bp    BooleanProperty to dynamically control whether the Image is
+     *              visible
      */
     public void addOverlay(ObjectProperty<Image> image, BooleanProperty bp) {
         foregroundImage.imageProperty().bind(image);
@@ -189,14 +183,14 @@ public class EntityTile extends Tile {
 
     /**
      * Method to add a Colour to the EntityTile.
-     *
+     * <p>
      * To paint the tile a background colour on tile
      *
      * @param colour Background colour of the tile
-     * @param bp BooleanProperty to dynamically control whether the colour should be changed
+     * @param bp     BooleanProperty to dynamically control whether the colour should be changed
      */
     public void addOverlay(Color colour, BooleanProperty bp) {
-        
+
         content.backgroundProperty().bind(Bindings.when(bp)
                 .then(new Background(new BackgroundFill(colour, new CornerRadii(10), Insets.EMPTY)))
                 .otherwise(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY))));
@@ -215,8 +209,8 @@ public class EntityTile extends Tile {
         } else {
             widthUnitsToUse = widthUnits;
         }
-        int width = unitWidth*widthUnitsToUse;
-        int height = unitHeight*heightUnits;
+        int width = unitWidth * widthUnitsToUse;
+        int height = unitHeight * heightUnits;
         content.setPrefSize(width, height);
         content.setMaxSize(width, height);
         content.setMinSize(width, height);

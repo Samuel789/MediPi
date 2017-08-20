@@ -63,8 +63,8 @@ public class ScrollControlTile extends Tile {
         } else {
             widthUnitsToUse = widthUnits;
         }
-        int width = unitWidth*widthUnitsToUse;
-        int height = unitHeight*heightUnits;
+        int width = unitWidth * widthUnitsToUse;
+        int height = unitHeight * heightUnits;
         content.setPrefSize(width, height);
         content.setMaxSize(width, height);
         content.setMinSize(width, height);
@@ -72,8 +72,8 @@ public class ScrollControlTile extends Tile {
         downButton.getStyleClass().add("mp-button");
         upButton.setPrefWidth(width - 20);
         downButton.setPrefWidth(width - 20);
-        upButton.setPrefHeight((height - 30)/2);
-        downButton.setPrefHeight((height - 30)/2);
+        upButton.setPrefHeight((height - 30) / 2);
+        downButton.setPrefHeight((height - 30) / 2);
         return content;
     }
 

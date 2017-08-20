@@ -5,16 +5,16 @@
 <hibernate-mapping>
     <class name="org.medipi.medication.PatientAdherence" table="patient_adherence">
         <id name="patientUuid" type="java.lang.String">
-            <column name="patient_uuid"  />
+            <column name="patient_uuid"/>
         </id>
         <property name="sevenDayFraction" type="double">
-            <column name="seven_day_fraction" />
+            <column name="seven_day_fraction"/>
         </property>
         <property name="streakLength" type="int">
-            <column name="streak_length" />
+            <column name="streak_length"/>
         </property>
 
-            </class>
+    </class>
     <query name="PatientAdherence.findByPatientUuid">
         <![CDATA[SELECT a FROM PatientAdherence a WHERE a.patientUuid = :uuid]]>
     </query>

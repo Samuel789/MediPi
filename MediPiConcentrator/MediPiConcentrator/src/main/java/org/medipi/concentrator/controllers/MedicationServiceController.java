@@ -22,7 +22,6 @@ import org.medipi.medication.DoseInstance;
 import org.medipi.model.MedWebDO;
 import org.medipi.model.MedicationPatientDO;
 import org.medipi.model.MedicationScheduleDO;
-import org.medipi.model.UnpackedDoseDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,28 +49,28 @@ public class MedicationServiceController {
     @Autowired
     private MediPiLogger logger;
 
-    @RequestMapping(value="/synchronize", method = RequestMethod.POST, consumes = {"application/json"})
+    @RequestMapping(value = "/synchronize", method = RequestMethod.POST, consumes = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ResponseEntity<MedicationPatientDO> synchronize(@RequestBody MedicationPatientDO uploadedData) {
         return this.medicationDownloadService.synchronize(uploadedData);
     }
 
-    @RequestMapping(value="/clinician/getPatientData", method = RequestMethod.GET)
+    @RequestMapping(value = "/clinician/getPatientData", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ResponseEntity<MedWebDO> getMedicationData() {
         return this.medicationDownloadService.getAllPatientData();
     }
 
-    @RequestMapping(value="/clinician/addSchedule", method = RequestMethod.POST, consumes = {"application/json"})
+    @RequestMapping(value = "/clinician/addSchedule", method = RequestMethod.POST, consumes = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public void addSchedule(@RequestBody MedicationScheduleDO content) {
         this.medicationScheduleUpdateService.addSchedule(content.getSchedule(), content.getDoses(), content.getMedicationId());
     }
 
-    @RequestMapping(value="/clinician/unpackPatientSchedules", method = RequestMethod.GET)
+    @RequestMapping(value = "/clinician/unpackPatientSchedules", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ResponseEntity<List<DoseInstance>> unpackPatientSchedules(@RequestParam("patientUuid") String patientUuid, @RequestParam("startDate") String startDateString, @RequestParam("endDate") String endDateString) {

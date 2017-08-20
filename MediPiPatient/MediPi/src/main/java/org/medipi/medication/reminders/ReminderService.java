@@ -11,18 +11,9 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class ReminderService {
-    public MediPi getMediPi() {
-        return mediPi;
-    }
-
     private MediPi mediPi;
     private Collection<ReminderEventInterface> todayActiveEvents;
     private Collection<ReminderEventInterface> events;
-
-    LocalDate getToday() {
-        return today;
-    }
-
     private LocalDate today;
     private ReminderServiceAsync runningReminderThread;
 
@@ -31,8 +22,17 @@ public class ReminderService {
         setEvents(events);
         startService();
     }
+
+    public MediPi getMediPi() {
+        return mediPi;
+    }
+
+    LocalDate getToday() {
+        return today;
+    }
+
     public void throwTestReminder() {
-        MedicationManager medicationManager =(MedicationManager) mediPi.getElement("Medication");
+        MedicationManager medicationManager = (MedicationManager) mediPi.getElement("Medication");
         System.out.println(medicationManager);
         Schedule testSchedule = new Schedule();
         ScheduledDose testDose = new ScheduledDose();
@@ -69,7 +69,7 @@ public class ReminderService {
         stopService();
         todayActiveEvents = new HashSet<>();
         today = LocalDate.now();
-        for (ReminderEventInterface event: events) {
+        for (ReminderEventInterface event : events) {
             if (event.activeOnDay(today)) {
                 todayActiveEvents.add(event);
             }
@@ -104,10 +104,12 @@ public class ReminderService {
 class ReminderServiceAsync extends Thread {
     private ReminderService reminderService;
     private volatile boolean isRunning;
+
     ReminderServiceAsync(ReminderService reminderService) {
         this.reminderService = reminderService;
         isRunning = true;
     }
+
     @Override
     public void run() {
         Collection<ReminderEventInterface> activeEvents;
@@ -120,7 +122,7 @@ class ReminderServiceAsync extends Thread {
             }
             LocalTime currentTime = LocalTime.now();
             synchronized (activeEvents) {
-                for (ReminderEventInterface event: activeEvents) {
+                for (ReminderEventInterface event : activeEvents) {
                     if (!event.isFrozen() && event.getReminderStartTime().isBefore(currentTime) && event.getReminderEndTime().isAfter(currentTime)) {
                         Platform.runLater(new Runnable() {
                             @Override

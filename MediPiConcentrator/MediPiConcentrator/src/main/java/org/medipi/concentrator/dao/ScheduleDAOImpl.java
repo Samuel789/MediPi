@@ -19,11 +19,11 @@ import org.medipi.medication.Medication;
 import org.medipi.medication.Schedule;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
  * Data Access Object for Hardware
+ *
  * @author rick@robinsonhq.com
  */
 @Repository

@@ -15,16 +15,17 @@
  */
 package org.medipi.concentrator.dao;
 
-import org.medipi.concentrator.entities.Hardware;
 import org.medipi.medication.Medication;
 
 import java.util.List;
 
 /**
  * Data Access Object interface for Hardware
+ *
  * @author rick@robinsonhq.com
  */
 public interface MedicationDAO extends GenericDAO<Medication> {
     public Medication findByMedicationId(int medicationId);
+
     public List<Medication> findAll();
 }

@@ -28,6 +28,7 @@ public class MedicationInformation extends Group {
     ImageView iconImageView;
 
     BorderPane content;
+
     public MedicationInformation(Schedule schedule) {
         content = new BorderPane();
         this.getChildren().add(content);
@@ -57,7 +58,9 @@ public class MedicationInformation extends Group {
         content.setTop(topPane);
         topPane.setLeft(titleLabel);
         Button closeButton = new Button();
-        closeButton.setOnMouseClicked((MouseEvent event) -> {((Stage)this.getScene().getWindow()).close();});
+        closeButton.setOnMouseClicked((MouseEvent event) -> {
+            ((Stage) this.getScene().getWindow()).close();
+        });
         closeButton.setText("Back");
         closeButton.setPrefHeight(40);
         closeButton.setPrefWidth(140);

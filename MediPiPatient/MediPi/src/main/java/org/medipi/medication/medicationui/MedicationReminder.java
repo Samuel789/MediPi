@@ -2,15 +2,12 @@ package org.medipi.medication.medicationui;
 
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -28,6 +25,7 @@ import java.io.File;
 public class MedicationReminder extends Group {
     VBox content;
     ReminderService reminderService;
+
     public MedicationReminder(MedicationReminderEvent reminderEvent, MediPi mediPi) {
         ScheduledDose dose = reminderEvent.getDose();
         reminderService = ((MedicationManager) mediPi.getElement("Medication")).getReminderService();
@@ -67,17 +65,18 @@ public class MedicationReminder extends Group {
         buttonBox.getChildren().add(delayButton);
         buttonBox.getChildren().add(dismissButton);
         dismissButton.setOnMouseClicked((MouseEvent event) -> {
-            ((Stage)this.getScene().getWindow()).close();
+            ((Stage) this.getScene().getWindow()).close();
             reminderService.dismissEvent(reminderEvent);
         });
         delayButton.setOnMouseClicked((MouseEvent event) -> {
-            ((Stage)this.getScene().getWindow()).close();
+            ((Stage) this.getScene().getWindow()).close();
             reminderEvent.snoozeForSeconds(600);
         });
         System.out.println("REMINDER - DoseId " + dose.getScheduledDoseId());
         takeButton.setOnMouseClicked((MouseEvent event) -> {
-            ((MedicationManager)mediPi.getElement("Medication")).recordMedicationDose(dose);
-            ((Stage)this.getScene().getWindow()).close();});
+            ((MedicationManager) mediPi.getElement("Medication")).recordMedicationDose(dose);
+            ((Stage) this.getScene().getWindow()).close();
+        });
         content.getChildren().add(buttonBox);
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setSpacing(5);

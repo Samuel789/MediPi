@@ -10,8 +10,12 @@ import java.time.LocalTime;
  */
 public interface ReminderEventInterface {
     public LocalTime getReminderStartTime();
+
     public LocalTime getReminderEndTime();
+
     public boolean activeOnDay(LocalDate date);
+
     public boolean isFrozen();
+
     public void execute(MediPi mediPi);
 }

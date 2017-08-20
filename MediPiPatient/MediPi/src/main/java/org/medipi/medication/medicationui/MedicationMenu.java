@@ -10,10 +10,11 @@ import org.medipi.ui.*;
 
 
 public class MedicationMenu extends TileMenu {
-    double adherenceRate =0.8;
+    double adherenceRate = 0.8;
     MediPi mediPi;
     Datastore datastore;
     HeaderTile headerTile;
+
     public MedicationMenu(MediPi mediPi, TileMenu upperMenu, Datastore datastore) {
         super(new WindowManager(), 3, 2.15, upperMenu);
         this.mediPi = mediPi;
@@ -22,19 +23,31 @@ public class MedicationMenu extends TileMenu {
         backSettingsTile.setMajorText("Back");
         backSettingsTile.setMinorText("< Synchronize >");
         headerTile = createAdherenceHeaderTile();
-        backSettingsTile.setOnMajorClick((MouseEvent event) -> {mediPi.callDashboard();});
-        backSettingsTile.setOnMinorClick((MouseEvent event) -> {((MedicationManager) mediPi.getElement("Medication")).getSynchronizer().run();});
+        backSettingsTile.setOnMajorClick((MouseEvent event) -> {
+            mediPi.callDashboard();
+        });
+        backSettingsTile.setOnMinorClick((MouseEvent event) -> {
+            ((MedicationManager) mediPi.getElement("Medication")).getSynchronizer().run();
+        });
         this.addTile(backSettingsTile);
         this.addTile(headerTile);
         EntityTile recordDoseTile = new EntityTile(new SimpleBooleanProperty(true), 1, 1);
         EntityTile viewScheduleTile = new EntityTile(new SimpleBooleanProperty(true), 1, 1);
-        EntityTile showMedicationsTile = new EntityTile(new SimpleBooleanProperty(true), 1 ,1);
+        EntityTile showMedicationsTile = new EntityTile(new SimpleBooleanProperty(true), 1, 1);
         recordDoseTile.addTitle("Record a Dose");
         showMedicationsTile.addTitle("Show Medications");
         viewScheduleTile.addTitle("View Schedule");
-        recordDoseTile.setOnTileClick((MouseEvent event) -> {this.setOverlayWindow(new RecordDoseMenu(mediPi, this)); this.showOverlayWindow();});
-        viewScheduleTile.setOnTileClick((MouseEvent event) -> {((MedicationManager) mediPi.getElement("Medication")).getReminderService().throwTestReminder();});
-        showMedicationsTile.setOnTileClick((MouseEvent event) -> {this.setOverlayWindow(new ShowMedicationsMenu(mediPi, this)); this.showOverlayWindow();});
+        recordDoseTile.setOnTileClick((MouseEvent event) -> {
+            this.setOverlayWindow(new RecordDoseMenu(mediPi, this));
+            this.showOverlayWindow();
+        });
+        viewScheduleTile.setOnTileClick((MouseEvent event) -> {
+            ((MedicationManager) mediPi.getElement("Medication")).getReminderService().throwTestReminder();
+        });
+        showMedicationsTile.setOnTileClick((MouseEvent event) -> {
+            this.setOverlayWindow(new ShowMedicationsMenu(mediPi, this));
+            this.showOverlayWindow();
+        });
 
         this.addTile(recordDoseTile);
         this.addTile(showMedicationsTile);
@@ -58,6 +71,7 @@ public class MedicationMenu extends TileMenu {
         tile.setTitleText("Medication Manager");
         return tile;
     }
+
     public void recordMedicationDose(ScheduledDose dose) {
         this.setOverlayWindow(new RecordDoseMenu(mediPi, this, dose));
         this.showOverlayWindow();

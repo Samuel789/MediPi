@@ -1,24 +1,21 @@
 import datetime
 import json
 
-import requests
 from django.http import HttpResponse
 from django.template.loader import get_template
 
 from MedWeb import settings
 from MedWeb.clinical_database.clinical_database import medications
-from MedWeb.concentrator_interface import entities
-from MedWeb.concentrator_interface.entities import Schedule
-
-from MedWeb.concentrator_interface.interface import update_from_concentrator, get_patient_dose_instances
 from MedWeb.concentrator_interface.interface import schedules
+from MedWeb.concentrator_interface.interface import update_from_concentrator, get_patient_dose_instances
 from MedWeb.patient_database.patient_database import patients
 
 sidebar_menu_urls = {"Medications": "/viewpatient",
-                        "Schedule & History": "/schedule",
-                        "Add Medication": "/assignmedication"}
+                     "Schedule & History": "/schedule",
+                     "Add Medication": "/assignmedication"}
 
 sidebar_menu_entries = ["Medications", "Schedule & History", "Add Medication"]
+
 
 def browse_patients(request):
     template = get_template("medication/browse_patients.djt.html")
@@ -32,6 +29,7 @@ def browse_patients(request):
                               "patients": patients.values(),
                               "active_patient": None}, request)
     return HttpResponse(output)
+
 
 def patient_summary(request):
     patient_uuid = request.GET.get("patient_uuid", None)
@@ -49,8 +47,11 @@ def patient_summary(request):
                               "active_sidebar_entry": "Medications",
                               "active_section": "patients",
                               "active_patient": patients[patient_uuid],
-                              "dose_instances": get_patient_dose_instances(patient_uuid, todayDate - datetime.timedelta(todayDate.weekday()), todayDate - datetime.timedelta(todayDate.weekday()) + datetime.timedelta(days=7))}, request)
+                              "dose_instances": get_patient_dose_instances(patient_uuid, todayDate - datetime.timedelta(
+                                  todayDate.weekday()), todayDate - datetime.timedelta(
+                                  todayDate.weekday()) + datetime.timedelta(days=7))}, request)
     return HttpResponse(output)
+
 
 def assign_medication(request):
     patient_uuid = request.GET.get("patient_uuid", None)
@@ -66,10 +67,12 @@ def assign_medication(request):
                               "active_sidebar_entry": "Add Medication",
                               "active_section": "patients",
                               "active_patient": patients[patient_uuid],
-                              "active_patient_medication_ids": json.dumps([sch.medication.id for sch in patients[patient_uuid].schedules]),
+                              "active_patient_medication_ids": json.dumps(
+                                  [sch.medication.id for sch in patients[patient_uuid].schedules]),
                               "medications": medications.values(),
                               }, request)
     return HttpResponse(output)
+
 
 def create_new_schedule(request):
     patient_uuid = request.GET.get("patient_uuid", None)
@@ -116,6 +119,6 @@ def modify_schedule(request):
                               "mode": 'modify'}, request)
     return HttpResponse(output)
 
+
 def query_concentrator(request):
     update_from_concentrator()
-

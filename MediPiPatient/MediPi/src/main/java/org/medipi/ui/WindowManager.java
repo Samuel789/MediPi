@@ -2,7 +2,6 @@ package org.medipi.ui;
 
 import javafx.scene.Group;
 import javafx.scene.layout.VBox;
-import org.medipi.ui.MainMenu;
 import org.medipi.devices.Element;
 
 import java.util.ArrayList;
@@ -12,14 +11,8 @@ public class WindowManager extends Group {
 
     private int targetWidth = 800;
     private int targetHeight = 380;
-
-    public MainMenu getDashboard() {
-        return dashboard;
-    }
     private MainMenu dashboard;
     private ArrayList<Element> elements = new ArrayList<>();
-
-
     public WindowManager() {
         contents = new VBox();
         dashboard = new MainMenu(this, null);
@@ -30,14 +23,19 @@ public class WindowManager extends Group {
         contents.setMinWidth(targetWidth);
         contents.setMaxWidth(targetWidth);
     }
+
+    public MainMenu getDashboard() {
+        return dashboard;
+    }
+
     public void addElement(Element element) throws Exception {
         elements.add(element);
         contents.getChildren().add(element.getWindowComponent());
         dashboard.addElementMenuEntry(element);
     }
+
     /**
      * Method to call the mainwindow back to the dashboard
-     *
      */
     public void callDashboard() {
         hideAllWindows();

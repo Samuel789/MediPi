@@ -4,6 +4,10 @@ package org.medipi.medication;
  * Created by sam on 10/08/17.
  */
 public class ScheduleAdherence {
+    private int scheduleId;
+    private Integer streakLength;
+    private Double sevenDayFraction;
+
     public int getScheduleId() {
         return scheduleId;
     }
@@ -27,8 +31,4 @@ public class ScheduleAdherence {
     public void setSevenDayFraction(Double sevenDayFraction) {
         this.sevenDayFraction = sevenDayFraction;
     }
-
-    private int scheduleId;
-    private Integer streakLength;
-    private Double sevenDayFraction;
 }

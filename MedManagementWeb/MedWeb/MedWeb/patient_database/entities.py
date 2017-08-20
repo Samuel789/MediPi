@@ -1,6 +1,5 @@
 from enum import Enum
 
-from MedWeb.concentrator_interface.entities import Schedule
 
 class Status(Enum):
     normal = 0
@@ -8,8 +7,10 @@ class Status(Enum):
     never_synched = 2
     not_synched_recently = 3
 
+
 class Patient:
     _json_name = "patient"
+
     def __init__(self, uuid, first_name, last_name, dob, nhs_no):
         self.uuid = uuid
         self.adherence = None

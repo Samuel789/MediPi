@@ -3,10 +3,26 @@ package org.medipi.medication;
 import java.sql.Time;
 
 public class DoseInstance {
+    public RecordedDose takenDose;
+    private ScheduledDose dose;
+    private int scheduleId;
+    private double doseValue;
+    private int day;
+    private Time timeStart;
+    private Time timeEnd;
+
+    public DoseInstance(ScheduledDose dose, int day) {
+        this.dose = dose;
+        this.day = day;
+        this.timeStart = dose.getWindowStartTime();
+        this.timeEnd = dose.getWindowEndTime();
+        this.scheduleId = dose.getScheduleId();
+        this.doseValue = dose.getDoseValue();
+    }
+
     public ScheduledDose getDose() {
         return dose;
     }
-
 
     public RecordedDose getTakenDose() {
         return takenDose;
@@ -16,9 +32,6 @@ public class DoseInstance {
         this.takenDose = takenDose;
     }
 
-    public RecordedDose takenDose;
-    private ScheduledDose dose;
-
     public int getScheduleId() {
         return scheduleId;
     }
@@ -26,8 +39,6 @@ public class DoseInstance {
     public void setScheduleId(int scheduleId) {
         this.scheduleId = scheduleId;
     }
-
-    private int scheduleId;
 
     public double getDoseValue() {
         return doseValue;
@@ -37,13 +48,9 @@ public class DoseInstance {
         this.doseValue = doseValue;
     }
 
-    private double doseValue;
-
     public int getDay() {
         return day;
     }
-
-    private int day;
 
     public Time getTimeStart() {
         return timeStart;
@@ -52,8 +59,6 @@ public class DoseInstance {
     public Time getTimeEnd() {
         return timeEnd;
     }
-
-    private Time timeStart;
 
     @Override
     public boolean equals(Object o) {
@@ -66,17 +71,6 @@ public class DoseInstance {
         if (dose != null ? !dose.equals(that.dose) : that.dose != null) return false;
         if (timeStart != null ? !timeStart.equals(that.timeStart) : that.timeStart != null) return false;
         return timeEnd != null ? timeEnd.equals(that.timeEnd) : that.timeEnd == null;
-    }
-
-    private Time timeEnd;
-
-    public DoseInstance(ScheduledDose dose, int day) {
-        this.dose = dose;
-        this.day = day;
-        this.timeStart = dose.getWindowStartTime();
-        this.timeEnd = dose.getWindowEndTime();
-        this.scheduleId = dose.getScheduleId();
-        this.doseValue = dose.getDoseValue();
     }
 
     public String toString() {

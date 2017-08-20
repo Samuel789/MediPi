@@ -4,18 +4,20 @@ import java.io.Serializable;
 
 public class DoseUnit implements Serializable {
 
-    public String getName() {
-        return name;
-    }
+    private String name;
+    private int doseUnitId;
+
     public DoseUnit() {
 
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
-
-    private String name;
 
     public int getDoseUnitId() {
         return doseUnitId;
@@ -24,6 +26,4 @@ public class DoseUnit implements Serializable {
     public void setDoseUnitId(int id) {
         this.doseUnitId = id;
     }
-
-    private int doseUnitId;
 }

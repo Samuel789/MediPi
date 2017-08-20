@@ -8,7 +8,6 @@ import org.medipi.medication.reminders.ReminderEventInterface;
 import org.medipi.medication.reminders.ReminderService;
 
 import java.util.HashSet;
-import java.util.Set;
 
 
 public class MedicationManager extends Element {
@@ -19,11 +18,6 @@ public class MedicationManager extends Element {
     private static final String MEDIPIIMAGESHIGHESTERROROUTOFTHRESHOLD = "medipi.images.highesterror.outofthreshold";
     private static final String MEDIPIIMAGESHIGHESTERRORCANTCALCULATE = "medipi.images.highesterror.cantcalculate";
     private static final String MEDIPIIMAGESHIGHESTERRORMISSING = "medipi.images.highesterror.missing";
-
-    public MedicationMenu getMenu() {
-        return menu;
-    }
-
     private MedicationMenu menu;
     private Datastore datastore;
     private ReminderService reminderService;
@@ -51,6 +45,10 @@ public class MedicationManager extends Element {
 
     public static String getMedipiimageshighesterrormissing() {
         return MEDIPIIMAGESHIGHESTERRORMISSING;
+    }
+
+    public MedicationMenu getMenu() {
+        return menu;
     }
 
     public Datastore getDatestore() {

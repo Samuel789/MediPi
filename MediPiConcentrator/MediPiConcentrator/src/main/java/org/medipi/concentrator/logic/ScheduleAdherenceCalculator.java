@@ -20,15 +20,9 @@ public class ScheduleAdherenceCalculator {
     private Integer streakLength;
     private int queryStartDay;
     private Schedule schedule;
-
-    public List<DoseInstance> getDoseInstances() {
-        return doseInstances;
-    }
-
     private List<DoseInstance> doseInstances;
     private int queryEndDay;
     private boolean calculatingStreak;
-
     public ScheduleAdherenceCalculator(Schedule schedule, int queryStartDay, int queryEndDay, boolean calculatingStreak) {
         initialize(schedule, queryStartDay, queryEndDay, calculatingStreak);
     }
@@ -78,6 +72,10 @@ public class ScheduleAdherenceCalculator {
 
     private static boolean dayQualifiesForStreak(int dosesTakenCorrectly, int dosesLeftUntaken, int dosesIncorrectlyTaken) {
         return dosesLeftUntaken == 0 && dosesIncorrectlyTaken == 0;
+    }
+
+    public List<DoseInstance> getDoseInstances() {
+        return doseInstances;
     }
 
     public Integer getNumDosesToTake() {

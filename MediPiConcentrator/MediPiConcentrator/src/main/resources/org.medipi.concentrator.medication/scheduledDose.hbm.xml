@@ -5,35 +5,35 @@
 <hibernate-mapping>
     <class name="org.medipi.medication.ScheduledDose" table="scheduled_dose">
         <id name="scheduledDoseId" type="int">
-            <column name="scheduled_dose_id" />
-            <generator class="increment" />
+            <column name="scheduled_dose_id"/>
+            <generator class="increment"/>
         </id>
         <property name="scheduleId" type="int" not-null="true">
-            <column name="schedule_id" />
+            <column name="schedule_id"/>
         </property>
         <property name="doseValue" type="double" not-null="true">
-            <column name="value" />
+            <column name="value"/>
         </property>
         <property name="startDay" type="int" not-null="true">
-            <column name="start_day" />
+            <column name="start_day"/>
         </property>
         <property name="repeatInterval" type="int" not-null="false">
-            <column name="repeat_interval" />
+            <column name="repeat_interval"/>
         </property>
         <property name="endDay" type="int" not-null="false">
-            <column name="end_day" />
+            <column name="end_day"/>
         </property>
         <property name="windowStartTime" type="time" not-null="true">
-            <column name="window_start_time" />
+            <column name="window_start_time"/>
         </property>
         <property name="windowEndTime" type="time" not-null="true">
-            <column name="window_end_time" />
+            <column name="window_end_time"/>
         </property>
         <property name="defaultReminderTime" type="time" not-null="true">
-            <column name="default_reminder_time" />
+            <column name="default_reminder_time"/>
         </property>
         <property name="reminderTime" type="time" not-null="true">
-            <column name="reminder_time" />
+            <column name="reminder_time"/>
         </property>
 
     </class>

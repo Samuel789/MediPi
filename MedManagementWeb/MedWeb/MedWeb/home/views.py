@@ -1,12 +1,7 @@
-from django.http import HttpResponse
-from django.shortcuts import render_to_response, render
-from django.template.loader import get_template
-
-from django.conf import settings
 import django
-
-from enum import Enum
-
+from django.conf import settings
+from django.http import HttpResponse
+from django.template.loader import get_template
 
 
 def about_view(request):

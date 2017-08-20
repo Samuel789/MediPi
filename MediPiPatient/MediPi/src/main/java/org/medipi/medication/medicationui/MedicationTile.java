@@ -6,7 +6,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -17,14 +20,9 @@ import java.util.HashMap;
 
 public class MedicationTile extends Tile {
 
-    Label titleLabel;
-    Label purposeLabel;
-    Label dueStatusLabel;
-    AdherenceBar adherenceBar;
-    public enum DisplayType {ADHERENCE, DUESTATUS};
-    public enum DueStatus {TAKENOW, ASNEEDED, NOTNOW};
     public static final HashMap<DueStatus, String> dueStatusStyles = new HashMap<>();
     public static final HashMap<DueStatus, String> dueStatusStrings = new HashMap<>();
+
     static {
         dueStatusStyles.put(DueStatus.TAKENOW, "button-advised");
         dueStatusStyles.put(DueStatus.ASNEEDED, "");
@@ -34,38 +32,13 @@ public class MedicationTile extends Tile {
         dueStatusStrings.put(DueStatus.NOTNOW, "Not Due");
     }
 
-    public DueStatus getDueStatus() {
-        return dueStatus;
-    }
-
-    public void setDueStatus(DueStatus dueStatus) {
-        if (this.dueStatus != null) {
-            content.getStyleClass().remove(dueStatusStyles.get(dueStatus));
-            dueStatusLabel.setText("");
-        }
-        this.dueStatus = dueStatus;
-        content.getStyleClass().add(dueStatusStyles.get(dueStatus));
-        dueStatusLabel.setText(dueStatusStrings.get(dueStatus));
-    }
-
-    private DueStatus dueStatus = null;
-
-    public DisplayType getDisplayType() {
-        return displayType;
-    }
-
-    public void setDisplayType(DisplayType displayType) {
-        this.displayType = displayType;
-        updateLayout();
-    }
-
+    Label titleLabel;
+    Label purposeLabel;
+    Label dueStatusLabel;
+    AdherenceBar adherenceBar;
     DisplayType displayType = DisplayType.ADHERENCE;
-
-    public Schedule getMedicationSchedule() {
-        return medicationSchedule;
-    }
-
     Schedule medicationSchedule;
+    private DueStatus dueStatus = null;
 
     public MedicationTile(BooleanProperty bprop, int widthUnits, int heightUnits, Schedule medicationSchedule) {
         super(bprop, widthUnits, heightUnits);
@@ -99,6 +72,33 @@ public class MedicationTile extends Tile {
         setShowInfoOnClick();
     }
 
+    public DueStatus getDueStatus() {
+        return dueStatus;
+    }
+
+    public void setDueStatus(DueStatus dueStatus) {
+        if (this.dueStatus != null) {
+            content.getStyleClass().remove(dueStatusStyles.get(dueStatus));
+            dueStatusLabel.setText("");
+        }
+        this.dueStatus = dueStatus;
+        content.getStyleClass().add(dueStatusStyles.get(dueStatus));
+        dueStatusLabel.setText(dueStatusStrings.get(dueStatus));
+    }
+
+    public DisplayType getDisplayType() {
+        return displayType;
+    }
+
+    public void setDisplayType(DisplayType displayType) {
+        this.displayType = displayType;
+        updateLayout();
+    }
+
+    public Schedule getMedicationSchedule() {
+        return medicationSchedule;
+    }
+
     private void updateLayout() {
         content.setCenter(null);
         content.setBottom(null);
@@ -124,12 +124,12 @@ public class MedicationTile extends Tile {
 
     }
 
-    private void setDoseStatus(DueStatus status) {
-        dueStatus = status;
-    }
-
     private DueStatus getDoseStatus() {
         return dueStatus;
+    }
+
+    private void setDoseStatus(DueStatus status) {
+        dueStatus = status;
     }
 
     public void setShowInfoOnClick() {
@@ -145,5 +145,9 @@ public class MedicationTile extends Tile {
             popupWindow.showAndWait();
         });
     }
+
+    public enum DisplayType {ADHERENCE, DUESTATUS}
+
+    public enum DueStatus {TAKENOW, ASNEEDED, NOTNOW}
 
 }

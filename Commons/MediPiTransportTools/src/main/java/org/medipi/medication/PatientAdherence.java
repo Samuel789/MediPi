@@ -5,6 +5,10 @@ package org.medipi.medication;
  */
 public class PatientAdherence {
 
+    private String patientUuid;
+    private Integer streakLength;
+    private Double sevenDayFraction;
+
     public Integer getStreakLength() {
         return streakLength;
     }
@@ -28,8 +32,4 @@ public class PatientAdherence {
     public void setPatientUuid(String patientUuid) {
         this.patientUuid = patientUuid;
     }
-
-    private String patientUuid;
-    private Integer streakLength;
-    private Double sevenDayFraction;
 }

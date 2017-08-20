@@ -34,7 +34,7 @@ import java.util.UUID;
 /**
  * Class to poll the MediPi Concentrator and request any downloads for the user
  * or device
- *
+ * <p>
  * This class polls the concentrator receives the list of responses and calls
  * the appropriate handler
  *
@@ -71,7 +71,7 @@ public class Synchronizer
     }
 
     private MedicationPatientDO downloadScheduleData() throws Exception {
-        RESTfulMessagingEngine rme = new RESTfulMessagingEngine(resourcePath + "medication/download", new String[] {"{deviceId}", "{patientId}"});
+        RESTfulMessagingEngine rme = new RESTfulMessagingEngine(resourcePath + "medication/download", new String[]{"{deviceId}", "{patientId}"});
         UUID uuid = UUID.randomUUID();
         VPNServiceManager vpnm = null;
         String patientCertName = System.getProperty(MEDIPIPATIENTCERTNAME);
@@ -104,13 +104,14 @@ public class Synchronizer
         List<Schedule> newSchedules = recievedData.getSchedules();
         return newSchedules;
     }
+
     private MedicationPatientDO performDataExchange(MedicationPatientDO uploadData) throws Exception {
         HashMap<String, Object> params = new HashMap<>();
         String patientCertName = System.getProperty(MEDIPIPATIENTCERTNAME);
         uploadData.setHardwareName(deviceCertName);
         uploadData.setPatientUuid(patientCertName);
 
-        RESTfulMessagingEngine rme = new RESTfulMessagingEngine(resourcePath + "medication/synchronize", new String[] {});
+        RESTfulMessagingEngine rme = new RESTfulMessagingEngine(resourcePath + "medication/synchronize", new String[]{});
         Response postResponse = rme.executePost(params, Entity.json(uploadData));
         System.out.println(postResponse.getStatusInfo());
         String jsonResponse = postResponse.readEntity(String.class);
@@ -120,12 +121,13 @@ public class Synchronizer
 
         return new ObjectMapper().readValue(jsonResponse, MedicationPatientDO.class);
     }
+
     private void uploadDoseData(MedicationPatientDO doses) throws Exception {
         HashMap<String, Object> params = new HashMap<>();
         String patientCertName = System.getProperty(MEDIPIPATIENTCERTNAME);
         params.put("deviceId", deviceCertName);
         params.put("patientId", patientCertName);
-        RESTfulMessagingEngine rme = new RESTfulMessagingEngine(resourcePath + "medication/upload", new String[] {});
+        RESTfulMessagingEngine rme = new RESTfulMessagingEngine(resourcePath + "medication/upload", new String[]{});
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Data-Format", "MediPiNative");
         Response postResponse = rme.executePut(params, Entity.json(doses), headers);
@@ -146,7 +148,7 @@ public class Synchronizer
             datastore.setPatientAdherence(recievedData.getPatientAdherence());
             medicationManager.reload();
 
-        }  catch (ProcessingException pe) {
+        } catch (ProcessingException pe) {
             MediPiLogger.getInstance().log(Synchronizer.class.getName() + ".error", "Attempt to synchronize medication data has failed - MediPi Concentrator is not available - please try again later. " + pe.getLocalizedMessage());
             MediPiMessageBox.getInstance().makeErrorMessage("Attempt to synchronize medication data has failed - MediPi Concentrator is not available - please try again later. " + pe.getLocalizedMessage(), pe);
         } catch (Exception e) {

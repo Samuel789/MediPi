@@ -3,15 +3,18 @@ import json
 from django.http import HttpResponse
 
 from MedWeb.clinical_database.clinical_database import medications
-from MedWeb.clinical_database.entities import Medication
 from MedWeb.concentrator_interface.entities import Schedule, from_dict, ScheduledDose
 from MedWeb.concentrator_interface.interface import schedules, send_to_concentrator, update_from_concentrator
 from MedWeb.patient_database.patient_database import patients
 
+
 def get_medication_details(request):
     medication_id = request.POST.get("id")
     medication = medications[int(medication_id)]
-    return HttpResponse(json.dumps({"full_name": medication.full_name, "short_name": medication.short_name, "cautionary_text": medication.cautionary_text, "id": medication.id, "dose_unit": medication.dose_unit.name}))
+    return HttpResponse(json.dumps({"full_name": medication.full_name, "short_name": medication.short_name,
+                                    "cautionary_text": medication.cautionary_text, "id": medication.id,
+                                    "dose_unit": medication.dose_unit.name}))
+
 
 def patch_schedule(request):
     data = request.POST
@@ -21,14 +24,17 @@ def patch_schedule(request):
         validate_scheduled_dose(dose)
     schedules[schedule_id].scheduled_doses += scheduled_doses
 
+
 def put_schedule(request):
     data = request.POST
     schedule = from_dict(Schedule.__class__, data["schedule"])
     validate_schedule(schedule)
     patients[schedule.id].schedules.append(schedule)
 
+
 def validate_schedule():
     pass
+
 
 def validate_scheduled_dose(dose):
     pass
@@ -44,9 +50,12 @@ def add_patient_schedule(request):
         dose = ScheduledDose(**dose_data, schedule_id=None, reminder_time=dose_data["default_reminder_time"])
         validate_scheduled_dose(dose)
         doses.append(dose)
-    schedule = Schedule(schedule_data["id"], schedule_data["start_date"], schedule_data["end_date"], schedule_data["alternate_name"], schedule_data["purpose_statement"], patient_uuid, medication_id,None,None,None)
+    schedule = Schedule(schedule_data["id"], schedule_data["start_date"], schedule_data["end_date"],
+                        schedule_data["alternate_name"], schedule_data["purpose_statement"], patient_uuid,
+                        medication_id, None, None, None)
     send_to_concentrator(schedule, doses)
     return HttpResponse()
+
 
 def update(request):
     update_from_concentrator()
@@ -55,6 +64,7 @@ def update(request):
 
 def error_response(exception):
     return HttpResponse(exception.message)
+
 
 class RequestProcessingException(Exception):
     def __init__(self, message):

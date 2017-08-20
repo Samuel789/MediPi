@@ -1,11 +1,12 @@
 class Medication:
     json_name = "medication"
     json_attribute_map = {"medicationId": "id",
-                       "shortName": "short_name",
-                       "fullName": "full_name",
-                       "cautionaryText": "cautionary_text",
-                       "iconName": "icon_name",
-                       "doseUnit": "dose_unit",}
+                          "shortName": "short_name",
+                          "fullName": "full_name",
+                          "cautionaryText": "cautionary_text",
+                          "iconName": "icon_name",
+                          "doseUnit": "dose_unit", }
+
     def __init__(self, id, short_name, full_name, cautionary_text, icon_name, dose_unit, dose_unit_id):
         self.id = id
         self.short_name = short_name
@@ -18,10 +19,12 @@ class Medication:
     def __str__(self):
         return "Medication %d: %s" % (self.id, self.full_name)
 
+
 class DoseUnit:
     json_name = "doseUnit"
     json_attribute_map = {"doseUnitId": "id",
-                       "name": "name"}
+                          "name": "name"}
+
     def __init__(self, id, name):
         self.id = id
         self.name = name

@@ -7,12 +7,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 
 public class HeaderTile extends Tile {
     Label titleLabel;
+
     public HeaderTile(SimpleBooleanProperty bpop, int widthUnits, int heightUnits) {
         super(bpop, widthUnits, heightUnits);
         content.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(5), new Insets(15))));

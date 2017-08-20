@@ -57,14 +57,14 @@ public class ButtonTile extends Tile {
         } else {
             widthUnitsToUse = widthUnits;
         }
-        int width = unitWidth*widthUnitsToUse;
-        int height = unitHeight*heightUnits;
+        int width = unitWidth * widthUnitsToUse;
+        int height = unitHeight * heightUnits;
         content.setPrefSize(width, height);
         content.setMaxSize(width, height);
         content.setMinSize(width, height);
         button.getStyleClass().add("mp-button");
-        button.setPrefWidth(width - 2*10);
-        button.setPrefHeight((height - 2*10));
+        button.setPrefWidth(width - 2 * 10);
+        button.setPrefHeight((height - 2 * 10));
         return content;
     }
 

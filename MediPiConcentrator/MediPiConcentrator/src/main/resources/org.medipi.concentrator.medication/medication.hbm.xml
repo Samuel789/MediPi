@@ -5,19 +5,20 @@
 <hibernate-mapping>
     <class name="org.medipi.medication.Medication" table="medication">
         <id name="medicationId" type="int">
-            <column name="medication_id" />
+            <column name="medication_id"/>
         </id>
         <property name="shortName" type="java.lang.String" not-null="true">
-            <column name="display_name" />
+            <column name="display_name"/>
         </property>
         <property name="fullName" type="java.lang.String" unique="true" not-null="true">
-            <column name="unique_name" />
+            <column name="unique_name"/>
 
         </property>
         <property name="cautionaryText" type="java.lang.String">
-            <column name="advisory_stmt" />
+            <column name="advisory_stmt"/>
         </property>
-        <many-to-one lazy="false" name="doseUnit" class="org.medipi.medication.DoseUnit" column="dose_unit" cascade="all" not-null="true" />
+        <many-to-one lazy="false" name="doseUnit" class="org.medipi.medication.DoseUnit" column="dose_unit"
+                     cascade="all" not-null="true"/>
 
     </class>
     <query name="Medication.findByMedicationId">

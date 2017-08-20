@@ -5,14 +5,14 @@
 <hibernate-mapping>
     <class name="org.medipi.medication.DoseUnit" table="dose_unit">
         <id name="doseUnitId" type="int">
-            <column name="dose_unit_id"  />
-            <generator class="increment" />
+            <column name="dose_unit_id"/>
+            <generator class="increment"/>
         </id>
         <property name="name" type="java.lang.String" not-null="true">
-            <column name="name" />
+            <column name="name"/>
         </property>
 
-            </class>
+    </class>
     <query name="DoseUnit.findByDoseId">
         <![CDATA[SELECT d FROM DoseUnit d WHERE d.doseUnitId = :id]]>
     </query>
