@@ -178,6 +178,7 @@ class DoseDetailsScreen extends TileMenu {
         timeButton.setText("Change Time");
         ButtonTile saveButton = new ButtonTile(new SimpleBooleanProperty(true), 2, 1);
         saveButton.setText("Save");
+        saveButton.getStyleClass().add("button-advised");
 
         addTile(backButton);
         addTile(header);
