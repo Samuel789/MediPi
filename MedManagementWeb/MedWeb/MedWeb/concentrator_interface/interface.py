@@ -94,6 +94,7 @@ def send_to_concentrator(schedule, doses):
     url = settings.MEDIPI_CONCENTRATOR_ADDRESS + 'medication/clinician/addSchedule'
     medicationDo = MedicationScheduleDO(schedule, doses)
     json = medicationDo.as_JSON()
+    print(json)
     requests.post(url, data=json, cert=(settings.SIGN_CERT_PATH, settings.SIGN_KEY_PATH), verify=False,
                   headers={'Content-type': 'application/json'}, timeout=7000)
     update_from_concentrator()
@@ -104,6 +105,7 @@ def get_patient_dose_instances(patient_uuid, start_date, end_date):
     data = json.loads(
         requests.get(url, params={"patientUuid": patient_uuid, "startDate": start_date, "endDate": end_date},
                      cert=(settings.SIGN_CERT_PATH, settings.SIGN_KEY_PATH), verify=False).text)
+    print(data)
     dose_instances = [entities.from_dict(entities.DoseInstance, dose_instance_data) for dose_instance_data in data]
     return dose_instances
 

@@ -7,7 +7,6 @@
     </div>
     <div class="container">
 
-
         {% if active_patient.status.value == 1 %}
             <div class="alert alert-danger">
                 <strong>Warning!</strong> This patient is not registered with the Concentrator.
@@ -15,11 +14,14 @@
         {% else %}
             {% if active_patient.schedules|length > 0 %}
                 <div id='timeline'></div>
+                <h2>Current Schedules</h2>
                 <table class="table table-hover">
                     <thead>
                     <tr>
                         <th>Medication</th>
                         <th>Full Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
                         <th>Last 7 Days</th>
                         <th>Streak</th>
                         <th>Alternate Name</th>
@@ -28,10 +30,12 @@
                     </thead>
                     <tbody>
 
-                    {% for schedule in active_patient.schedules %}
+                    {% for schedule in active_patient.schedules|present %}
                         <tr>
                             <td>{{ schedule.medication.short_name }}</td>
                             <td>{{ schedule.medication.full_name }}</td>
+                            <td>{{ schedule.start_date|date:"Y-m-d" }}</td>
+                            <td>{{ schedule.end_date|date:"Y-m-d" }}</td>
                             <td>{{ schedule.adherence.seven_day_fraction|as_percentage }}</td>
                             <td>{{ schedule.adherence.streak_length }}</td>
                             <td>{% if schedule.alternate_name is None %}<i>None</i>{% else %}
@@ -40,7 +44,42 @@
                                 <a class="btn btn-default"
                                    href="{{ siteurl }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
                                 <a class="btn btn-default"
-                                   href="{{ siteurl }}/patients/viewschedule?schedule_id={{ schedule.id }}">View</a>
+                                   href="{{ siteurl }}/patients/viewschedule?schedule_id={{ schedule.id }}">Remove</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
+                <h2>Upcoming Schedules</h2>
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Medication</th>
+                        <th>Full Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Alternate Name</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for schedule in active_patient.schedules|future %}
+                        <tr>
+                            <td>{{ schedule.medication.short_name }}</td>
+                            <td>{{ schedule.medication.full_name }}</td>
+                            <td>{{ schedule.start_date|date:"Y-m-d" }}</td>
+                            <td>{{ schedule.end_date|date:"Y-m-d" }}</td>
+                            <td>{% if schedule.alternate_name is None %}<i>None</i>{% else %}
+                                {{ schedule.alternate_name }}{% endif %}</td>
+                            <td>
+                                <a class="btn btn-default"
+                                   href="{{ siteurl }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
+                                <a class="btn btn-default"
+                                   href="{{ siteurl }}/patients/viewschedule?schedule_id={{ schedule.id }}">Cancel</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -80,16 +119,23 @@
             var chart = new google.visualization.Timeline(container);
             var dataTable = new google.visualization.DataTable();
 
-            dataTable.addColumn({type: 'string', id: 'President'});
+            dataTable.addColumn({type: 'string', id: 'Name'});
             dataTable.addColumn({type: 'string', id: 'Value'});
             dataTable.addColumn({type: 'date', id: 'Start'});
             dataTable.addColumn({type: 'date', id: 'End'});
             dataTable.addRows([
                 {%  for dose in dose_instances %}
-                    ["{{ dose.schedule.medication.full_name }}", {{ dose.dose_value }} +" " + "{{ dose.schedule.medication.dose_unit.name }}", new Date("{{ dose|dose_start_date|date:"Y-m-d H:i" }}"), new Date("{{ dose|dose_end_date|date:"Y-m-d H:i" }}")],
+                    ["{{ dose.schedule.medication.full_name }}", {{ dose.dose_value }} +" " + "{{ dose.schedule.medication.dose_unit.name }}", new Date("{{ dose.start_datetime|date:"Y-m-d H:i" }}"), new Date("{{ dose.end_datetime|date:"Y-m-d H:i" }}")],
                 {% endfor %}
             ]);
-            chart.draw(dataTable);
+            chart.draw(dataTable, {enableInteractivity: false,
+                                   colors: [{%  for dose in dose_instances %}"{{ dose.color }}",{% endfor %}],
+                                   title: "This week",
+                                    hAxis: {
+                                    format: 'yyyy-M-d',
+                                    gridlines: {count: 15}
+                                  }
+                                   });
         }
     </script>
 

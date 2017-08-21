@@ -39,3 +39,11 @@ def nhs_part(nhs_no, index):
         return nhs_no[3:6]
     if index == 3:
         return nhs_no[6:10]
+
+@register.filter
+def present(schedule_list):
+    return [schedule for schedule in schedule_list if schedule.start_date <= datetime.date.today() and (schedule.end_date is None or schedule.end_date > datetime.date.today())]
+
+@register.filter
+def future(schedule_list):
+    return [schedule for schedule in schedule_list if schedule.start_date > datetime.date.today()]

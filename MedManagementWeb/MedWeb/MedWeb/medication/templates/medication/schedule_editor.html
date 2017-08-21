@@ -12,7 +12,12 @@
 
     </div>
     <div class="container">
-        <p>Schedule start date: <input type="text" id="start-date-picker"></p>
+    <p>Schedule start date:
+            {% if enable_start_date_change %}
+                <input type="text" id="start-date-picker">
+        {% else %}
+                <span type="text" id="start-date-picker"></span>
+        {% endif %}</p>
         <p>Purpose statement: <input type="text" id="purpose-statement-field" style="width:600px"></p>
         <p>Alternate name (patient-set): <input type="text" disabled id="alternate-name-field" placeholder="None"></p>
         <div class="option-pane" id="asneeded_pane">
@@ -148,7 +153,6 @@
             schedule["id"] = {{ active_schedule.id|safe }};
             schedule["purpose_statement"] = "{{ active_schedule.purpose_statement|safe }}";
             schedule["alternate_name"] = "{{ active_schedule.alternate_name|safe }}";
-
         {% else %}
             var schedule_start_day = new Date();
             schedule_start_day.setDate(schedule_start_day.getDate() + 1);
@@ -156,8 +160,8 @@
             schedule["purpose_statement"] = "";
             schedule["alternate_name"] = "";
         {% endif %}
-        {% load static %}
-        start_date_picker.datepicker({
+        {% if enable_start_date_change %}
+            start_date_picker.datepicker({
             date: schedule_start_day,
             minDate: function () {
                 minDate = new Date();
@@ -174,7 +178,11 @@
                 end_date_picker.datepicker("option", "minDate", schedule_start_day);
             }
         });
-        start_date_picker.datepicker('setDate', schedule_start_day);
+            start_date_picker.datepicker('setDate', schedule_start_day);
+        {% else %}
+            start_date_picker.html(schedule_start_day.toISOString().substring(0, 10));
+        {% endif %}
+        {% load static %}
         schedule_start_day.setSeconds(3601);
         schedule_end_day = new Date(schedule_start_day);
         end_date_picker.datepicker({

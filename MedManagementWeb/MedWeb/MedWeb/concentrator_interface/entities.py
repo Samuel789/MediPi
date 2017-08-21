@@ -112,14 +112,14 @@ class ScheduleAdherenceObject(AdherenceObject):
 class DoseInstance:
     _json_name = "doseInstance"
     _json_attribute_map = {"dose": "scheduled_dose_id <- scheduledDoseId",
-                           "takenDose": "taken_dose_id <- recordedDoseId",
+                           "takenDose": "taken_dose_uuid <- recordedDoseUUID",
                            "day": "day",
                            "timeStart": "start_time",
                            "timeEnd": "end_time",
                            "doseValue": "dose_value",
                            "scheduleId": "schedule_id"}
 
-    def __init__(self, day, start_time, end_time, schedule_id, scheduled_dose_id, taken_dose_id, dose_value):
+    def __init__(self, day, start_time, end_time, schedule_id, scheduled_dose_id, taken_dose_uuid, dose_value):
         self.day = day
         self.start_time = start_time
         self.end_time = end_time
@@ -127,7 +127,7 @@ class DoseInstance:
         from MedWeb.concentrator_interface.interface import schedules
         self.schedule = schedules[schedule_id]
         self.scheduled_dose_id = scheduled_dose_id
-        self.taken_dose_id = taken_dose_id
+        self.taken_dose_uuid = taken_dose_uuid
         self.dose_value = dose_value
 
 
