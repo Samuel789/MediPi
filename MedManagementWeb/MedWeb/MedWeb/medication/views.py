@@ -8,7 +8,6 @@ from MedWeb import settings
 from MedWeb.clinical_database.clinical_database import medications
 from MedWeb.concentrator_interface.interface import schedules
 from MedWeb.concentrator_interface.interface import update_from_concentrator, get_patient_dose_instances
-from MedWeb.medication.templatetags.display_utils import dose_start_date, dose_end_date
 from MedWeb.patient_database.patient_database import patients
 
 sidebar_menu_urls = {"Medications": "/viewpatient",
@@ -43,8 +42,9 @@ def patient_summary(request):
                                   todayDate.weekday()), todayDate - datetime.timedelta(
                                   todayDate.weekday()) + datetime.timedelta(days=7))
     for dose_instance in dose_instances:
-        dose_instance.start_datetime = dose_start_date(dose_instance)
-        dose_instance.end_datetime = dose_end_date(dose_instance)
+        dose_date = dose_instance.schedule.start_date + datetime.timedelta(days=dose_instance.day)
+        dose_instance.start_datetime = datetime.datetime.combine(dose_date, dose_instance.start_time)
+        dose_instance.end_datetime = datetime.datetime.combine(dose_date, dose_instance.end_time)
         if dose_instance.start_datetime > datetime.datetime.now():
             dose_instance.color = "#ADECFF"
         elif dose_instance.taken_dose_uuid is not None:
