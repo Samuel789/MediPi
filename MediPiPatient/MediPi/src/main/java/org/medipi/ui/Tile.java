@@ -16,6 +16,7 @@
 package org.medipi.ui;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -100,5 +101,9 @@ public class Tile {
 
     public void setContent(BorderPane content) {
         this.content = content;
+    }
+
+    public ObservableList<String> getStyleClass() {
+        return content.getStyleClass();
     }
 }

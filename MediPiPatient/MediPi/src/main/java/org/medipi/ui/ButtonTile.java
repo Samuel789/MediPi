@@ -16,6 +16,7 @@
 package org.medipi.ui;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -78,5 +79,10 @@ public class ButtonTile extends Tile {
 
     public void setOnButtonClick(EventHandler<? super MouseEvent> event) {
         button.setOnMouseClicked(event);
+    }
+
+    @Override
+    public ObservableList<String> getStyleClass() {
+        return button.getStyleClass();
     }
 }
