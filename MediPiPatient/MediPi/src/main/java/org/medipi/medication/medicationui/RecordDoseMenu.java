@@ -78,7 +78,7 @@ public class RecordDoseMenu extends TileMenu {
 
     private void populateMedicationTiles() {
         dueDose = new HashMap<>();
-        schedules = ((MedicationManager) mediPi.getElement("Medication")).getDatestore().getPatientSchedules();
+        schedules = ((MedicationManager) mediPi.getElement("Medication")).getDatestore().getActiveSchedules();
         ArrayList<MedicationTile> orderedTiles = new ArrayList<>();
         ReminderService reminderService = ((MedicationManager) mediPi.getElement("Medication")).getReminderService();
         LocalTime currentTime = LocalTime.now();
@@ -187,7 +187,7 @@ class DoseDetailsScreen extends TileMenu {
         doseButton.setOnButtonClick((MouseEvent e) -> {
             TextInputDialog inputWindow = new TextInputDialog(Double.toString(doseValue));
             inputWindow.setTitle("Dose value");
-            inputWindow.setHeaderText("Set dose value (" + correspondingDose.getSchedule().getMedication().getDoseUnit().getName() + ")");
+            inputWindow.setHeaderText("Set dose value (" + medicationSchedule.getMedication().getDoseUnit().getName() + ")");
             inputWindow.initModality(Modality.APPLICATION_MODAL);
             inputWindow.showAndWait();
             try {
@@ -201,7 +201,7 @@ class DoseDetailsScreen extends TileMenu {
         timeButton.setOnButtonClick((MouseEvent e) -> {
             TextInputDialog inputWindow = new TextInputDialog(doseTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
             inputWindow.setTitle("Time taken");
-            inputWindow.setHeaderText("Set time taken " + correspondingDose.getSchedule().determineDisplayName() + ")");
+            inputWindow.setHeaderText("Set time taken " + medicationSchedule.determineDisplayName() + ")");
             inputWindow.initModality(Modality.APPLICATION_MODAL);
             inputWindow.showAndWait();
             try {

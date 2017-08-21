@@ -5,6 +5,7 @@ import org.medipi.medication.reminders.MedicationReminderEvent;
 import org.medipi.medication.reminders.ReminderEventInterface;
 import org.medipi.medication.reminders.ReminderService;
 
+import java.sql.Date;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -21,6 +22,12 @@ public class Datastore {
     private List<Schedule> patientSchedules;
     private MediPi medipi;
     private PatientAdherence patientAdherence;
+
+    public List<Schedule> getActiveSchedules() {
+        return activeSchedules;
+    }
+
+    private List<Schedule> activeSchedules;
 
     public Datastore(MediPi medipi) {
         this.medipi = medipi;
@@ -48,8 +55,14 @@ public class Datastore {
     private void populateReminderService() {
         ReminderService reminderService = ((MedicationManager) medipi.getElement("Medication")).getReminderService();
         HashSet<ReminderEventInterface> events = new HashSet<>();
+        activeSchedules = new ArrayList<>();
         // Add every scheduled dose to reminder service
         for (Schedule schedule : patientSchedules) {
+            if (!schedule.getAssignedStartDate().toLocalDate().isAfter(LocalDate.now())) {
+                if (schedule.getAssignedEndDate() == null || schedule.getAssignedEndDate().toLocalDate().isAfter(LocalDate.now())) {
+                    activeSchedules.add(schedule);
+                }
+            }
             for (ScheduledDose dose : schedule.getScheduledDoses()) {
                 events.add(new MedicationReminderEvent(dose));
             }

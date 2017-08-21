@@ -11,6 +11,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class TestScheduledDoseUnpacker {
@@ -154,6 +155,16 @@ public class TestScheduledDoseUnpacker {
         expectedResult.add(new DoseInstance(simpleDailyDose, 2));
         expectedResult.add(new DoseInstance(simpleDailyDose, 3));
         assert ScheduledDoseUnpacker.unpack(simpleDailyDose, 0, 4).equals(expectedResult);
+    }
+
+    @Test
+    public void repeatNullGivesSingleDoseInstance() {
+        assert ScheduledDoseUnpacker.unpack(singleDayDose, 2, 7).equals(Collections.singletonList(new DoseInstance(singleDayDose, 5)));
+    }
+
+    @Test
+    public void repeatNullOutOfBoundsGivesZeroDoses() {
+        assert ScheduledDoseUnpacker.unpack(singleDayDose, 6, 10).equals(Collections.emptyList());
     }
 
     @Test

@@ -265,3 +265,16 @@ th.clinical-value {
 .panel-text {
     padding: 10px;
 }
+
+.floater-warning {
+    bottom:0;
+    position: fixed;
+    padding: 5px;
+    font-weight: bold;
+    right:0;
+    background-color: red;
+    width: 250px;
+    color: white;
+    float: top;
+
+}

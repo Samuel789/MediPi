@@ -5,7 +5,7 @@ import java.sql.Time;
 public class DoseInstance {
     public RecordedDose takenDose;
     private ScheduledDose dose;
-    private int scheduleId;
+    private Integer scheduleId;
     private double doseValue;
     private int day;
     private Time timeStart;
@@ -32,11 +32,11 @@ public class DoseInstance {
         this.takenDose = takenDose;
     }
 
-    public int getScheduleId() {
+    public Integer getScheduleId() {
         return scheduleId;
     }
 
-    public void setScheduleId(int scheduleId) {
+    public void setScheduleId(Integer scheduleId) {
         this.scheduleId = scheduleId;
     }
 

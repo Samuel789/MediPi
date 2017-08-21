@@ -116,7 +116,7 @@ public class ScheduleAdherenceCalculator {
     }
 
     private void initialize(Schedule schedule, int queryStartDay, int queryEndDay, boolean calculatingStreak) {
-        assert (queryStartDay < queryEndDay);
+        assert (queryStartDay <= queryEndDay);
         assert (queryStartDay >= 0);
         this.queryStartDay = queryStartDay;
         this.queryEndDay = queryEndDay;

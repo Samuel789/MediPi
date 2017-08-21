@@ -13,11 +13,14 @@
             </div>
         {% else %}
             {% if active_patient.schedules|length > 0 %}
+                <div class="top-floater-warning floater-warning" id="out-of-view-warning" hidden>Some medications out of view</div>
                 <div id='timeline'></div>
                 <h2>Current Schedules</h2>
+                <div id="med-tables">
                 <table class="table table-hover">
                     <thead>
                     <tr>
+                        <th>Status</th>
                         <th>Medication</th>
                         <th>Full Name</th>
                         <th>Start Date</th>
@@ -32,6 +35,7 @@
 
                     {% for schedule in active_patient.schedules|present %}
                         <tr>
+                            <td>Current</td>
                             <td>{{ schedule.medication.short_name }}</td>
                             <td>{{ schedule.medication.full_name }}</td>
                             <td>{{ schedule.start_date|date:"Y-m-d" }}</td>
@@ -57,6 +61,7 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
+                        <th>Status</th>
                         <th>Medication</th>
                         <th>Full Name</th>
                         <th>Start Date</th>
@@ -69,6 +74,7 @@
 
                     {% for schedule in active_patient.schedules|future %}
                         <tr>
+                            <td>{% if schedule.medication|being_taken:active_patient.schedules %}Modification{% else %}Not yet active{% endif %}</td>
                             <td>{{ schedule.medication.short_name }}</td>
                             <td>{{ schedule.medication.full_name }}</td>
                             <td>{{ schedule.start_date|date:"Y-m-d" }}</td>
@@ -86,6 +92,7 @@
 
                     </tbody>
                 </table>
+                </div>
             {% else %}
                 <div class="alert alert-info">
                     <strong>Info!</strong> No medications have been assigned to this patient. Click the Add Medication
@@ -137,6 +144,37 @@
                                   }
                                    });
         }
+    </script>
+
+    <script>
+    function isScrolledIntoView(elem)
+        {
+            var docViewTop = $(window).scrollTop();
+            var docViewBottom = docViewTop + $(window).height();
+
+            var elemTop = $(elem).offset().top;
+            var elemBottom = elemTop + elem.height();
+
+            return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+        }
+        var medTables = $("#med-tables");
+        var outOfViewWarning = $("#out-of-view-warning");
+    function updateScrollWarning() {
+        if(isScrolledIntoView(medTables)){
+        outOfViewWarning.prop("hidden", true)
+    } else {
+        outOfViewWarning.prop("hidden", false)
+    }
+    }
+$(window).scroll(function(){
+    updateScrollWarning()
+  });
+$(window).resize(function() {
+    updateScrollWarning()
+});
+$(window).ready(function() {
+    updateScrollWarning()
+});
     </script>
 
 

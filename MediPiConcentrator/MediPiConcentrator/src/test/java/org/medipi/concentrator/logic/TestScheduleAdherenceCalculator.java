@@ -186,11 +186,38 @@ public class TestScheduleAdherenceCalculator {
         schedule.setScheduledDoses(Collections.singleton(dose));
         ScheduleAdherenceCalculator scheduleAdherenceCalculator = new ScheduleAdherenceCalculator(schedule, 3, 10, false);
         scheduleAdherenceCalculator.calculateScheduleAdherence();
-        System.out.println(scheduleAdherenceCalculator.getSummary());
         assert scheduleAdherenceCalculator.getAdherenceFraction() == 0;
         assert scheduleAdherenceCalculator.getNumDosesMissed() == 1;
         assert scheduleAdherenceCalculator.getNumDosesTakenIncorrectly() == 1;
         assert scheduleAdherenceCalculator.getNumDosesTakenCorrectly() == 0;
+    }
+
+    @Test
+    public void zeroRangeGivesNullFraction() {
+        schedule.setScheduledDoses(new HashSet<>());
+        schedule.setRecordedDoses(new HashSet<>());
+        ScheduledDose dose = new ScheduledDose();
+        dose.setStartDay(0);
+        dose.setSchedule(schedule);
+        dose.setWindowStartTime(Time.valueOf("13:00:00"));
+        dose.setWindowEndTime(Time.valueOf("15:00:00"));
+        dose.setDoseValue(3);
+        dose.setRepeatInterval(1);
+        dose.setEndDay(null);
+        RecordedDose rDose = new RecordedDose();
+        rDose.setDayTaken(5);
+        rDose.setDoseValue(2);
+        rDose.setTimeTaken(Time.valueOf("14:00:00"));
+        rDose.setSchedule(schedule);
+        schedule.setRecordedDoses(Collections.singleton(rDose));
+        schedule.setScheduledDoses(Collections.singleton(dose));
+        ScheduleAdherenceCalculator scheduleAdherenceCalculator = new ScheduleAdherenceCalculator(schedule, 3, 3, false);
+        scheduleAdherenceCalculator.calculateScheduleAdherence();
+        assert scheduleAdherenceCalculator.getAdherenceFraction() == null;
+        assert scheduleAdherenceCalculator.getNumDosesMissed() == 0;
+        assert scheduleAdherenceCalculator.getNumDosesTakenIncorrectly() == 0;
+        assert scheduleAdherenceCalculator.getNumDosesTakenCorrectly() == 0;
+        assert scheduleAdherenceCalculator.getNumDosesToTake() == 0;
     }
 
 

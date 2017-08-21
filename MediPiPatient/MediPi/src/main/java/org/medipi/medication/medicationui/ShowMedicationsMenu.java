@@ -45,7 +45,7 @@ public class ShowMedicationsMenu extends TileMenu {
     }
 
     private void populateMedicationTiles() {
-        for (Schedule schedule : ((MedicationManager) medipi.getElement("Medication")).getDatestore().getPatientSchedules()) {
+        for (Schedule schedule : ((MedicationManager) medipi.getElement("Medication")).getDatestore().getActiveSchedules()) {
             mainPane.addTile(new MedicationTile(new SimpleBooleanProperty(true), 1, 1, schedule));
         }
     }

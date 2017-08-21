@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ScheduledDoseUnpacker {
-    @Autowired
-    private ScheduleDAOImpl scheduleDAOimpl;
+public final class ScheduledDoseUnpacker {
+
+    private ScheduledDoseUnpacker() {}
 
     public static List<DoseInstance> unpack(ScheduledDose scheduledDose, int startDay, int endDay) {
         validateArguments(scheduledDose, startDay, endDay);

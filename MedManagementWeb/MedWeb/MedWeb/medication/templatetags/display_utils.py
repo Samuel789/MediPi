@@ -47,3 +47,10 @@ def present(schedule_list):
 @register.filter
 def future(schedule_list):
     return [schedule for schedule in schedule_list if schedule.start_date > datetime.date.today()]
+
+@register.filter
+def being_taken(medication, patient_schedules):
+    for schedule in present(patient_schedules):
+        if schedule.medication == medication:
+            return True
+    return False
