@@ -1,6 +1,7 @@
 package org.medipi.medication.medicationui;
 
-import javafx.geometry.Pos;
+import javafx.geometry.*;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,9 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.medipi.MediPi;
 import org.medipi.medication.Medication;
@@ -20,6 +19,7 @@ import org.medipi.medication.ScheduledDose;
 import org.medipi.medication.reminders.MedicationReminderEvent;
 import org.medipi.medication.reminders.ReminderService;
 
+import java.awt.*;
 import java.io.File;
 
 public class MedicationReminder extends Group {
@@ -33,6 +33,8 @@ public class MedicationReminder extends Group {
         this.getChildren().add(content);
         Schedule schedule = dose.getSchedule();
         Medication medication = schedule.getMedication();
+        content.setPadding(new Insets(10));
+        content.setStyle("-fx-border-color: deepskyblue; -fx-border-width: 2px");
         Label titleLabel = new Label("Medication Reminder");
         Label reminderLabel = new Label("It's time to take " + schedule.determineDisplayName());
         Label doseLabel = new Label("Dose: " + dose.getDoseValue() + " " + medication.getDoseUnit().getName());
@@ -64,6 +66,7 @@ public class MedicationReminder extends Group {
         buttonBox.getChildren().add(takeButton);
         buttonBox.getChildren().add(delayButton);
         buttonBox.getChildren().add(dismissButton);
+        buttonBox.setPadding(new Insets(5));
         dismissButton.setOnMouseClicked((MouseEvent event) -> {
             ((Stage) this.getScene().getWindow()).close();
             reminderService.dismissEvent(reminderEvent);
