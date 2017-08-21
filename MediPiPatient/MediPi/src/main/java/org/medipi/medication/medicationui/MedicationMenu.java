@@ -10,7 +10,6 @@ import org.medipi.ui.*;
 
 
 public class MedicationMenu extends TileMenu {
-    double adherenceRate = 0.8;
     MediPi mediPi;
     Datastore datastore;
     HeaderTile headerTile;
@@ -42,7 +41,7 @@ public class MedicationMenu extends TileMenu {
             this.showOverlayWindow();
         });
         viewScheduleTile.setOnTileClick((MouseEvent event) -> {
-            ((MedicationManager) mediPi.getElement("Medication")).getReminderService().throwTestReminder();
+            ((MedicationManager) mediPi.getElement("Medication")).getReminderService().triggerTestReminder();
         });
         showMedicationsTile.setOnTileClick((MouseEvent event) -> {
             this.setOverlayWindow(new ShowMedicationsMenu(mediPi, this));

@@ -3,6 +3,7 @@ package org.medipi.medication.reminders;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.medipi.MediPi;
 import org.medipi.medication.ScheduledDose;
 import org.medipi.medication.medicationui.MedicationReminder;
@@ -78,6 +79,7 @@ public class MedicationReminderEvent implements ReminderEventInterface {
         MedicationReminder popupContents = new MedicationReminder(this, mediPi);
         Scene popupScene = new Scene(popupContents);
         popupContents.getStylesheets().addAll(mediPi.scene.getStylesheets());
+        popupWindow.initStyle(StageStyle.UNDECORATED);
         popupWindow.setScene(popupScene);
         popupWindow.setTitle("Medication Information");
         popupWindow.initModality(Modality.WINDOW_MODAL);

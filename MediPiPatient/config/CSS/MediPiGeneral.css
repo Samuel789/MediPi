@@ -351,6 +351,10 @@ Messenger
 	-fx-background-color: #D4F5B3 !important;
 }
 
+.button-disabled {
+    -fx-background-color: dimgrey !important;
+}
+
 .mp-button {
 	-fx-background-color: white;
 	-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 5 , 5 );
@@ -360,6 +364,16 @@ Messenger
 }
 
 .button-large {
-	-fx-pref-width: 120;
+	-fx-pref-width: 140;
 	-fx-pref-height: 40;
+}
+
+.heading-text {
+	-fx-font: 17px Tahoma;
+	-fx-font-weight: bold;
+}
+
+.title-text {
+	-fx-font: 20px Tahoma;
+	-fx-font-weight: bold;
 }

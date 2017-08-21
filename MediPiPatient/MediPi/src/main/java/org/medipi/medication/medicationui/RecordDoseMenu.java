@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -12,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import org.medipi.MediPi;
 import org.medipi.medication.*;
 import org.medipi.medication.reminders.MedicationReminderEvent;
@@ -23,6 +25,8 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -180,6 +184,39 @@ class DoseDetailsScreen extends TileMenu {
         saveButton.setText("Save");
         saveButton.getStyleClass().add("button-advised");
 
+        doseButton.setOnButtonClick((MouseEvent e) -> {
+            TextInputDialog inputWindow = new TextInputDialog(Double.toString(doseValue));
+            inputWindow.setTitle("Dose value");
+            inputWindow.setHeaderText("Set dose value (" + correspondingDose.getSchedule().getMedication().getDoseUnit().getName() + ")");
+            inputWindow.initModality(Modality.APPLICATION_MODAL);
+            inputWindow.showAndWait();
+            try {
+                doseValue = Double.valueOf(inputWindow.getResult());
+                generateDoseString();
+            } catch (NumberFormatException exc) {
+                showValidationError("Please enter only a number");
+            }
+        });
+
+        timeButton.setOnButtonClick((MouseEvent e) -> {
+            TextInputDialog inputWindow = new TextInputDialog(doseTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
+            inputWindow.setTitle("Time taken");
+            inputWindow.setHeaderText("Set time taken " + correspondingDose.getSchedule().determineDisplayName() + ")");
+            inputWindow.initModality(Modality.APPLICATION_MODAL);
+            inputWindow.showAndWait();
+            try {
+                LocalTime inputTime = LocalTime.parse(inputWindow.getResult());
+                if (!inputTime.isAfter(LocalTime.now())) {
+                    doseTime = inputTime;
+                    generateDoseString();
+                } else {
+                    showValidationError("Please enter a time before the current time");
+                }
+            } catch (DateTimeParseException exc) {
+                showValidationError("Please enter a time in the format HH:MM");
+            }
+        });
+
         addTile(backButton);
         addTile(header);
 
@@ -210,6 +247,15 @@ class DoseDetailsScreen extends TileMenu {
                 }
             }
         });
+    }
+
+    private static void showValidationError(String contentText) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Invalid input");
+        alert.setHeaderText("Please try that again!");
+        alert.setContentText(contentText);
+
+        alert.showAndWait();
     }
 
     private static String formatNumber(double d) {

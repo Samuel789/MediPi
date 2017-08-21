@@ -31,7 +31,7 @@ public class ReminderService {
         return today;
     }
 
-    public void throwTestReminder() {
+    public void triggerTestReminder() {
         MedicationManager medicationManager = (MedicationManager) mediPi.getElement("Medication");
         System.out.println(medicationManager);
         Schedule testSchedule = new Schedule();
@@ -47,8 +47,8 @@ public class ReminderService {
         testSchedule.setMedication(testMedication);
         testSchedule.setPurposeStatement("Medication Purpose Statement");
         testDose.setSchedule(testSchedule);
-        testDose.setWindowStartTime(Time.valueOf("14:00:00"));
-        testDose.setWindowEndTime(Time.valueOf("16:00:00"));
+        testDose.setWindowStartTime(Time.valueOf("12:00:00"));
+        testDose.setWindowEndTime(Time.valueOf("12:16:00"));
         testDose.setReminderTime(Time.valueOf("15:00:00"));
         testDose.setDoseValue(4.5);
         MedicationReminderEvent event = new MedicationReminderEvent(testDose);

@@ -9,7 +9,6 @@ import org.medipi.ui.*;
 
 
 public class ShowMedicationsMenu extends TileMenu {
-    double adherenceRate = 0.8;
     TileMenu mainPane;
     MediPi medipi;
 
