@@ -6,6 +6,7 @@ import org.medipi.medication.ScheduledDose;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,9 @@ public class ScheduledDoseUnpacker {
     public static List<DoseInstance> unpack(ScheduledDose scheduledDose, int startDay, int endDay) {
         validateArguments(scheduledDose, startDay, endDay);
         int sequenceStartDay = Math.max(startDay, scheduledDose.getStartDay());
+        if (sequenceStartDay >= endDay) {
+            return new ArrayList<>();
+        }
         int sequenceEndDay;
         if (scheduledDose.getEndDay() != null) {
             sequenceEndDay = Math.min(endDay, scheduledDose.getEndDay());

@@ -173,7 +173,9 @@ public class MedicationDownloadService {
             int endDay = Math.max(0, (int) schedule.getAssignedStartDate().toLocalDate().until(endDate, ChronoUnit.DAYS));
             for (ScheduledDose dose : schedule.getScheduledDoses()) {
                 dose.setSchedule(schedule);
-                doseInstances.addAll(ScheduledDoseUnpacker.unpack(dose, startDay, endDay));
+                ScheduleAdherenceCalculator scheduleAdherenceCalculator = new ScheduleAdherenceCalculator(schedule, startDay, endDay, false);
+                scheduleAdherenceCalculator.calculateScheduleAdherence();
+                doseInstances.addAll(scheduleAdherenceCalculator.getDoseInstances());
                 dose.setSchedule(null);
             }
         }

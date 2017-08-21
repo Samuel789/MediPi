@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -41,14 +42,16 @@ public class MedicationScheduleUpdateService {
         }
         int dateDifference = (int) existingStartDate.until(newStartDate, ChronoUnit.DAYS);
         schedule.setAssignedStartDate(Date.valueOf(newStartDate));
+        List<ScheduledDose> removeList = new ArrayList<>();
         for (ScheduledDose dose : schedule.getScheduledDoses()) {
             try {
                 transposeDose(dose, dateDifference);
             } catch (DoseOutOfBoundsException e) {
                 //
-                schedule.getScheduledDoses().remove(dose);
+                removeList.add(dose);
             }
         }
+        schedule.getScheduledDoses().removeAll(removeList);
     }
 
     private void transposeDose(ScheduledDose dose, int days) throws DoseOutOfBoundsException {
@@ -73,7 +76,7 @@ public class MedicationScheduleUpdateService {
     private Schedule getExistingSchedule(LocalDate date, Medication medication, String patientUuid) {
         List<Schedule> existing_schedules = scheduleDAOimpl.findByMedicationAndPatient(medication, patientUuid);
         for (Schedule schedule : existing_schedules) {
-            if (!schedule.getAssignedStartDate().toLocalDate().isAfter(date) && (schedule.getAssignedEndDate() == null || schedule.getAssignedEndDate().toLocalDate().isAfter(date))) {
+            if ((schedule.getAssignedEndDate() == null || schedule.getAssignedEndDate().toLocalDate().isAfter(date.plusDays(1)))) {
                 return schedule;
             }
         }
@@ -105,17 +108,19 @@ public class MedicationScheduleUpdateService {
     @Transactional(rollbackFor = Throwable.class)
     public void addSchedule(Schedule newSchedule, List<ScheduledDose> newDoses, int medicationId) {
         Medication medication = medicationDAOImpl.findByMedicationId(medicationId);
+        newSchedule.setMedication(medication);
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         newSchedule.setScheduleId(null);
-        scheduleDAOimpl.save(newSchedule);
-        newSchedule.setMedication(medication);
         Schedule existing_schedule = getExistingSchedule(tomorrow, medication, newSchedule.getPatientUuid());
+        scheduleDAOimpl.save(newSchedule);
         newSchedule.setScheduledDoses(new HashSet<>(newDoses));
+        if (newSchedule.getAssignedStartDate().toLocalDate().isBefore(tomorrow)) {
+            moveScheduleStartDate(newSchedule, tomorrow);
+        }
         if (existing_schedule != null) {
             assert (existing_schedule.getPatientUuid().equals(newSchedule.getPatientUuid()));
             existing_schedule.setAssignedEndDate(Date.valueOf(tomorrow));
-            moveScheduleStartDate(newSchedule, tomorrow);
-            scheduleDAOimpl.update(newSchedule);
+
             // Clean up previous schedule changes from today (which were never able to come into effect)
             if (existing_schedule.getAssignedEndDate().equals(existing_schedule.getAssignedStartDate())) {
                 deleteSchedule(existing_schedule);

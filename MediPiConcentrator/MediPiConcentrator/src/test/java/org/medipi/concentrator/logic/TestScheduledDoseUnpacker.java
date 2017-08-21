@@ -210,9 +210,9 @@ public class TestScheduledDoseUnpacker {
         ScheduledDoseUnpacker.unpack(simpleDailyDose, 3, 2);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void endDateOnStartDateIsInvalid() {
-        ScheduledDoseUnpacker.unpack(simpleDailyDose, 3, 3);
+    @Test
+    public void endDateOnStartDateGivesNoDoses() {
+        assert ScheduledDoseUnpacker.unpack(simpleDailyDose, 3, 3).size() == 0;
     }
 
     @Test

@@ -28,8 +28,13 @@ public class ScheduleAdherenceCalculator {
     }
 
     public ScheduleAdherenceCalculator(Schedule schedule, LocalDate queryStartDate, LocalDate queryEndDate, boolean calculatingStreak) {
-        if (queryStartDate.isBefore(schedule.getAssignedStartDate().toLocalDate())) {
-            queryStartDate = schedule.getAssignedStartDate().toLocalDate();
+        LocalDate scheduleStart = schedule.getAssignedStartDate().toLocalDate();
+        if (queryStartDate.isBefore(scheduleStart)) {
+            if (queryEndDate.isBefore(scheduleStart)) {
+                queryStartDate = queryEndDate;
+            } else {
+                queryStartDate = schedule.getAssignedStartDate().toLocalDate();
+            }
         }
         if (queryEndDate.isBefore(queryStartDate)) {
             throw new IllegalArgumentException("Query end date cannot be before start date");
@@ -41,7 +46,7 @@ public class ScheduleAdherenceCalculator {
 
     private static Integer toDayOfSchedule(Schedule schedule, LocalDate date) {
         if (date.isBefore(schedule.getAssignedStartDate().toLocalDate())) {
-            return null;
+            return 0;
         }
         return (int) schedule.getAssignedStartDate().toLocalDate().until(date, ChronoUnit.DAYS);
     }
