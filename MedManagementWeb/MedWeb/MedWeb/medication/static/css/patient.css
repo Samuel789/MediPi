@@ -254,8 +254,12 @@ th.clinical-value {
     padding: 5px 15px;
 }
 
+.main-pane .widecontainer {
+    width: 1300px !important;
+}
+
 .main-pane .container {
-    width: 1300px;
+    width: 1000px ;
 }
 
 .button-row {

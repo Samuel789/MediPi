@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.medipi.medication.Schedule;
 import org.medipi.ui.Tile;
 
@@ -142,9 +143,11 @@ public class MedicationTile extends Tile {
             MedicationInformation popupContents = new MedicationInformation(medicationSchedule);
             Scene scene = new Scene(popupContents);
             scene.getStylesheets().addAll(content.getScene().getStylesheets());
+            popupContents.setStyle("-fx-border-color: deepskyblue; -fx-border-width: 2px");
             popupWindow.setScene(scene);
             popupWindow.setTitle("Medication Information");
             popupWindow.initModality(Modality.WINDOW_MODAL);
+            popupWindow.initStyle(StageStyle.UNDECORATED);
             popupWindow.initOwner(content.getScene().getWindow());
             popupWindow.showAndWait();
         });

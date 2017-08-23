@@ -41,8 +41,9 @@
             </div>
 
         </div>
+        <a class="btn btn-lg btn-primary" id="save-button" onclick="upload()">Save</a>
+
     </div>
-    <a class="btn btn-lg btn-primary" id="save-button" onclick="upload()">Save</a>
     </div>
     <!--Edit dose modal dialog-->
     <div class="modal fade" id="dose-editor-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -64,7 +65,7 @@
                                     <input type="time" id="end-time-input" placeholder="End Time"><br/>
                                     Default reminder time: <input type="time" id="reminder-time-input"
                                                                   placeholder="Default Reminder Time"><br/>
-                                    Starting on day: <input type="number" id="start-day-input"
+                                    Starting on day: <input type="number" id="start-day-input" min="0"
                                                             onchange="recalculate_clarifiers()"
                                                             placeholder="Start Day"> (<span
                                             id="start-day-clarifier"></span>)
@@ -83,10 +84,10 @@
                                     <div class="radio">
                                         <label><input type="radio" name="optradio" id="repeat-radio"
                                                       onchange="optradio_onchange()">Repeat every <input type="number"
-                                                                                                         id="repeat-interval-input"
+                                                                                                         id="repeat-interval-input" min="0"
                                                                                                          placeholder="Repeat Interval">
                                             days<br/>
-                                            up to (and not including) day <input type="number" id="end-day-input"
+                                            up to (and not including) day <input type="number" id="end-day-input" min="0"
                                                                                  onchange="recalculate_clarifiers()"
                                                                                  placeholder="End Day"> (<span
                                                     id="end-day-clarifier"></span>). </label>
@@ -349,7 +350,7 @@
                 end_day = Number(modinp_end_day.value);
             }
             var end_day;
-            if (Number(modinp_end_day.value) == Number(modinp_start_day.value)) {
+            if (modinp_end_day.value == "" || Number(modinp_end_day.value) == Number(modinp_start_day.value) ) {
                 end_day = null;
             } else {
                 end_day = Number(modinp_end_day.value)
@@ -361,11 +362,16 @@
             } else {
                 repeat_interval = Number(modinp_repeat_interval.value);
             }
+            var start_day = Number(modinp_start_day.value);
+            if (end_day!= null && end_day < start_day) {
+                alert("End day cannot be before start day.");
+                return;
+            }
             dose = {
                 'dose_value': Number(modinp_dose_value.value),
                 'start_time': modinp_start_time.value,
                 'end_time': modinp_end_time.value,
-                'start_day': Number(modinp_start_day.value),
+                'start_day': start_day,
                 'end_day': end_day,
                 'repeat_interval': repeat_interval,
                 'default_reminder_time': modinp_reminder_time.value

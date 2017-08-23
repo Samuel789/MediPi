@@ -71,6 +71,8 @@ def assign_medication(request):
     if patient_uuid is None:
         return browse_patients(request)
     template = get_template("medication/assign_medication.djt.html")
+    active_medications = [sch.medication.id for sch in patients[patient_uuid].schedules if sch.end_date is None or sch.end_date > datetime.date.today()]
+    print(active_medications)
     output = template.render({"title": settings.SITE_NAME,
                               "version": settings.version_string,
                               "siteurl": settings.SITE_URL,
@@ -81,7 +83,7 @@ def assign_medication(request):
                               "active_section": "patients",
                               "active_patient": patients[patient_uuid],
                               "active_patient_medication_ids": json.dumps(
-                                  [sch.medication.id for sch in patients[patient_uuid].schedules]),
+                                  active_medications),
                               "medications": medications.values(),
                               }, request)
     return HttpResponse(output)

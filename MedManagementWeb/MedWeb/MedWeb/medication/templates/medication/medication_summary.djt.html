@@ -5,7 +5,7 @@
     <div class="title">
         <h3>Patient Medications: {{ active_patient.name }}</h3>
     </div>
-    <div class="container">
+    <div class="container widecontainer">
 
         {% if active_patient.status.value == 1 %}
             <div class="alert alert-danger">
@@ -35,13 +35,18 @@
 
                     {% for schedule in active_patient.schedules|present %}
                         <tr>
-                            <td>Current</td>
+                            <td>Active</td>
                             <td>{{ schedule.medication.short_name }}</td>
                             <td>{{ schedule.medication.full_name }}</td>
                             <td>{{ schedule.start_date|date:"Y-m-d" }}</td>
                             <td>{{ schedule.end_date|date:"Y-m-d" }}</td>
+                        {% if schedule.scheduled_doses|length > 0 %}
                             <td>{{ schedule.adherence.seven_day_fraction|as_percentage }}</td>
                             <td>{{ schedule.adherence.streak_length }}</td>
+                        {% else %}
+                            <td>Taken as needed</td>
+                            <td></td>
+                        {% endif %}
                             <td>{% if schedule.alternate_name is None %}<i>None</i>{% else %}
                                 {{ schedule.alternate_name }}{% endif %}</td>
                             <td>
@@ -135,14 +140,13 @@
                     ["{{ dose.schedule.medication.full_name }}", {{ dose.dose_value }} +" " + "{{ dose.schedule.medication.dose_unit.name }}", new Date("{{ dose.start_datetime|date:"Y-m-d H:i" }}"), new Date("{{ dose.end_datetime|date:"Y-m-d H:i" }}")],
                 {% endfor %}
             ]);
-            chart.draw(dataTable, {enableInteractivity: false,
+            chart.draw(dataTable, {
                                    colors: [{%  for dose in dose_instances %}"{{ dose.color }}",{% endfor %}],
                                    title: "This week",
                                     hAxis: {
                                     format: 'yyyy-M-d',
                                     gridlines: {count: 15}
-                                  }
-                                   });
+                                  }});
         }
     </script>
 

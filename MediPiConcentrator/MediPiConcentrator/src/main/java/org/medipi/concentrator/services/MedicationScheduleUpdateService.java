@@ -60,7 +60,14 @@ public class MedicationScheduleUpdateService {
                 dose.setStartDay(dose.getStartDay() - days);
             }
         } else {
-            dose.setStartDay(repeatUnit - (days % repeatUnit));
+            int newStartDay = 0;
+            if (dose.getStartDay() > days) {
+                newStartDay += dose.getStartDay() - days;
+            }
+            if (days % repeatUnit != 0) {
+                newStartDay += repeatUnit - (days % repeatUnit);
+            }
+            dose.setStartDay(newStartDay);
             if (dose.getEndDay() != null) {
                 dose.setEndDay(dose.getEndDay() - days);
                 if (dose.getEndDay() <= dose.getStartDay()) {
