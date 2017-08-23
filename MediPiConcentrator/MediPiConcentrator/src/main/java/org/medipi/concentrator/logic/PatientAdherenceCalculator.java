@@ -1,8 +1,11 @@
 package org.medipi.concentrator.logic;
 
 import org.medipi.medication.Schedule;
+import org.medipi.medication.ScheduleAdherence;
 
+import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,7 +23,7 @@ public class PatientAdherenceCalculator {
     private Collection<Schedule> schedules;
     private LocalDate queryEndDate;
     private boolean calculatingStreak;
-    private HashMap<Schedule, ScheduleAdherenceCalculator> scheduleAdherenceCalculators;
+    private HashMap<Schedule, ScheduleAdherenceCalculatorInterface> scheduleAdherenceCalculators;
 
     public PatientAdherenceCalculator(Collection<Schedule> schedules, LocalDate startDate, LocalDate endDate, boolean calculatingStreak) {
         this.schedules = schedules;
@@ -30,8 +33,15 @@ public class PatientAdherenceCalculator {
         resetResults();
     }
 
-    public HashMap<Schedule, ScheduleAdherenceCalculator> getScheduleAdherenceCalculators() {
+    public HashMap<Schedule, ScheduleAdherenceCalculatorInterface> getScheduleAdherenceCalculators() {
         return scheduleAdherenceCalculators;
+    }
+
+    private LocalTime penultimateDayEndTime = null;
+
+    public void setPenultimateDayEndTime(LocalTime time) {
+        penultimateDayEndTime = time;
+        resetResults();
     }
 
     public Integer getNumDosesTakenCorrectly() {
@@ -105,36 +115,33 @@ public class PatientAdherenceCalculator {
         int numDosesMissed = 0;
         int numDosesTakenIncorrectly = 0;
         int numDosesToTake = 0;
-        int streakLength = 0;
-        double adherenceFraction;
-        HashMap<Schedule, ScheduleAdherenceCalculator> scheduleAdherenceCalculators = new HashMap<>();
+        Integer streakLength = null;
+        Double adherenceFraction;
+        HashMap<Schedule, ScheduleAdherenceCalculatorInterface> scheduleAdherenceCalculators = new HashMap<>();
         LocalDate earliestStart = LocalDate.now();
         HashSet<LocalDate> errantDays = new HashSet<>();
-        HashMap<Schedule, Integer> scheduleStreakLength = new HashMap<>();
-        HashMap<Schedule, Double> scheduleFraction = new HashMap<>();
         for (Schedule schedule : schedules) {
             LocalDate scheduleStart = schedule.getAssignedStartDate().toLocalDate();
             if (scheduleStart.isBefore(earliestStart)) earliestStart = scheduleStart;
-            ScheduleAdherenceCalculator scheduleAdherenceCalculator = new ScheduleAdherenceCalculator(schedule, queryStartDate, queryEndDate, calculatingStreak);
-            scheduleAdherenceCalculator.calculateScheduleAdherence();
-            scheduleAdherenceCalculators.put(schedule, scheduleAdherenceCalculator);
-            numDosesTakenCorrectly += scheduleAdherenceCalculator.getNumDosesTakenCorrectly();
-            numDosesMissed += scheduleAdherenceCalculator.getNumDosesMissed();
-            numDosesTakenIncorrectly += scheduleAdherenceCalculator.getNumDosesTakenIncorrectly();
-            numDosesToTake += scheduleAdherenceCalculator.getNumDosesToTake();
+            ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, queryStartDate, queryEndDate, calculatingStreak);
+            scheduleAdherenceCalculatorInterface.setQueryEndDateTime(queryEndDate, penultimateDayEndTime);
+            scheduleAdherenceCalculatorInterface.calculateScheduleAdherence();
+            scheduleAdherenceCalculators.put(schedule, scheduleAdherenceCalculatorInterface);
+            numDosesTakenCorrectly += scheduleAdherenceCalculatorInterface.getNumDosesTakenCorrectly();
+            numDosesMissed += scheduleAdherenceCalculatorInterface.getNumDosesMissed();
+            numDosesTakenIncorrectly += scheduleAdherenceCalculatorInterface.getNumDosesTakenIncorrectly();
+            numDosesToTake += scheduleAdherenceCalculatorInterface.getNumDosesToTake();
             if (calculatingStreak) {
-                LocalDate scheduleLastErrantDate = scheduleAdherenceCalculator.getLastErrantDate();
+                LocalDate scheduleLastErrantDate = scheduleAdherenceCalculatorInterface.getLastErrantDate();
                 if (scheduleLastErrantDate != null) {
                     errantDays.add(scheduleLastErrantDate);
                 }
-                scheduleStreakLength.put(schedule, scheduleAdherenceCalculator.getStreakLength());
             }
-            scheduleFraction.put(schedule, scheduleAdherenceCalculator.getAdherenceFraction());
-        }
-        if (calculatingStreak) {
-            streakLength = calculateStreakLength(errantDays, earliestStart);
         }
         adherenceFraction = calculateAdherenceFraction(numDosesTakenCorrectly, numDosesMissed, numDosesTakenIncorrectly);
+        if (calculatingStreak && adherenceFraction != null) {
+            streakLength = calculateStreakLength(errantDays, earliestStart);
+        }
         this.numDosesTakenCorrectly = numDosesTakenCorrectly;
         this.numDosesMissed = numDosesMissed;
         this.numDosesTakenIncorrectly = numDosesTakenIncorrectly;
@@ -144,20 +151,20 @@ public class PatientAdherenceCalculator {
         this.streakLength = streakLength;
     }
 
-    private double calculateAdherenceFraction(int dosesCorrectlyTaken, int dosesNotTaken, int dosesTakenIncorrectly) {
+    private Double calculateAdherenceFraction(int dosesCorrectlyTaken, int dosesNotTaken, int dosesTakenIncorrectly) {
         if (dosesCorrectlyTaken + dosesNotTaken + dosesTakenIncorrectly == 0) {
-            return 1;
+            return null;
         }
-        return dosesCorrectlyTaken / (dosesCorrectlyTaken + dosesNotTaken);
+        return ((double) dosesCorrectlyTaken) / (dosesCorrectlyTaken + dosesNotTaken);
     }
 
-    private int calculateStreakLength(Collection<LocalDate> errantDays, LocalDate earliestScheduleStart) {
+    private Integer calculateStreakLength(Collection<LocalDate> errantDays, LocalDate earliestScheduleStart) {
         int streakLength;
         if (errantDays.size() == 0) {
-            streakLength = (int) earliestScheduleStart.until(LocalDate.now(), ChronoUnit.DAYS);
+            streakLength = (int) earliestScheduleStart.until(queryEndDate, ChronoUnit.DAYS);
         } else {
             LocalDate maxDate = errantDays.stream().max(LocalDate::compareTo).get();
-            streakLength = (int) maxDate.until(LocalDate.now(), ChronoUnit.DAYS);
+            streakLength = (int) maxDate.until(queryEndDate, ChronoUnit.DAYS) - 1;
         }
         return streakLength;
     }

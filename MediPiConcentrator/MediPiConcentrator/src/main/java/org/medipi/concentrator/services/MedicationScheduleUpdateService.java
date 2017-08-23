@@ -30,9 +30,6 @@ public class MedicationScheduleUpdateService {
     private ScheduledDoseDAOImpl scheduledDoseDAOimpl;
 
     @Autowired
-    private PatientDAOImpl patientDAOimpl;
-
-    @Autowired
     private MedicationDAOImpl medicationDAOImpl;
 
     private void moveScheduleStartDate(Schedule schedule, LocalDate newStartDate) {

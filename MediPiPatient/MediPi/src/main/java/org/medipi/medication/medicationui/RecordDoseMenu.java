@@ -201,7 +201,7 @@ class DoseDetailsScreen extends TileMenu {
         timeButton.setOnButtonClick((MouseEvent e) -> {
             TextInputDialog inputWindow = new TextInputDialog(doseTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
             inputWindow.setTitle("Time taken");
-            inputWindow.setHeaderText("Set time taken " + medicationSchedule.determineDisplayName() + ")");
+            inputWindow.setHeaderText("Set time taken (" + medicationSchedule.determineDisplayName() + ")");
             inputWindow.initModality(Modality.APPLICATION_MODAL);
             inputWindow.showAndWait();
             try {

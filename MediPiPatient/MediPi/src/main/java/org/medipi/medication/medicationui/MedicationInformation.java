@@ -38,8 +38,6 @@ public class MedicationInformation extends Group {
         fullNameLabel = new Label(schedule.getMedication().getFullName());
         purposeLabel = new Label(schedule.getPurposeStatement());
         advisoryTextArea = new TextArea(schedule.getMedication().getCautionaryText());
-        adherenceBar = new AdherenceBar(schedule.getScheduleAdherence());
-        adherenceBar.setLongForm(true);
         try {
             iconImage = new Image(new File(schedule.getMedication().getIconName()).toURL().toString());
 
@@ -79,7 +77,17 @@ public class MedicationInformation extends Group {
         centre.getChildren().add(iconAdvisoryBox);
         content.setCenter(centre);
 
-        content.setBottom(adherenceBar);
-        content.setAlignment(adherenceBar, Pos.CENTER);
+        if (schedule.getScheduledDoses().size() > 0) {
+            adherenceBar = new AdherenceBar(schedule.getScheduleAdherence());
+            adherenceBar.setLongForm(true);
+            content.setBottom(adherenceBar);
+            adherenceBar.setVerticalPadding(10);
+            content.setAlignment(adherenceBar, Pos.CENTER);
+        } else {
+            Label asNeededLabel = new Label("You can take this medication as needed");
+            asNeededLabel.getStyleClass().add("heading-text");
+            content.setBottom(asNeededLabel);
+            content.setAlignment(asNeededLabel, Pos.CENTER);
+        }
     }
 }

@@ -73,7 +73,7 @@ public class Datastore {
         // Check if any doses have already been taken today
         for (Schedule schedule : patientSchedules) {
             HashSet<RecordedDose> todayTakenDoses = new HashSet<>();
-            int dayOfSchedule = (int) schedule.getAssignedStartDate().toLocalDate().until(LocalDate.now(), ChronoUnit.DAYS);
+            int dayOfSchedule = (int) schedule.getAssignedStartDate().toLocalDate().until(today, ChronoUnit.DAYS);
             for (RecordedDose takenDose : schedule.getRecordedDoses()) {
                 int takenDay = takenDose.getDayTaken();
                 if (takenDay == dayOfSchedule) {

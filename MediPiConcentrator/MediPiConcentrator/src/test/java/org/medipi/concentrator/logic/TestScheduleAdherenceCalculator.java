@@ -8,7 +8,6 @@ import org.medipi.medication.ScheduledDose;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class TestScheduleAdherenceCalculator {
@@ -32,14 +31,14 @@ public class TestScheduleAdherenceCalculator {
         dose.setSchedule(schedule);
         dose.setRepeatInterval(2);
         schedule.setScheduledDoses(Collections.singleton(dose));
-        ScheduleAdherenceCalculator scheduleAdherenceCalculator = new ScheduleAdherenceCalculator(schedule, 0, 10, false);
-        scheduleAdherenceCalculator.calculateScheduleAdherence();
-        assert scheduleAdherenceCalculator.getNumDosesMissed() == 3;
-        assert scheduleAdherenceCalculator.getAdherenceFraction() == 0;
-        assert scheduleAdherenceCalculator.getStreakLength() == null;
-        assert scheduleAdherenceCalculator.getNumDosesToTake() == 3;
-        assert scheduleAdherenceCalculator.getNumDosesTakenIncorrectly() == 0;
-        assert scheduleAdherenceCalculator.getNumDosesTakenCorrectly() == 0;
+        ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, 0, 10, false);
+        scheduleAdherenceCalculatorInterface.calculateScheduleAdherence();
+        assert scheduleAdherenceCalculatorInterface.getNumDosesMissed() == 3;
+        assert scheduleAdherenceCalculatorInterface.getAdherenceFraction() == 0;
+        assert scheduleAdherenceCalculatorInterface.getStreakLength() == null;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesToTake() == 3;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesTakenIncorrectly() == 0;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesTakenCorrectly() == 0;
     }
 
     @Test
@@ -114,9 +113,9 @@ public class TestScheduleAdherenceCalculator {
     public void noScheduledDosesGivesNull() {
         schedule.setScheduledDoses(new HashSet<>());
         schedule.setRecordedDoses(new HashSet<>());
-        ScheduleAdherenceCalculator scheduleAdherenceCalculator = new ScheduleAdherenceCalculator(schedule, 3, 10, false);
-        scheduleAdherenceCalculator.calculateScheduleAdherence();
-        assert scheduleAdherenceCalculator.getAdherenceFraction() == null;
+        ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, 3, 10, false);
+        scheduleAdherenceCalculatorInterface.calculateScheduleAdherence();
+        assert scheduleAdherenceCalculatorInterface.getAdherenceFraction() == null;
     }
 
     @Test
@@ -127,9 +126,9 @@ public class TestScheduleAdherenceCalculator {
         dose.setStartDay(0);
         dose.setSchedule(schedule);
         schedule.setScheduledDoses(Collections.singleton(dose));
-        ScheduleAdherenceCalculator scheduleAdherenceCalculator = new ScheduleAdherenceCalculator(schedule, 3, 10, false);
-        scheduleAdherenceCalculator.calculateScheduleAdherence();
-        assert scheduleAdherenceCalculator.getAdherenceFraction() == null;
+        ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, 3, 10, false);
+        scheduleAdherenceCalculatorInterface.calculateScheduleAdherence();
+        assert scheduleAdherenceCalculatorInterface.getAdherenceFraction() == null;
     }
     @Test
     public void noDoseInRangeGivesNullWithRecordedDoseOutOfRange() {
@@ -144,9 +143,9 @@ public class TestScheduleAdherenceCalculator {
         rDose.setSchedule(schedule);
         schedule.setRecordedDoses(Collections.singleton(rDose));
         schedule.setScheduledDoses(Collections.singleton(dose));
-        ScheduleAdherenceCalculator scheduleAdherenceCalculator = new ScheduleAdherenceCalculator(schedule, 3, 10, false);
-        scheduleAdherenceCalculator.calculateScheduleAdherence();
-        assert scheduleAdherenceCalculator.getAdherenceFraction() == null;
+        ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, 3, 10, false);
+        scheduleAdherenceCalculatorInterface.calculateScheduleAdherence();
+        assert scheduleAdherenceCalculatorInterface.getAdherenceFraction() == null;
     }
 
     @Test
@@ -162,9 +161,9 @@ public class TestScheduleAdherenceCalculator {
         rDose.setSchedule(schedule);
         schedule.setRecordedDoses(Collections.singleton(rDose));
         schedule.setScheduledDoses(Collections.singleton(dose));
-        ScheduleAdherenceCalculator scheduleAdherenceCalculator = new ScheduleAdherenceCalculator(schedule, 3, 10, false);
-        scheduleAdherenceCalculator.calculateScheduleAdherence();
-        assert scheduleAdherenceCalculator.getAdherenceFraction() == 0;
+        ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, 3, 10, false);
+        scheduleAdherenceCalculatorInterface.calculateScheduleAdherence();
+        assert scheduleAdherenceCalculatorInterface.getAdherenceFraction() == 0;
     }
 
     @Test
@@ -184,12 +183,12 @@ public class TestScheduleAdherenceCalculator {
         rDose.setSchedule(schedule);
         schedule.setRecordedDoses(Collections.singleton(rDose));
         schedule.setScheduledDoses(Collections.singleton(dose));
-        ScheduleAdherenceCalculator scheduleAdherenceCalculator = new ScheduleAdherenceCalculator(schedule, 3, 10, false);
-        scheduleAdherenceCalculator.calculateScheduleAdherence();
-        assert scheduleAdherenceCalculator.getAdherenceFraction() == 0;
-        assert scheduleAdherenceCalculator.getNumDosesMissed() == 1;
-        assert scheduleAdherenceCalculator.getNumDosesTakenIncorrectly() == 1;
-        assert scheduleAdherenceCalculator.getNumDosesTakenCorrectly() == 0;
+        ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, 3, 10, false);
+        scheduleAdherenceCalculatorInterface.calculateScheduleAdherence();
+        assert scheduleAdherenceCalculatorInterface.getAdherenceFraction() == 0;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesMissed() == 1;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesTakenIncorrectly() == 1;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesTakenCorrectly() == 0;
     }
 
     @Test
@@ -211,18 +210,175 @@ public class TestScheduleAdherenceCalculator {
         rDose.setSchedule(schedule);
         schedule.setRecordedDoses(Collections.singleton(rDose));
         schedule.setScheduledDoses(Collections.singleton(dose));
-        ScheduleAdherenceCalculator scheduleAdherenceCalculator = new ScheduleAdherenceCalculator(schedule, 3, 3, false);
-        scheduleAdherenceCalculator.calculateScheduleAdherence();
-        assert scheduleAdherenceCalculator.getAdherenceFraction() == null;
-        assert scheduleAdherenceCalculator.getNumDosesMissed() == 0;
-        assert scheduleAdherenceCalculator.getNumDosesTakenIncorrectly() == 0;
-        assert scheduleAdherenceCalculator.getNumDosesTakenCorrectly() == 0;
-        assert scheduleAdherenceCalculator.getNumDosesToTake() == 0;
+        ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, 3, 3, false);
+        scheduleAdherenceCalculatorInterface.calculateScheduleAdherence();
+        assert scheduleAdherenceCalculatorInterface.getAdherenceFraction() == null;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesMissed() == 0;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesTakenIncorrectly() == 0;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesTakenCorrectly() == 0;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesToTake() == 0;
     }
 
+    @Test
+    public void simpleStreakTest() {
+        ScheduledDose dose = new ScheduledDose();
+        dose.setStartDay(2);
+        dose.setEndDay(null);
+        dose.setWindowStartTime(Time.valueOf("14:00:00"));
+        dose.setWindowEndTime(Time.valueOf("17:00:00"));
+        dose.setReminderTime(Time.valueOf("16:30:00"));
+        dose.setDoseValue(2);
+        dose.setSchedule(schedule);
+        dose.setRepeatInterval(2);
+
+        schedule.setScheduledDoses(Collections.singleton(dose));
+        ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, 0, 6, true);
+        Set<RecordedDose> takenDoses = new HashSet<>();
+        for (int i: new int [] {2, 4}) {
+            RecordedDose takenDose = new RecordedDose();
+            takenDose.setDayTaken(i);
+            takenDose.setDoseValue(2);
+            takenDose.setTimeTaken(Time.valueOf("14:30:00"));
+            takenDoses.add(takenDose);
+        }
+        dose.getSchedule().setRecordedDoses(takenDoses);
+        scheduleAdherenceCalculatorInterface.calculateScheduleAdherence();
+
+        assert scheduleAdherenceCalculatorInterface.getNumDosesMissed() == 0;
+        assert scheduleAdherenceCalculatorInterface.getAdherenceFraction() == 1;
+        assert scheduleAdherenceCalculatorInterface.getStreakLength() == 6;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesToTake() == 2;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesTakenIncorrectly() == 0;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesTakenCorrectly() == 2;
+    }
 
     @Test
-    public void test_method_2() {
-        System.out.println("@Test - test_method_2");
+    public void streakIndependentOfWindow() {
+        ScheduledDose dose = new ScheduledDose();
+        dose.setStartDay(2);
+        dose.setEndDay(null);
+        dose.setWindowStartTime(Time.valueOf("14:00:00"));
+        dose.setWindowEndTime(Time.valueOf("17:00:00"));
+        dose.setReminderTime(Time.valueOf("16:30:00"));
+        dose.setDoseValue(2);
+        dose.setSchedule(schedule);
+        dose.setRepeatInterval(2);
+
+        schedule.setScheduledDoses(Collections.singleton(dose));
+        ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, 2, 6, true);
+        Set<RecordedDose> takenDoses = new HashSet<>();
+        for (int i: new int [] {2, 4}) {
+            RecordedDose takenDose = new RecordedDose();
+            takenDose.setDayTaken(i);
+            takenDose.setDoseValue(2);
+            takenDose.setTimeTaken(Time.valueOf("14:30:00"));
+            takenDoses.add(takenDose);
+        }
+        dose.getSchedule().setRecordedDoses(takenDoses);
+        scheduleAdherenceCalculatorInterface.calculateScheduleAdherence();
+
+        assert scheduleAdherenceCalculatorInterface.getNumDosesMissed() == 0;
+        assert scheduleAdherenceCalculatorInterface.getAdherenceFraction() == 1;
+        assert scheduleAdherenceCalculatorInterface.getStreakLength() == 6;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesToTake() == 2;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesTakenIncorrectly() == 0;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesTakenCorrectly() == 2;
+    }
+
+    @Test
+    public void imperfectStreak() {
+        ScheduledDose dose = new ScheduledDose();
+        dose.setStartDay(2);
+        dose.setEndDay(null);
+        dose.setWindowStartTime(Time.valueOf("14:00:00"));
+        dose.setWindowEndTime(Time.valueOf("17:00:00"));
+        dose.setReminderTime(Time.valueOf("16:30:00"));
+        dose.setDoseValue(2);
+        dose.setSchedule(schedule);
+        dose.setRepeatInterval(2);
+
+        schedule.setScheduledDoses(Collections.singleton(dose));
+        ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, 2, 11, true);
+        Set<RecordedDose> takenDoses = new HashSet<>();
+        for (int i: new int [] {2, 6, 10}) {
+            RecordedDose takenDose = new RecordedDose();
+            takenDose.setDayTaken(i);
+            takenDose.setDoseValue(2);
+            takenDose.setTimeTaken(Time.valueOf("14:30:00"));
+            takenDoses.add(takenDose);
+        }
+        dose.getSchedule().setRecordedDoses(takenDoses);
+        scheduleAdherenceCalculatorInterface.calculateScheduleAdherence();
+
+        assert scheduleAdherenceCalculatorInterface.getNumDosesMissed() == 2;
+        assert scheduleAdherenceCalculatorInterface.getAdherenceFraction() == 3./5;
+        assert scheduleAdherenceCalculatorInterface.getStreakLength() == 2;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesToTake() == 5;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesTakenIncorrectly() == 0;
+        assert scheduleAdherenceCalculatorInterface.getNumDosesTakenCorrectly() == 3;
+    }
+
+    @Test
+    public void lastErrantDayCorrectlyConvertedToDate() {
+        ScheduledDose dose = new ScheduledDose();
+        dose.setStartDay(2);
+        dose.setEndDay(null);
+        dose.setWindowStartTime(Time.valueOf("14:00:00"));
+        dose.setWindowEndTime(Time.valueOf("17:00:00"));
+        dose.setReminderTime(Time.valueOf("16:30:00"));
+        dose.setDoseValue(2);
+        dose.setSchedule(schedule);
+        dose.setRepeatInterval(2);
+
+        schedule.setScheduledDoses(Collections.singleton(dose));
+        ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, 2, 11, true);
+        Set<RecordedDose> takenDoses = new HashSet<>();
+        for (int i: new int [] {2, 6, 10}) {
+            RecordedDose takenDose = new RecordedDose();
+            takenDose.setDayTaken(i);
+            takenDose.setDoseValue(2);
+            takenDose.setTimeTaken(Time.valueOf("14:30:00"));
+            takenDoses.add(takenDose);
+        }
+        dose.getSchedule().setRecordedDoses(takenDoses);
+        scheduleAdherenceCalculatorInterface.calculateScheduleAdherence();
+        assert scheduleAdherenceCalculatorInterface.getLastErrantDay() == 8;
+        assert scheduleAdherenceCalculatorInterface.getLastErrantDate().equals(LocalDate.of(2017, 7, 9));
+    }
+
+    @Test
+    public void constructFromDates() {
+        ScheduleAdherenceCalculatorInterface calculator = new ScheduleAdherenceCalculator(schedule, LocalDate.of(2017, 7, 5), LocalDate.of(2017, 7, 11), true);
+        assert calculator.getQueryStartDay() == 4;
+        assert calculator.getQueryEndDay() == 10;
+        assert calculator.isCalculatingStreak() == true;
+    }
+
+    @Test
+    public void constructFromDatesOutOfBounds() {
+        ScheduleAdherenceCalculatorInterface calculator = new ScheduleAdherenceCalculator(schedule, LocalDate.of(2017, 6, 20), LocalDate.of(2017, 7, 11), false);
+        assert calculator.getQueryStartDay() == 0;
+        assert calculator.getQueryEndDay() == 10;
+        assert calculator.isCalculatingStreak() == false;
+    }
+    @Test
+    public void constructFromDatesZeroRange() {
+        ScheduleAdherenceCalculatorInterface calculator = new ScheduleAdherenceCalculator(schedule, LocalDate.of(2017, 7, 20), LocalDate.of(2017, 7, 20), true);
+        assert calculator.getQueryStartDay() == 19;
+        assert calculator.getQueryEndDay() == 19;
+        assert calculator.isCalculatingStreak() == true;
+    }
+
+    @Test
+    public void constructFromDatesBeforeSchedule() {
+        ScheduleAdherenceCalculatorInterface calculator = new ScheduleAdherenceCalculator(schedule, LocalDate.of(2017, 6, 10), LocalDate.of(2017, 6, 20), true);
+        assert calculator.getQueryStartDay() == 0;
+        assert calculator.getQueryEndDay() == 0;
+        assert calculator.isCalculatingStreak() == true;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void queryEndBeforeStartThrowsException() {
+        ScheduleAdherenceCalculatorInterface calculator = new ScheduleAdherenceCalculator(schedule, LocalDate.of(2017, 6, 20), LocalDate.of(2017, 6, 10), true);
     }
 }

@@ -107,7 +107,7 @@ public class MedicationReminderEvent implements ReminderEventInterface {
         boolean repeatsToday;
         if (dayOfSchedule == dose.getStartDay()) {
             repeatsToday = true;
-        } else if (dose.getRepeatInterval() == 0 || dose.getRepeatInterval() == null) {
+        } else if (dose.getRepeatInterval() == null || dose.getRepeatInterval() == 0) {
             repeatsToday = false;
         } else {
             double intervals = (dayOfSchedule - dose.getStartDay()) / dose.getRepeatInterval();

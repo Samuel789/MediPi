@@ -101,7 +101,7 @@ public class Schedule implements Serializable {
     }
 
     public String determineDisplayName() {
-        if (alternateName != null) {
+        if (alternateName != null && alternateName != "") {
             return alternateName;
         } else {
             return medication.getShortName();

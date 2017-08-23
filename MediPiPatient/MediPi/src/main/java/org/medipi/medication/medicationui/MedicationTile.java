@@ -42,6 +42,7 @@ public class MedicationTile extends Tile {
 
     public MedicationTile(BooleanProperty bprop, int widthUnits, int heightUnits, Schedule medicationSchedule) {
         super(bprop, widthUnits, heightUnits);
+        this.medicationSchedule = medicationSchedule;
 
         content.setId("mainwindow-dashboard-component");
         content.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY)));
@@ -113,9 +114,12 @@ public class MedicationTile extends Tile {
     }
 
     private void setAdherenceView() {
-
-        content.setCenter(adherenceBar);
-        content.setAlignment(adherenceBar, Pos.CENTER);
+        if (medicationSchedule.getScheduledDoses().size() > 0) {
+            content.setCenter(adherenceBar);
+            content.setAlignment(adherenceBar, Pos.CENTER);
+        } else {
+            // Some indication of take as needed
+        }
     }
 
     private void setDoseStatusView() {

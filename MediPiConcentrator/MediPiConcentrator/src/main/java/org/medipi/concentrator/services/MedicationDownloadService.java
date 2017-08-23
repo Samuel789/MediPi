@@ -5,7 +5,7 @@ import org.medipi.concentrator.entities.Patient;
 import org.medipi.concentrator.exception.NotFound404Exception;
 import org.medipi.concentrator.logic.PatientAdherenceCalculator;
 import org.medipi.concentrator.logic.ScheduleAdherenceCalculator;
-import org.medipi.concentrator.logic.ScheduledDoseUnpacker;
+import org.medipi.concentrator.logic.ScheduleAdherenceCalculatorInterface;
 import org.medipi.concentrator.utilities.Utilities;
 import org.medipi.medication.*;
 import org.medipi.model.MedWebDO;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -110,7 +111,7 @@ public class MedicationDownloadService {
 
     @Transactional(rollbackFor = Throwable.class)
     private void updateAdherence(String patientUuid) {
-        LocalDate searchEndTime = LocalDate.now();
+        LocalDate searchEndTime = LocalDate.now().plusDays(1);
         LocalDate searchStartTime = searchEndTime.minusDays(7);
         Collection<Schedule> patientSchedules = scheduleDAOimpl.findByPatientUuid(patientUuid);
         for (Schedule schedule : patientSchedules) {
@@ -119,16 +120,17 @@ public class MedicationDownloadService {
             }
         }
         PatientAdherenceCalculator patientAdherenceCalculator = new PatientAdherenceCalculator(patientSchedules, searchStartTime, searchEndTime, true);
+        patientAdherenceCalculator.setPenultimateDayEndTime(LocalTime.now());
         patientAdherenceCalculator.calculatePatientAdherence();
         for (Schedule schedule : patientSchedules) {
-            ScheduleAdherenceCalculator scheduleAdherenceCalculator = patientAdherenceCalculator.getScheduleAdherenceCalculators().get(schedule);
+            ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = patientAdherenceCalculator.getScheduleAdherenceCalculators().get(schedule);
             if (schedule.getScheduleAdherence() == null) {
                 ScheduleAdherence scheduleAdherence = new ScheduleAdherence();
                 scheduleAdherence.setScheduleId(schedule.getScheduleId());
                 schedule.setScheduleAdherence(scheduleAdherence);
             }
-            schedule.getScheduleAdherence().setSevenDayFraction(scheduleAdherenceCalculator.getAdherenceFraction());
-            schedule.getScheduleAdherence().setStreakLength(scheduleAdherenceCalculator.getStreakLength());
+            schedule.getScheduleAdherence().setSevenDayFraction(scheduleAdherenceCalculatorInterface.getAdherenceFraction());
+            schedule.getScheduleAdherence().setStreakLength(scheduleAdherenceCalculatorInterface.getStreakLength());
             scheduleAdherenceDAOimpl.save(schedule.getScheduleAdherence());
         }
         PatientAdherence patientAdherence = patientAdherenceDAOimpl.findByPatientUuid(patientUuid);
@@ -173,9 +175,11 @@ public class MedicationDownloadService {
             int endDay = Math.max(0, (int) schedule.getAssignedStartDate().toLocalDate().until(endDate, ChronoUnit.DAYS));
             for (ScheduledDose dose : schedule.getScheduledDoses()) {
                 dose.setSchedule(schedule);
-                ScheduleAdherenceCalculator scheduleAdherenceCalculator = new ScheduleAdherenceCalculator(schedule, startDay, endDay, false);
-                scheduleAdherenceCalculator.calculateScheduleAdherence();
-                doseInstances.addAll(scheduleAdherenceCalculator.getDoseInstances());
+            }
+            ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, startDay, endDay, false);
+            scheduleAdherenceCalculatorInterface.calculateScheduleAdherence();
+            doseInstances.addAll(scheduleAdherenceCalculatorInterface.getDoseInstances());
+            for (ScheduledDose dose : schedule.getScheduledDoses()) {
                 dose.setSchedule(null);
             }
         }

@@ -11,6 +11,10 @@ import org.medipi.medication.PatientAdherence;
 import org.medipi.medication.ScheduleAdherence;
 
 public class AdherenceBar extends Group {
+    static final double YELLOWTHRESHOLD = 0.90;
+    static final double REDTHRESHOLD = 0.75;
+    static final double MINVISIBLE = 0.05;
+    static final double MINSTREAKLENGTH = 2;
     ProgressBar progressBar;
     Label adherenceText;
     HBox hbox;
@@ -82,9 +86,27 @@ public class AdherenceBar extends Group {
             progressBar.setProgress(100);
             progressBar.setStyle("-fx-accent: navy;");
         } else {
-            progressBar.setProgress(value);
-            progressBar.setStyle("-fx-accent: yellow;");
+            if (progress < MINVISIBLE) {
+                progressBar.setProgress(MINVISIBLE);
+            } else {
+                progressBar.setProgress(value);
+            }
+            progressBar.setStyle(String.format("-fx-accent: %s;", determineColor(progress)));
         }
+    }
+
+    private String determineColor(double progress) {
+        if (progress < REDTHRESHOLD) {
+            return "red";
+        } else if (progress <= YELLOWTHRESHOLD) {
+            return "yellow";
+        } else {
+            return "green";
+        }
+    }
+
+    public void setVerticalPadding(int pixels) {
+        content.setPadding(new Insets(pixels, 0, pixels, 0));
     }
 
     private void updateLabel() {
@@ -93,16 +115,20 @@ public class AdherenceBar extends Group {
                 adherenceText.setText("Sync with the Concentrator to use this feature.");
                 streakText.setText("Tap the <Synchronize> button");
             } else {
-                adherenceText.setText(String.format("%d%% overall adherence in the last 7 days", (int) (progressBar.getProgress() * 100), streakLength));
-                streakText.setText(String.format("Perfect for %d days!", streakLength));
+                adherenceText.setText(String.format("%d%% overall adherence in the last 7 days", (int) (progress * 100), streakLength));
+                if (streakLength >= MINSTREAKLENGTH) {
+                    streakText.setText(String.format("Perfect for %d days!", streakLength));
+                } else {
+                    streakText.setText("");
+                }
             }
         } else {
             if (progress == null) {
                 adherenceText.setText("Unknown");
                 streakText.setText("");
             } else {
-                adherenceText.setText(String.format("%d%% adherence", (int) (progressBar.getProgress() * 100)));
-                if (streakLength > 1) {
+                adherenceText.setText(String.format("%d%% adherence", (int) (progress * 100)));
+                if (streakLength >= MINSTREAKLENGTH) {
                     streakText.setText(streakLength.toString() + " perfect days!");
                 } else {
                     streakText.setText("");
@@ -113,7 +139,7 @@ public class AdherenceBar extends Group {
 
     private void setStreakLength(Integer value) {
         streakLength = value;
-        if (value == null) {
+        if (value == null || value < MINSTREAKLENGTH) {
             streakNumber.setText("");
         } else {
             streakNumber.setText(String.format("%d", value));
