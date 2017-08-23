@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import static org.medipi.concentrator.logic.ScheduleUtilities.fromDayOfSchedule;
+import static org.medipi.concentrator.logic.ScheduleUtilities.toDayOfSchedule;
+
 public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorInterface {
     private Integer numDosesTakenCorrectly;
     private Integer numDosesMissed;
@@ -41,21 +44,22 @@ public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorI
                 queryStartDate = schedule.getAssignedStartDate().toLocalDate();
             }
         }
-        Integer queryStartDay = toDayOfSchedule(schedule, queryStartDate);
-        Integer queryEndDay = toDayOfSchedule(schedule, queryEndDate);
+        Integer queryStartDay;
+        if (queryStartDate.isBefore(scheduleStart)) {
+            queryStartDay = 0;
+        } else {
+            queryStartDay = toDayOfSchedule(schedule, queryStartDate);
+        }
+        Integer queryEndDay;
+        if (queryEndDate.isBefore(scheduleStart)) {
+            queryEndDay = 0;
+        } else {
+            queryEndDay = toDayOfSchedule(schedule, queryEndDate);
+        }
         initialize(schedule, queryStartDay, queryEndDay, calculatingStreak);
     }
 
-    private static Integer toDayOfSchedule(Schedule schedule, LocalDate date) {
-        if (date.isBefore(schedule.getAssignedStartDate().toLocalDate())) {
-            return 0;
-        }
-        return (int) schedule.getAssignedStartDate().toLocalDate().until(date, ChronoUnit.DAYS);
-    }
 
-    private static LocalDate fromDayOfSchedule(Schedule schedule, int day) {
-        return schedule.getAssignedStartDate().toLocalDate().plusDays(day);
-    }
 
     private static int[] calculate_day_adherence(List<DoseInstance> dosesToTake, List<RecordedDose> takenDoses, Time endTime) {
         int numDosesToTake = dosesToTake.size();

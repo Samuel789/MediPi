@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import static org.medipi.concentrator.logic.ScheduleUtilities.getOptimizedEndDate;
+import static org.medipi.concentrator.logic.ScheduleUtilities.moveScheduleStartDate;
+
 /**
  * Created by sam on 19/08/17.
  */
@@ -32,51 +35,6 @@ public class MedicationScheduleUpdateService {
     @Autowired
     private MedicationDAOImpl medicationDAOImpl;
 
-    private void moveScheduleStartDate(Schedule schedule, LocalDate newStartDate) {
-        LocalDate existingStartDate = schedule.getAssignedStartDate().toLocalDate();
-        if (existingStartDate.equals(newStartDate)) {
-            return;
-        }
-        int dateDifference = (int) existingStartDate.until(newStartDate, ChronoUnit.DAYS);
-        schedule.setAssignedStartDate(Date.valueOf(newStartDate));
-        List<ScheduledDose> removeList = new ArrayList<>();
-        for (ScheduledDose dose : schedule.getScheduledDoses()) {
-            try {
-                transposeDose(dose, dateDifference);
-            } catch (DoseOutOfBoundsException e) {
-                //
-                removeList.add(dose);
-            }
-        }
-        schedule.getScheduledDoses().removeAll(removeList);
-    }
-
-    private void transposeDose(ScheduledDose dose, int days) throws DoseOutOfBoundsException {
-        Integer repeatUnit = dose.getRepeatInterval();
-        if (repeatUnit == null) {
-            if (dose.getStartDay() < days) {
-                throw new DoseOutOfBoundsException();
-            } else {
-                dose.setStartDay(dose.getStartDay() - days);
-            }
-        } else {
-            int newStartDay = 0;
-            if (dose.getStartDay() > days) {
-                newStartDay += dose.getStartDay() - days;
-            }
-            if (days % repeatUnit != 0) {
-                newStartDay += repeatUnit - (days % repeatUnit);
-            }
-            dose.setStartDay(newStartDay);
-            if (dose.getEndDay() != null) {
-                dose.setEndDay(dose.getEndDay() - days);
-                if (dose.getEndDay() <= dose.getStartDay()) {
-                    throw new DoseOutOfBoundsException();
-                }
-            }
-        }
-    }
-
     private Schedule getExistingSchedule(LocalDate date, Medication medication, String patientUuid) {
         List<Schedule> existing_schedules = scheduleDAOimpl.findByMedicationAndPatient(medication, patientUuid);
         for (Schedule schedule : existing_schedules) {
@@ -86,28 +44,6 @@ public class MedicationScheduleUpdateService {
         }
         return null;
     }
-
-    private Date getMaxEndDate(Schedule schedule) {
-        if (schedule.getScheduledDoses().size() == 0) {
-            return null; // Take as needed
-        }
-        int maxDay = 0;
-        for (ScheduledDose dose : schedule.getScheduledDoses()) {
-            if (dose.getRepeatInterval() != null) {
-                if (dose.getEndDay() == null) {
-                    return null;
-                } else {
-                    maxDay = Math.max(maxDay, dose.getEndDay() - ((dose.getEndDay() - dose.getStartDay()) % dose.getRepeatInterval()));
-                }
-            } else {
-                maxDay = Math.max(maxDay, dose.getStartDay());
-            }
-
-
-        }
-        return Date.valueOf(schedule.getAssignedStartDate().toLocalDate().plusDays(maxDay + 1));
-    }
-
 
     @Transactional(rollbackFor = Throwable.class)
     public void addSchedule(Schedule newSchedule, List<ScheduledDose> newDoses, int medicationId) {
@@ -135,7 +71,7 @@ public class MedicationScheduleUpdateService {
             new_dose.setScheduleId(newSchedule.getScheduleId());
             scheduledDoseDAOimpl.save(new_dose);
         }
-        newSchedule.setAssignedEndDate(getMaxEndDate(newSchedule));
+        newSchedule.setAssignedEndDate(getOptimizedEndDate(newSchedule));
         scheduleDAOimpl.update(newSchedule);
     }
 
@@ -147,5 +83,3 @@ public class MedicationScheduleUpdateService {
     }
 }
 
-class DoseOutOfBoundsException extends Exception {
-}

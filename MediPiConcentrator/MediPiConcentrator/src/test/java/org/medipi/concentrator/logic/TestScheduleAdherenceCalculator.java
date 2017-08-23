@@ -66,7 +66,6 @@ public class TestScheduleAdherenceCalculator {
         dose.getSchedule().setRecordedDoses(takenDoses);
         scheduleAdherenceCalculator.calculateScheduleAdherence();
 
-        System.out.println(scheduleAdherenceCalculator.getSummary());
         assert scheduleAdherenceCalculator.getNumDosesMissed() == 0;
         assert scheduleAdherenceCalculator.getAdherenceFraction() == 1;
         assert scheduleAdherenceCalculator.getStreakLength() == null;
@@ -100,7 +99,6 @@ public class TestScheduleAdherenceCalculator {
         dose.getSchedule().setRecordedDoses(takenDoses);
         scheduleAdherenceCalculator.calculateScheduleAdherence();
 
-        System.out.println(scheduleAdherenceCalculator.getSummary());
         assert scheduleAdherenceCalculator.getNumDosesMissed() == 1;
         assert scheduleAdherenceCalculator.getAdherenceFraction().equals(2/3.);
         assert scheduleAdherenceCalculator.getStreakLength() == null;
