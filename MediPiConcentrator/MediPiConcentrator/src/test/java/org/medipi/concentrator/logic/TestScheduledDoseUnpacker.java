@@ -258,5 +258,22 @@ public class TestScheduledDoseUnpacker {
         assert ScheduledDoseUnpacker.unpack(intervalTwoDose, 3, 10).equals(expectedResult);
     }
 
-    //TODO - zero range test
+    @Test
+    public void unnamedTest() {
+        ScheduledDose dose = new ScheduledDose();
+        dose.setStartDay(0);
+        dose.setEndDay(null);
+        Schedule schedule = new Schedule();
+        schedule.setAssignedStartDate(Date.valueOf("2017-08-20"));
+        schedule.setAssignedEndDate(Date.valueOf("2017-08-30"));
+        dose.setRepeatInterval(1);
+        dose.setSchedule(schedule);
+        List<DoseInstance> expectedResult = new ArrayList<>();
+        expectedResult.add(new DoseInstance(dose, 0));
+        expectedResult.add(new DoseInstance(dose, 1));
+        expectedResult.add(new DoseInstance(dose, 2));
+        expectedResult.add(new DoseInstance(dose, 3));
+        expectedResult.add(new DoseInstance(dose, 4));
+        assert ScheduledDoseUnpacker.unpack(dose, 0, 5).equals(expectedResult);
+    }
 }

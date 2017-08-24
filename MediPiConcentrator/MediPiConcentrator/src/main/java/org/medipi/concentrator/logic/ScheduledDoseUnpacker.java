@@ -29,7 +29,8 @@ public final class ScheduledDoseUnpacker {
 
         }
         if (scheduledDose.getSchedule().getAssignedEndDate() != null) {
-            sequenceEndDay = (int) scheduledDose.getSchedule().getAssignedStartDate().toLocalDate().until(scheduledDose.getSchedule().getAssignedEndDate().toLocalDate(), ChronoUnit.DAYS);
+            int scheduleEndDay = (int) scheduledDose.getSchedule().getAssignedStartDate().toLocalDate().until(scheduledDose.getSchedule().getAssignedEndDate().toLocalDate(), ChronoUnit.DAYS);
+            sequenceEndDay = Math.min(scheduleEndDay, sequenceEndDay);
         }
         if (scheduledDose.getRepeatInterval() == null) {
             if (scheduledDose.getStartDay() >= sequenceStartDay && scheduledDose.getStartDay() < sequenceEndDay) {

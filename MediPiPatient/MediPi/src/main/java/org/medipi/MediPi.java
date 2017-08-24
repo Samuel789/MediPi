@@ -525,6 +525,7 @@ public class MediPi extends Application implements UnlockConsumer {
                 exit();
             });
             VBox mainWindow = new VBox();
+            mainWindow.setStyle("-fx-background-color: lightblue;");
             mainWindow.setId("mainwindow");
             mainWindow.setPadding(new Insets(0, 5, 0, 5));
             mainWindow.setAlignment(Pos.TOP_CENTER);

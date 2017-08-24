@@ -156,7 +156,11 @@ public class MedicationDownloadService {
         responseData.setPatientAdherenceList(adherence);
         responseData.setPatientUuids(patientUuids);
         responseData.setSchedules(schedules);
-        responseData.setMedications(medicationDAOImpl.findAll());
+        List<Medication> medicationList = new ArrayList<>();
+        for (Schedule schedule: schedules) {
+            medicationList.add(schedule.getMedication());
+        }
+        responseData.setMedications(medicationList);
         return new ResponseEntity<MedWebDO>(responseData, HttpStatus.OK);
     }
 

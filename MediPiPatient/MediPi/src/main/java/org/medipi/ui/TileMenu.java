@@ -7,12 +7,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.ColorInput;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.util.Vector;
 
@@ -64,6 +63,7 @@ public class TileMenu extends Group {
         dashTile.setOrientation(Orientation.HORIZONTAL);
         dashTile.setPrefWrapLength(targetWidth);
         dashTile.setId("mainwindow-dashboard");
+        dashTile.setMinHeight(contents.getHeight());
         contents.setContent(dashTile);
         contents.addEventFilter(ScrollEvent.ANY, (x) -> {
             updateScrollPosition();
