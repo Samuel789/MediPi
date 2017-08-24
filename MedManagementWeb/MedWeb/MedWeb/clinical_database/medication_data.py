@@ -39,4 +39,18 @@ medication_data = [{"id": 327096008,
                     "cautionary_text": "Avoid excessive exposure to UV light including sunlight.",
                     "icon_name": "/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png",
                     "dose_unit_id": 0
+                    },
+                   {"id": 324430000,
+                    "full_name": "Trimethoprim 100mg tablets",
+                    "short_name": "Trimethoprim",
+                    "cautionary_text": "Avoid excessive exposure to UV light including sunlight.",
+                    "icon_name": "/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png",
+                    "dose_unit_id": 0
+                    },
+                    {"id": 324357002,
+                    "full_name": "Co-trimoxazole 80mg/400mg tablets",
+                    "short_name": "Co-trimoxazole",
+                    "cautionary_text": "Avoid excessive exposure to UV light including sunlight.",
+                    "icon_name": "/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png",
+                    "dose_unit_id": 0
                     }]
