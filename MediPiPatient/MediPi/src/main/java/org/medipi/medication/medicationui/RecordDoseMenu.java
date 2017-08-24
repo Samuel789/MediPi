@@ -164,7 +164,7 @@ class DoseDetailsScreen extends TileMenu {
         medicationName = medicationSchedule.determineDisplayName();
         doseDay = LocalDate.now();
         doseTime = LocalTime.now();
-        doseValue = 0;
+        doseValue = 1;
         doseDescriptor = new Label();
         generateDoseString();
 

@@ -187,6 +187,4 @@ public class MedicationDownloadService {
         response.setDoseInstances(doseInstances);
         return new ResponseEntity<List<DoseInstance>>(doseInstances, HttpStatus.OK);
     }
-
-
 }
