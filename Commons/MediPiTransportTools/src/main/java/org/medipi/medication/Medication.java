@@ -7,7 +7,7 @@ public class Medication implements Serializable {
     private String fullName;
     private String cautionaryText;
     private String icon_name;
-    private int medicationId;
+    private long medicationId;
     private DoseUnit doseUnit;
 
     public Medication() {
@@ -17,11 +17,11 @@ public class Medication implements Serializable {
         cautionaryText = "! Item 1\n ! Item 2";
     }
 
-    public int getMedicationId() {
+    public long getMedicationId() {
         return medicationId;
     }
 
-    public void setMedicationId(int id) {
+    public void setMedicationId(long id) {
         this.medicationId = id;
     }
 

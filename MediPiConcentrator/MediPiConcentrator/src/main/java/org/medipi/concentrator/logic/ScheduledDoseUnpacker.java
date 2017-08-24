@@ -1,9 +1,7 @@
 package org.medipi.concentrator.logic;
 
-import org.medipi.concentrator.dao.ScheduleDAOImpl;
 import org.medipi.medication.DoseInstance;
 import org.medipi.medication.ScheduledDose;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -14,7 +12,8 @@ import java.util.stream.IntStream;
 
 public final class ScheduledDoseUnpacker {
 
-    private ScheduledDoseUnpacker() {}
+    private ScheduledDoseUnpacker() {
+    }
 
     public static List<DoseInstance> unpack(ScheduledDose scheduledDose, int startDay, int endDay) {
         validateArguments(scheduledDose, startDay, endDay);

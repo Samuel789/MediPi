@@ -47,7 +47,7 @@ public class TestScheduleUtilities {
     }
 
     @Test
-    public void dateInSchedule_convertToDayOfSchedule_correctAnswer() {
+    public void dateInSchedule_convertToDayOfSchedule_correctResult() {
         assert ScheduleUtilities.toDayOfSchedule(testSchedule, LocalDate.of(2017, 8, 12)) == 11;
     }
 
@@ -72,17 +72,17 @@ public class TestScheduleUtilities {
     }
 
     @Test
-    public void scheduleFirstDay_convertFromDayOfSchedule_correctAnswer() {
+    public void scheduleFirstDay_convertFromDayOfSchedule_correctResult() {
         assert ScheduleUtilities.fromDayOfSchedule(testSchedule, 0).equals(LocalDate.of(2017, 8, 1));
     }
 
     @Test
-    public void dayInSchedule_convertFromDayOfSchedule_correctAnswer() {
+    public void dayInSchedule_convertFromDayOfSchedule_correctResult() {
         assert ScheduleUtilities.fromDayOfSchedule(testSchedule, 5).equals(LocalDate.of(2017, 8, 6));
     }
 
     @Test
-    public void afterScheduleEnd_convertFromDayOfSchedule_correctAnswer() {
+    public void afterScheduleEnd_convertFromDayOfSchedule_correctResult() {
         assert ScheduleUtilities.fromDayOfSchedule(testSchedule, 31).equals(LocalDate.of(2017, 9, 1));
     }
 
@@ -93,12 +93,12 @@ public class TestScheduleUtilities {
     }
 
     @Test
-    public void boundedInfiniteSchedule_optimizeEndDate_unchanged() {
+    public void truncatedInfiniteSchedule_optimizeEndDate_unchanged() {
         assert ScheduleUtilities.getOptimizedEndDate(testSchedule).equals(Date.valueOf("2017-08-24"));
     }
 
     @Test
-    public void truncatedSchedule_optimizeEndDate_unchanged() {
+    public void truncatedInfiniteSchedule2_optimizeEndDate_unchanged() {
         testSchedule.setAssignedEndDate(Date.valueOf("2017-08-16"));
         assert ScheduleUtilities.getOptimizedEndDate(testSchedule).equals(Date.valueOf("2017-08-16"));
     }
@@ -115,7 +115,7 @@ public class TestScheduleUtilities {
     }
 
     @Test
-    public void truncatedSchedule_getUnboundedEndDate_null() {
+    public void boundedInfiniteSchedule2_getUnboundedEndDate_null() {
         testSchedule.setAssignedEndDate(Date.valueOf("2017-08-16"));
         assert ScheduleUtilities.getOptimizedUnboundedEndDate(testSchedule) == null;
     }
@@ -128,55 +128,55 @@ public class TestScheduleUtilities {
     }
 
     @Test
-    public void asNeededSchedule_getUnboundedEndDate_null() {
+    public void infiniteAsNeededSchedule_getUnboundedEndDate_null() {
         testSchedule.setScheduledDoses(new HashSet<>());
         assert ScheduleUtilities.getOptimizedUnboundedEndDate(testSchedule) == null;
     }
 
     @Test
-    public void repeatIntervalGreaterThanTransposeAmount_transpose_correctAnswer() throws DoseOutOfBoundsException{
+    public void repeatIntervalGreaterThanTransposeAmount_transpose_correctResult() throws DoseOutOfBoundsException{
         ScheduleUtilities.transposeDose(testDose1, 4);
         assert testDose1.getStartDay() == 1;
         assert testDose1.getRepeatInterval() == 5;
         assert testDose1.getEndDay() == 14;
     }
     @Test
-    public void repeatIntervalEqualToTransposeAmount_transpose_correctAnswer() throws DoseOutOfBoundsException{
+    public void repeatIntervalEqualToTransposeAmount_transpose_correctResult() throws DoseOutOfBoundsException{
         ScheduleUtilities.transposeDose(testDose1, 5);
         assert testDose1.getStartDay() == 0;
         assert testDose1.getRepeatInterval() == 5;
         assert testDose1.getEndDay() == 13;
     }
     @Test
-    public void repeatIntervalLessThanTransposeAmount_transpose_correctAnswer() throws DoseOutOfBoundsException{
+    public void repeatIntervalLessThanTransposeAmount_transpose_correctResult() throws DoseOutOfBoundsException{
         ScheduleUtilities.transposeDose(testDose1, 6);
         assert testDose1.getStartDay() == 4;
         assert testDose1.getRepeatInterval() == 5;
         assert testDose1.getEndDay() == 12;
     }
     @Test
-    public void transposeAmountZero_transpose_correctAnswer() throws DoseOutOfBoundsException{
+    public void transposeAmountZero_transpose_correctResult() throws DoseOutOfBoundsException{
         ScheduleUtilities.transposeDose(testDose1, 0);
         assert testDose1.getStartDay() == 0;
         assert testDose1.getRepeatInterval() == 5;
         assert testDose1.getEndDay() == 18;
     }
     @Test
-    public void intervalOneNullEnd_transpose_correctAnswer() throws DoseOutOfBoundsException{
+    public void dailyInfiniteDose_transpose_correctResult() throws DoseOutOfBoundsException{
         ScheduleUtilities.transposeDose(testDose2, 6);
-        assert testDose1.getStartDay() == 0;
-        assert testDose1.getRepeatInterval() == 1;
-        assert testDose1.getEndDay() == null;
+        assert testDose2.getStartDay() == 0;
+        assert testDose2.getRepeatInterval() == 1;
+        assert testDose2.getEndDay() == null;
     }
     @Test
-    public void nonRepeatingDose_transpose_correctAnswer() throws DoseOutOfBoundsException{
+    public void nonRepeatingDose_transpose_correctResult() throws DoseOutOfBoundsException{
         ScheduleUtilities.transposeDose(testDose3, 1);
-        assert testDose1.getStartDay() == 1;
-        assert testDose1.getRepeatInterval() == null;
-        assert testDose1.getEndDay() == null;
+        assert testDose3.getStartDay() == 1;
+        assert testDose3.getRepeatInterval() == null;
+        assert testDose3.getEndDay() == null;
     }
     @Test(expected = DoseOutOfBoundsException.class)
-    public void transposeEqualsEndDay_transpose_throwsException() throws DoseOutOfBoundsException{
+    public void transposeToEndDay_transpose_throwsException() throws DoseOutOfBoundsException{
         ScheduleUtilities.transposeDose(testDose1, 18);
     }
     @Test(expected = DoseOutOfBoundsException.class)
@@ -184,7 +184,7 @@ public class TestScheduleUtilities {
         ScheduleUtilities.transposeDose(testDose1, 19);
     }
     @Test(expected = DoseOutOfBoundsException.class)
-    public void transposeLessThanEndDay_transpose_throwsException() throws DoseOutOfBoundsException{
+    public void transposeBetweenDoseEndDayAndLastDose_transpose_throwsException() throws DoseOutOfBoundsException{
         ScheduleUtilities.transposeDose(testDose1, 17);
     }
     @Test(expected = DoseOutOfBoundsException.class)
@@ -192,7 +192,7 @@ public class TestScheduleUtilities {
         ScheduleUtilities.transposeDose(testDose1, 16);
     }
     @Test
-    public void transposeToLastDose_transpose_correctAnswer() throws DoseOutOfBoundsException{
+    public void transposeToLastDose_transpose_correctResult() throws DoseOutOfBoundsException{
         ScheduleUtilities.transposeDose(testDose1, 15);
         assert testDose1.getStartDay() == 0;
         assert testDose1.getRepeatInterval() == 5;
@@ -203,20 +203,20 @@ public class TestScheduleUtilities {
         ScheduleUtilities.transposeDose(testDose3, 3);
     }
     @Test
-    public void transposeToEndDaySingleDose_transpose_correctAnswer() throws DoseOutOfBoundsException{
+    public void transposeToEndDaySingleDose_transpose_correctResult() throws DoseOutOfBoundsException{
         ScheduleUtilities.transposeDose(testDose3, 2);
         assert testDose3.getStartDay() == 0;
         assert testDose3.getRepeatInterval() == null;
     }
     @Test
-    public void transposeBeforeScheduleStart_transpose_correctAnswer() throws DoseOutOfBoundsException{
+    public void transposeBeforeScheduleStart_transpose_correctResult() throws DoseOutOfBoundsException{
         ScheduleUtilities.transposeDose(testDose2, 2);
         assert testDose2.getStartDay() == 1;
         assert testDose2.getRepeatInterval() == 1;
         assert testDose2.getEndDay() == null;
     }
     @Test
-    public void transposeToScheduleStart_transpose_correctAnswer() throws DoseOutOfBoundsException{
+    public void transposeToDoseStart_transpose_correctResult() throws DoseOutOfBoundsException{
         ScheduleUtilities.transposeDose(testDose2, 3);
         assert testDose2.getStartDay() == 0;
         assert testDose2.getRepeatInterval() == 1;
@@ -224,51 +224,83 @@ public class TestScheduleUtilities {
     }
 
     @Test
-    public void moveEqualsEndDay_move_throwsException() throws DoseOutOfBoundsException{
+    public void moveToEndDay_move_doseRemoved() {
         ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,19));
         assert(testSchedule.getScheduledDoses().contains(testDose1) == false);
-    }
-    @Test(expected = DoseOutOfBoundsException.class)
-    public void moveGreaterThanEndDay_move_throwsException() throws DoseOutOfBoundsException{
-        ScheduleUtilities.transposeDose(testDose1, 19);
-    }
-    @Test(expected = DoseOutOfBoundsException.class)
-    public void transposeLessThanEndDay_move_throwsException() throws DoseOutOfBoundsException{
-        ScheduleUtilities.transposeDose(testDose1, 17);
-    }
-    @Test(expected = DoseOutOfBoundsException.class)
-    public void transposeToDayAfterLastDose_move_throwsException() throws DoseOutOfBoundsException{
-        ScheduleUtilities.transposeDose(testDose1, 16);
+        assert testSchedule.getAssignedStartDate().equals(Date.valueOf("2017-8-19"));
     }
     @Test
-    public void transposeToLastDose_move_correctAnswer() throws DoseOutOfBoundsException{
-        ScheduleUtilities.transposeDose(testDose1, 15);
+    public void moveGreaterThanEndDay_move_doseRemoved(){
+        ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,20));
+        assert testSchedule.getAssignedStartDate().equals(Date.valueOf("2017-8-20"));
+        assert(testSchedule.getScheduledDoses().contains(testDose1) == false);
+    }
+    @Test
+    public void moveLessThanEndDay_move_doseRemoved(){
+        ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,18));
+        assert testSchedule.getAssignedStartDate().equals(Date.valueOf("2017-8-18"));
+        assert(testSchedule.getScheduledDoses().contains(testDose1) == false);
+    }
+    @Test
+    public void moveToDayAfterLastDose_move_doseRemoved(){
+        ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,17));
+        assert testSchedule.getAssignedStartDate().equals(Date.valueOf("2017-8-17"));
+        assert(testSchedule.getScheduledDoses().contains(testDose1) == false);
+    }
+    @Test
+    public void moveToLastDose_move_correctResult() throws DoseOutOfBoundsException{
+        ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,16));
+        assert testSchedule.getScheduledDoses().contains(testDose1);
+        assert testSchedule.getAssignedStartDate().equals(Date.valueOf("2017-8-16"));
         assert testDose1.getStartDay() == 0;
         assert testDose1.getRepeatInterval() == 5;
         assert testDose1.getEndDay() == 3;
     }
-    @Test(expected = DoseOutOfBoundsException.class)
-    public void transposeGreaterThanEndDaySingleDose_move_throwsException() throws DoseOutOfBoundsException{
-        ScheduleUtilities.transposeDose(testDose3, 3);
+    @Test
+    public void moveGreaterThanEndDaySingleDose_move_throwsException(){
+        ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,4));
+        assert(testSchedule.getScheduledDoses().contains(testDose3) == false);
     }
     @Test
-    public void transposeToEndDaySingleDose_move_correctAnswer() throws DoseOutOfBoundsException{
-        ScheduleUtilities.transposeDose(testDose3, 2);
+    public void moveToEndDaySingleDose_move_correctResult(){
+        ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,3));
         assert testDose3.getStartDay() == 0;
         assert testDose3.getRepeatInterval() == null;
+        assert(testSchedule.getScheduledDoses().contains(testDose3));
     }
     @Test
-    public void transposeBeforeScheduleStart_move_correctAnswer() throws DoseOutOfBoundsException{
-        ScheduleUtilities.transposeDose(testDose2, 2);
+    public void moveBeforeScheduleStart_move_correctResult(){
+        ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,3));
         assert testDose2.getStartDay() == 1;
         assert testDose2.getRepeatInterval() == 1;
         assert testDose2.getEndDay() == null;
+        assert(testSchedule.getScheduledDoses().contains(testDose2));
     }
     @Test
-    public void transposeToScheduleStart_move_correctAnswer() throws DoseOutOfBoundsException{
-        ScheduleUtilities.transposeDose(testDose2, 3);
+    public void moveToDoseStart_move_correctResult(){
+        ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,4));
         assert testDose2.getStartDay() == 0;
         assert testDose2.getRepeatInterval() == 1;
         assert testDose2.getEndDay() == null;
+        assert(testSchedule.getScheduledDoses().contains(testDose2));
+    }
+    @Test
+    public void moveByZero_move_correctResult(){
+        ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,1));
+        assert testDose1.getStartDay() == 0;
+        assert testDose2.getStartDay() == 3;
+        assert testDose3.getStartDay() == 2;
+        assert(testSchedule.getScheduledDoses().contains(testDose1));
+        assert(testSchedule.getScheduledDoses().contains(testDose2));
+        assert(testSchedule.getScheduledDoses().contains(testDose3));
+    }
+    @Test
+    public void transposeByZero_transpose_correctResult() throws DoseOutOfBoundsException{
+        ScheduleUtilities.transposeDose(testDose1, 0);
+        ScheduleUtilities.transposeDose(testDose2, 0);
+        ScheduleUtilities.transposeDose(testDose3, 0);
+        assert testDose1.getStartDay() == 0;
+        assert testDose2.getStartDay() == 3;
+        assert testDose3.getStartDay() == 2;
     }
 }

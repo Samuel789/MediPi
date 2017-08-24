@@ -28,7 +28,7 @@ import java.util.List;
 @Repository
 public class MedicationDAOImpl extends GenericDAOImpl<Medication> implements MedicationDAO {
     @Override
-    public Medication findByMedicationId(int medicationId) {
+    public Medication findByMedicationId(long medicationId) {
         return this.getEntityManager().createNamedQuery("Medication.findByMedicationId", Medication.class)
                 .setParameter("id", medicationId)
                 .getSingleResult();

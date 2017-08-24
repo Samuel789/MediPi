@@ -227,7 +227,7 @@ public class TestScheduledDoseUnpacker {
     }
 
     @Test
-    public void simpleRangeTest() {
+    public void simpleRange_rangeMethod() {
         Integer[] expected_result = {4, 5, 6, 7};
         ArrayList<Integer> results = new ArrayList<>();
         ScheduledDoseUnpacker.range(4, 8, 1).forEach(results::add);

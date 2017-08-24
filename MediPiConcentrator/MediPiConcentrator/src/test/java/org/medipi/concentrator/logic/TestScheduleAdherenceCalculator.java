@@ -21,7 +21,7 @@ public class TestScheduleAdherenceCalculator {
     }
 
     @Test
-    public void simpleNoAdherenceTet() {
+    public void zeroAdherenceSchedule() {
         ScheduledDose dose = new ScheduledDose();
         dose.setStartDay(2);
         dose.setEndDay(7);
@@ -42,7 +42,7 @@ public class TestScheduleAdherenceCalculator {
     }
 
     @Test
-    public void simplePerfectAdherenceTet() {
+    public void perfectAdherenceSchedule() {
         ScheduledDose dose = new ScheduledDose();
         dose.setStartDay(2);
         dose.setEndDay(null);
@@ -75,7 +75,7 @@ public class TestScheduleAdherenceCalculator {
     }
 
     @Test
-    public void simpleFractionalAdherenceTet() {
+    public void fractionalAdherenceSchedule() {
         ScheduledDose dose = new ScheduledDose();
         dose.setStartDay(2);
         dose.setEndDay(null);
@@ -108,7 +108,7 @@ public class TestScheduleAdherenceCalculator {
     }
 
     @Test
-    public void noScheduledDosesGivesNull() {
+    public void noScheduledDoses_nullAdherence() {
         schedule.setScheduledDoses(new HashSet<>());
         schedule.setRecordedDoses(new HashSet<>());
         ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, 3, 10, false);
@@ -117,7 +117,7 @@ public class TestScheduleAdherenceCalculator {
     }
 
     @Test
-    public void noDosesInRangeGivesNull() {
+    public void noScheduledDosesInRange_nullAdherence() {
         schedule.setScheduledDoses(new HashSet<>());
         schedule.setRecordedDoses(new HashSet<>());
         ScheduledDose dose = new ScheduledDose();
@@ -129,7 +129,7 @@ public class TestScheduleAdherenceCalculator {
         assert scheduleAdherenceCalculatorInterface.getAdherenceFraction() == null;
     }
     @Test
-    public void noDoseInRangeGivesNullWithRecordedDoseOutOfRange() {
+    public void noScheduledDosesInRangeWithRecordedDosesOutOfRange() {
         schedule.setScheduledDoses(new HashSet<>());
         schedule.setRecordedDoses(new HashSet<>());
         ScheduledDose dose = new ScheduledDose();
@@ -147,7 +147,7 @@ public class TestScheduleAdherenceCalculator {
     }
 
     @Test
-    public void doseInRangeGivesZeroWithNoRdInRange() {
+    public void untakenDosesInRangeWithRecordedDosesOutOfRange() {
         schedule.setScheduledDoses(new HashSet<>());
         schedule.setRecordedDoses(new HashSet<>());
         ScheduledDose dose = new ScheduledDose();
@@ -165,7 +165,7 @@ public class TestScheduleAdherenceCalculator {
     }
 
     @Test
-    public void incorrectlyTakenDoseIdentified() {
+    public void incorrectlyTakenDosesCounted() {
         schedule.setScheduledDoses(new HashSet<>());
         schedule.setRecordedDoses(new HashSet<>());
         ScheduledDose dose = new ScheduledDose();
@@ -190,7 +190,7 @@ public class TestScheduleAdherenceCalculator {
     }
 
     @Test
-    public void zeroRangeGivesNullFraction() {
+    public void zeroRange_null() {
         schedule.setScheduledDoses(new HashSet<>());
         schedule.setRecordedDoses(new HashSet<>());
         ScheduledDose dose = new ScheduledDose();
@@ -218,7 +218,7 @@ public class TestScheduleAdherenceCalculator {
     }
 
     @Test
-    public void simpleStreakTest() {
+    public void streak_calculatedCorrectly() {
         ScheduledDose dose = new ScheduledDose();
         dose.setStartDay(2);
         dose.setEndDay(null);
@@ -251,7 +251,7 @@ public class TestScheduleAdherenceCalculator {
     }
 
     @Test
-    public void streakIndependentOfWindow() {
+    public void streakWithBoundedWindow_boundingIgnored() {
         ScheduledDose dose = new ScheduledDose();
         dose.setStartDay(2);
         dose.setEndDay(null);
@@ -284,7 +284,7 @@ public class TestScheduleAdherenceCalculator {
     }
 
     @Test
-    public void imperfectStreak() {
+    public void imperfectAdherence_streakCalculatedCorrectly() {
         ScheduledDose dose = new ScheduledDose();
         dose.setStartDay(2);
         dose.setEndDay(null);
@@ -376,7 +376,7 @@ public class TestScheduleAdherenceCalculator {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void queryEndBeforeStartThrowsException() {
+    public void queryEndBeforeQueryStartThrowsException() {
         ScheduleAdherenceCalculatorInterface calculator = new ScheduleAdherenceCalculator(schedule, LocalDate.of(2017, 6, 20), LocalDate.of(2017, 6, 10), true);
     }
 }

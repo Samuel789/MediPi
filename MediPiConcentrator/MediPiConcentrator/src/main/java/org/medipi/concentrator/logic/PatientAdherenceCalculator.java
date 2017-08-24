@@ -1,9 +1,7 @@
 package org.medipi.concentrator.logic;
 
 import org.medipi.medication.Schedule;
-import org.medipi.medication.ScheduleAdherence;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -24,6 +22,7 @@ public class PatientAdherenceCalculator {
     private LocalDate queryEndDate;
     private boolean calculatingStreak;
     private HashMap<Schedule, ScheduleAdherenceCalculatorInterface> scheduleAdherenceCalculators;
+    private LocalTime penultimateDayEndTime = null;
 
     public PatientAdherenceCalculator(Collection<Schedule> schedules, LocalDate startDate, LocalDate endDate, boolean calculatingStreak) {
         this.schedules = schedules;
@@ -33,11 +32,21 @@ public class PatientAdherenceCalculator {
         resetResults();
     }
 
+    private static Double calculateAdherenceFraction(int numDosesToTake, int numDosesTakenCorrectly, int numDosesMissed, int numDosesTakenIncorrectly) {
+        if (numDosesToTake + numDosesTakenIncorrectly != 0) {
+            if (numDosesToTake == 0) {
+                return 0.;
+            } else {
+                return Math.max(numDosesTakenCorrectly - numDosesTakenIncorrectly, 0) / ((double) numDosesToTake);
+            }
+        } else {
+            return null;
+        }
+    }
+
     public HashMap<Schedule, ScheduleAdherenceCalculatorInterface> getScheduleAdherenceCalculators() {
         return scheduleAdherenceCalculators;
     }
-
-    private LocalTime penultimateDayEndTime = null;
 
     public void setPenultimateDayEndTime(LocalTime time) {
         penultimateDayEndTime = time;
@@ -109,7 +118,6 @@ public class PatientAdherenceCalculator {
         scheduleAdherenceCalculators = new HashMap<>();
     }
 
-
     public void calculatePatientAdherence() {
         int numDosesTakenCorrectly = 0;
         int numDosesMissed = 0;
@@ -138,7 +146,7 @@ public class PatientAdherenceCalculator {
                 }
             }
         }
-        adherenceFraction = calculateAdherenceFraction(numDosesTakenCorrectly, numDosesMissed, numDosesTakenIncorrectly);
+        adherenceFraction = calculateAdherenceFraction(numDosesToTake, numDosesTakenCorrectly, numDosesMissed, numDosesTakenIncorrectly);
         if (calculatingStreak && adherenceFraction != null) {
             streakLength = calculateStreakLength(errantDays, earliestStart);
         }
@@ -149,13 +157,6 @@ public class PatientAdherenceCalculator {
         this.scheduleAdherenceCalculators = scheduleAdherenceCalculators;
         this.adherenceFraction = adherenceFraction;
         this.streakLength = streakLength;
-    }
-
-    private Double calculateAdherenceFraction(int dosesCorrectlyTaken, int dosesNotTaken, int dosesTakenIncorrectly) {
-        if (dosesCorrectlyTaken + dosesNotTaken + dosesTakenIncorrectly == 0) {
-            return null;
-        }
-        return ((double) dosesCorrectlyTaken) / (dosesCorrectlyTaken + dosesNotTaken);
     }
 
     private Integer calculateStreakLength(Collection<LocalDate> errantDays, LocalDate earliestScheduleStart) {

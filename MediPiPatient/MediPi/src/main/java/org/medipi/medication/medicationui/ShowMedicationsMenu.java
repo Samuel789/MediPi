@@ -1,6 +1,7 @@
 package org.medipi.medication.medicationui;
 
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
 import org.medipi.MediPi;
 import org.medipi.medication.MedicationManager;
@@ -14,6 +15,7 @@ public class ShowMedicationsMenu extends TileMenu {
 
     public ShowMedicationsMenu(MediPi medipi, TileMenu upperMenu) {
         super(new WindowManager(), 3, 2.15, upperMenu);
+        setPadding(new Insets(10, 5, 10, 5));
         MajorMinorTile medTile1 = new MajorMinorTile(new SimpleBooleanProperty(true), 1, 1);
         medTile1.setMajorText("Back");
         this.medipi = medipi;

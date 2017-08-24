@@ -46,7 +46,7 @@ public class MedicationScheduleUpdateService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public void addSchedule(Schedule newSchedule, List<ScheduledDose> newDoses, int medicationId) {
+    public void addSchedule(Schedule newSchedule, List<ScheduledDose> newDoses, long medicationId) {
         Medication medication = medicationDAOImpl.findByMedicationId(medicationId);
         newSchedule.setMedication(medication);
         LocalDate tomorrow = LocalDate.now().plusDays(1);

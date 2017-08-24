@@ -19,6 +19,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.paint.*;
+import javafx.scene.paint.Color;
 import org.medipi.authentication.MediPiWindow;
 import org.medipi.devices.Element;
 
@@ -70,7 +72,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -678,7 +679,6 @@ public class MediPi extends Application implements UnlockConsumer {
                 makeFatalErrorMessage("Authentication cannot be loaded - " + e.getMessage(), null);
                 return;
             }
-
             root.getChildren().add(mainWindow);
 
             // Load CSS properties - see considerations/todo in main text above
@@ -691,6 +691,7 @@ public class MediPi extends Application implements UnlockConsumer {
             }
 
             primaryStage.setTitle(MEDIPINAME + " " + VERSION + "-" + VERSIONNAME);
+
             //show the screen
             if (fatalError) {
                 Label l = new Label(fatalErrorLog.toString());
@@ -698,6 +699,7 @@ public class MediPi extends Application implements UnlockConsumer {
                 scene = new Scene(l);
             }
             primaryStage.setScene(scene);
+            primaryStage.getScene();
             primaryStage.setMinWidth(screenwidth);
             primaryStage.setMinHeight(screenheight);
             primaryStage.show();

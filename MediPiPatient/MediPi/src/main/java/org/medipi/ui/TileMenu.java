@@ -33,6 +33,9 @@ public class TileMenu extends Group {
         this(windowManager.getTargetWidth(), windowManager.getTargetHeight(), columns, visibleRows, upperMenu);
     }
 
+    public void setPadding(Insets insets) {
+        contents.setPadding(insets);
+    }
     public TileMenu(int targetWidth, int targetHeight, int columns, double visibleRows, TileMenu upperMenu) {
         // Set up the Dashboard view
         tiles = new Vector<Tile>();
@@ -47,8 +50,10 @@ public class TileMenu extends Group {
         contents.setMinHeight(targetHeight);
         contents.setMaxHeight(targetHeight);
         contents.setMinWidth(targetWidth);
+        contents.setPadding(new Insets(0));
         contents.setMaxWidth(targetWidth);
-        contents.setId("mainwindow-dashboard-scroll");
+        contents.setStyle("-fx-background-color: lightblue;");
+        this.setStyle("-fx-background-color: lightblue;");
         contents.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         contents.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         dashTile = new FlowPane();

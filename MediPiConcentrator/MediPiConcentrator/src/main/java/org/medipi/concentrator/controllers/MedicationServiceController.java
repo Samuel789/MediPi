@@ -53,7 +53,10 @@ public class MedicationServiceController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ResponseEntity<MedicationPatientDO> synchronize(@RequestBody MedicationPatientDO uploadedData) {
-        return this.medicationDownloadService.synchronize(uploadedData);
+        String patientUuid = this.medicationDownloadService.verifyPatient(uploadedData);
+        this.medicationDownloadService.uploadRecordedDoses(uploadedData);
+        this.medicationDownloadService.updateAdherence(patientUuid);
+        return this.medicationDownloadService.getMedicationData(patientUuid);
     }
 
     @RequestMapping(value = "/clinician/getPatientData", method = RequestMethod.GET)

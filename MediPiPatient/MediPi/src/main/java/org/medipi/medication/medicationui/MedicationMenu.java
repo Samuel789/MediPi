@@ -14,6 +14,13 @@ public class MedicationMenu extends TileMenu {
     Datastore datastore;
     HeaderTile headerTile;
 
+    public void setSynched(boolean synched) {
+        this.synched = synched;
+        loadPatientAdherenceStatistics();
+    }
+
+    boolean synched = false;
+
     public MedicationMenu(MediPi mediPi, TileMenu upperMenu, Datastore datastore) {
         super(new WindowManager(), 3, 2.15, upperMenu);
         this.mediPi = mediPi;
@@ -59,6 +66,7 @@ public class MedicationMenu extends TileMenu {
         headerTile.setMainContent(adherenceBar);
         adherenceBar.setWidth(450);
         adherenceBar.setLongForm(true);
+        adherenceBar.setUnSynched(!synched);
     }
 
     public void reload() {

@@ -28,7 +28,7 @@ public class MedicationReminder extends Group {
     ReminderService reminderService;
     private static final int SNOOZEDURATION = 600;
 
-    public MedicationReminder(MedicationReminderEvent reminderEvent, MediPi mediPi) {
+    public MedicationReminder(MedicationReminderEvent reminderEvent, MediPi mediPi, Stage window) {
         ScheduledDose dose = reminderEvent.getDose();
         reminderService = ((MedicationManager) mediPi.getElement("Medication")).getReminderService();
         content = new VBox();
@@ -107,6 +107,7 @@ public class MedicationReminder extends Group {
             content.getScene().getWindow().setHeight(content.getHeight() + 4);
             content.getChildren().add(content.getChildren().indexOf(advisoryTextArea), dismissWarningLabel);
             content.getChildren().remove(advisoryTextArea);
+            window.setHeight(280);
         });
         System.out.println("REMINDER - DoseId " + dose.getScheduledDoseId());
         takeButton.setOnMouseClicked((MouseEvent event) -> {

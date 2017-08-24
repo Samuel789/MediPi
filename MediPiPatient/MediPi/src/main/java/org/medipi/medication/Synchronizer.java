@@ -147,7 +147,7 @@ public class Synchronizer
             datastore.replacePatientSchedules(schedules);
             datastore.setPatientAdherence(recievedData.getPatientAdherence());
             medicationManager.reload();
-
+            medicationManager.getMenu().setSynched(true);
         } catch (ProcessingException pe) {
             MediPiLogger.getInstance().log(Synchronizer.class.getName() + ".error", "Attempt to synchronize medication data has failed - MediPi Concentrator is not available - please try again later. " + pe.getLocalizedMessage());
             MediPiMessageBox.getInstance().makeErrorMessage("Attempt to synchronize medication data has failed - MediPi Concentrator is not available - please try again later. " + pe.getLocalizedMessage(), pe);

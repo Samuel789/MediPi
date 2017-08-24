@@ -25,13 +25,13 @@ public class MedicationScheduleDO {
     private Schedule schedule;
     private List<ScheduledDose> doses;
 
-    public int getMedicationId() {
+    public long getMedicationId() {
         return medicationId;
     }
 
-    public void setMedicationId(int medicationId) {
+    public void setMedicationId(long medicationId) {
         this.medicationId = medicationId;
     }
 
-    private int medicationId;
+    private long medicationId;
 }

@@ -7,7 +7,6 @@ import org.medipi.medication.Schedule;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -28,9 +27,12 @@ public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorI
     private List<DoseInstance> doseInstances;
     private int queryEndDay;
     private boolean calculatingStreak;
+    private Time penultimateDayEndTime = null;
+
     public ScheduleAdherenceCalculator(Schedule schedule, int queryStartDay, int queryEndDay, boolean calculatingStreak) {
         initialize(schedule, queryStartDay, queryEndDay, calculatingStreak);
     }
+
 
     public ScheduleAdherenceCalculator(Schedule schedule, LocalDate queryStartDate, LocalDate queryEndDate, boolean calculatingStreak) {
         LocalDate scheduleStart = schedule.getAssignedStartDate().toLocalDate();
@@ -58,8 +60,6 @@ public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorI
         }
         initialize(schedule, queryStartDay, queryEndDay, calculatingStreak);
     }
-
-
 
     private static int[] calculate_day_adherence(List<DoseInstance> dosesToTake, List<RecordedDose> takenDoses, Time endTime) {
         int numDosesToTake = dosesToTake.size();
@@ -91,6 +91,18 @@ public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorI
 
     private static boolean dayQualifiesForStreak(int dosesTakenCorrectly, int dosesLeftUntaken, int dosesIncorrectlyTaken) {
         return dosesLeftUntaken == 0 && dosesIncorrectlyTaken == 0;
+    }
+
+    private static Double calculateAdherenceFraction(int numDosesToTake, int numDosesTakenCorrectly, int numDosesMissed, int numDosesTakenIncorrectly) {
+        if (numDosesToTake + numDosesTakenIncorrectly != 0) {
+            if (numDosesToTake == 0) {
+                return 0.;
+            } else {
+                return Math.max(numDosesTakenCorrectly - numDosesTakenIncorrectly, 0) / ((double) numDosesToTake);
+            }
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -137,9 +149,6 @@ public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorI
     public Schedule getSchedule() {
         return schedule;
     }
-
-    private Time penultimateDayEndTime = null;
-
 
     private void initialize(Schedule schedule, int queryStartDay, int queryEndDay, boolean calculatingStreak) {
         assert (queryStartDay <= queryEndDay);
@@ -300,9 +309,7 @@ public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorI
         this.lastErrantDay = lastErrantDay;
         this.doseInstances = doseInstances;
         this.numDosesToTake = numDosesToTake;
-        if (numDosesToTake != 0) {
-            this.adherenceFraction = Math.max(numDosesTakenCorrectly - numDosesTakenIncorrectly, 0) / ((double) numDosesToTake);
-        }
+        this.adherenceFraction = calculateAdherenceFraction(numDosesToTake, numDosesTakenCorrectly, numDosesMissed, numDosesTakenIncorrectly);
     }
 
     private Integer calculateStreakLength(Integer lastErrantDay) {

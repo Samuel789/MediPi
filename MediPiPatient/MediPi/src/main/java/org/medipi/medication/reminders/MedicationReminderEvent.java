@@ -76,7 +76,7 @@ public class MedicationReminderEvent implements ReminderEventInterface {
     public void execute(MediPi mediPi) {
         frozen = true;
         Stage popupWindow = new Stage();
-        MedicationReminder popupContents = new MedicationReminder(this, mediPi);
+        MedicationReminder popupContents = new MedicationReminder(this, mediPi, popupWindow);
         Scene popupScene = new Scene(popupContents);
         popupContents.getStylesheets().addAll(mediPi.scene.getStylesheets());
         popupWindow.initStyle(StageStyle.UNDECORATED);
@@ -107,6 +107,8 @@ public class MedicationReminderEvent implements ReminderEventInterface {
         boolean repeatsToday;
         if (dayOfSchedule == dose.getStartDay()) {
             repeatsToday = true;
+        } else if (dayOfSchedule < dose.getStartDay()) {
+            repeatsToday = false;
         } else if (dose.getRepeatInterval() == null || dose.getRepeatInterval() == 0) {
             repeatsToday = false;
         } else {

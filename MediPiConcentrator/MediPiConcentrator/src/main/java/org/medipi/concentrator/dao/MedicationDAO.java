@@ -25,7 +25,7 @@ import java.util.List;
  * @author rick@robinsonhq.com
  */
 public interface MedicationDAO extends GenericDAO<Medication> {
-    public Medication findByMedicationId(int medicationId);
+    public Medication findByMedicationId(long medicationId);
 
     public List<Medication> findAll();
 }

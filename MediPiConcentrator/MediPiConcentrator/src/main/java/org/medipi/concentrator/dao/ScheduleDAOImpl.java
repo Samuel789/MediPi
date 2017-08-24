@@ -29,9 +29,9 @@ import java.util.List;
 @Repository
 public class ScheduleDAOImpl extends GenericDAOImpl<Schedule> implements ScheduleDAO {
     @Override
-    public Schedule findByScheduleId(int medicationId) {
-        return this.getEntityManager().createNamedQuery("Schedule.findByfineduleId", Schedule.class)
-                .setParameter("id", medicationId)
+    public Schedule findByScheduleId(int scheduleId) {
+        return this.getEntityManager().createNamedQuery("Schedule.findByScheduleId", Schedule.class)
+                .setParameter("id", scheduleId)
                 .getSingleResult();
     }
 

@@ -24,6 +24,9 @@
 	-fx-background-color: lightblue;
 	-fx-padding: 10 5 10 5;
 }
+#main-scene {
+	-fx-background-color: lightblue;
+}
 #mainwindow-dashboard-component{
 	-fx-background-color: white;
 	-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 5 , 5 );

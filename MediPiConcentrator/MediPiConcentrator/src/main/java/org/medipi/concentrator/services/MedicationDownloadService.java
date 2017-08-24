@@ -56,7 +56,6 @@ public class MedicationDownloadService {
     public ResponseEntity<MedicationPatientDO> getMedicationData(String patientUuid) {
 
         MedicationPatientDO medicationInfo = new MedicationPatientDO();
-        List<ScheduledDose> doses = new ArrayList<>();
         System.out.println(org.hibernate.Version.getVersionString());
         try {
             medicationInfo.setSchedules(scheduleDAOimpl.findAll());
@@ -77,7 +76,7 @@ public class MedicationDownloadService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    private void uploadRecordedDoses(MedicationPatientDO uploadedData) {
+    public void uploadRecordedDoses(MedicationPatientDO uploadedData) {
         List<RecordedDose> doseData = new ArrayList<>();
         for (Schedule schedule : uploadedData.getSchedules()) {
             doseData.addAll(schedule.getRecordedDoses());
@@ -92,8 +91,7 @@ public class MedicationDownloadService {
         }
     }
 
-    @Transactional(rollbackFor = Throwable.class)
-    public ResponseEntity<MedicationPatientDO> synchronize(MedicationPatientDO uploadedData) {
+    public String verifyPatient(MedicationPatientDO uploadedData) {
         assert patientDeviceValidationService != null;
         String patientUuid = uploadedData.getPatientUuid();
         String hardwareName = uploadedData.getHardwareName();
@@ -104,13 +102,11 @@ public class MedicationDownloadService {
             System.out.println(e.getMessage());
             throw new NotFound404Exception("Hardware and/or patient not registered" + e.getLocalizedMessage());
         }
-        uploadRecordedDoses(uploadedData);
-        updateAdherence(patientUuid);
-        return getMedicationData(patientUuid);
+        return patientUuid;
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    private void updateAdherence(String patientUuid) {
+    public void updateAdherence(String patientUuid) {
         LocalDate searchEndTime = LocalDate.now().plusDays(1);
         LocalDate searchStartTime = searchEndTime.minusDays(7);
         Collection<Schedule> patientSchedules = scheduleDAOimpl.findByPatientUuid(patientUuid);

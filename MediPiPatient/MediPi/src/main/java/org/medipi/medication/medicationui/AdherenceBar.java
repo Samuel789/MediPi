@@ -25,6 +25,18 @@ public class AdherenceBar extends Group {
     Double progress;
     boolean longForm = false;
 
+    public boolean isUnSynched() {
+        return unSynched;
+    }
+
+    public void setUnSynched(boolean unSynched) {
+        this.unSynched = unSynched;
+        updateLabel();
+    }
+
+    boolean unSynched = false;
+
+
     public AdherenceBar(ScheduleAdherence scheduleAdherence) {
         this(scheduleAdherence.getSevenDayFraction(), scheduleAdherence.getStreakLength());
     }
@@ -110,10 +122,13 @@ public class AdherenceBar extends Group {
     }
 
     private void updateLabel() {
-        if (longForm) {
+        if (unSynched) {
+            adherenceText.setText("Sync with the Concentrator to use this feature.");
+            streakText.setText("Tap the <Synchronize> button");
+        } else if (longForm) {
             if (progress == null) {
-                adherenceText.setText("Sync with the Concentrator to use this feature.");
-                streakText.setText("Tap the <Synchronize> button");
+                adherenceText.setText("No statistics yet.");
+                streakText.setText("");
             } else {
                 adherenceText.setText(String.format("%d%% overall adherence in the last 7 days", (int) (progress * 100), streakLength));
                 if (streakLength >= MINSTREAKLENGTH) {
@@ -124,7 +139,7 @@ public class AdherenceBar extends Group {
             }
         } else {
             if (progress == null) {
-                adherenceText.setText("Unknown");
+                adherenceText.setText("");
                 streakText.setText("");
             } else {
                 adherenceText.setText(String.format("%d%% adherence", (int) (progress * 100)));

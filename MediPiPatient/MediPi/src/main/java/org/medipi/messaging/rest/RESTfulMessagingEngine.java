@@ -126,14 +126,12 @@ public class RESTfulMessagingEngine {
         String keystorePass = System.getProperty("medipi.device.macaddress");
 
         KeyStore trustStore = loadStore(truststoreLocation, truststorePass);
-        System.out.println("SECRET #1: The truststore is located at: " + truststoreLocation + "\n    with password " + truststorePass);
 
         TrustManagerFactory tmf
                 = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         tmf.init(trustStore);
 
         KeyStore keyStore = loadStore(keystoreLocation, keystorePass);
-        System.out.println("SECRET #2: The keystore is located at: " + keystoreLocation + "\n    with password " + keystorePass);
 
 
         KeyManagerFactory kmf

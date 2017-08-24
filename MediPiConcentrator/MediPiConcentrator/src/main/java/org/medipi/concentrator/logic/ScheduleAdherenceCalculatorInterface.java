@@ -3,7 +3,6 @@ package org.medipi.concentrator.logic;
 import org.medipi.medication.DoseInstance;
 import org.medipi.medication.Schedule;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -39,6 +38,7 @@ public interface ScheduleAdherenceCalculatorInterface {
     int getQueryEndDay();
 
     void setQueryEndDayTime(int queryEndDay, LocalTime endTime);
+
     void setQueryEndDateTime(LocalDate queryEndDate, LocalTime endTime);
 
     boolean isCalculatingStreak();
