@@ -24,7 +24,7 @@ import javafx.scene.layout.Pane;
 
 /**
  * Class to encapsulate a Dashboard Component node which is placed in the
- * dashboard. This class creates and handles the dashboard EntityTile and its
+ * dashboard. This class creates and handles the dashboard DashboardTile and its
  * contents, allowing the tile to be clicked and the Element to be called.
  * Overlays can be added to the tile so that dynamically changing data can be
  * displayed or an alert when actions are required in the related Element.
@@ -68,9 +68,9 @@ public class Tile {
     }
 
     /**
-     * Method to return the Dashboard EntityTile
+     * Method to return the Dashboard DashboardTile
      *
-     * @return Dashboard EntityTile content back to the main MediPi class
+     * @return Dashboard DashboardTile content back to the main MediPi class
      */
     public Pane getNode(int unitWidth, int unitHeight, int availableWidthUnits) {
         int widthUnitsToUse;

@@ -41,7 +41,7 @@ import org.medipi.MediPiMessageBox;
  * Class to watch a the incoming messages directory for changes to files.
  *
  * When a new file is detected, the message List is updated in Messenger and an
- * alert badge is superimposed onto the Dashboard EntityTile. The tile is also
+ * alert badge is superimposed onto the Dashboard DashboardTile. The tile is also
  * coloured Red and a message is inserted into the lower alert banner
  */
 public class MessageWatcher extends Thread {

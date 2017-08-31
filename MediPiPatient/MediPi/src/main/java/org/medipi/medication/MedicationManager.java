@@ -1,7 +1,7 @@
 package org.medipi.medication;
 
 import javafx.scene.Node;
-import org.medipi.DashboardTile;
+import org.medipi.ui.DashboardTile;
 import org.medipi.devices.Element;
 import org.medipi.medication.medicationui.MedicationMenu;
 import org.medipi.medication.reminders.ReminderEventInterface;

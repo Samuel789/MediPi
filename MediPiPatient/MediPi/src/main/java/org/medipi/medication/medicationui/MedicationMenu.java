@@ -37,12 +37,15 @@ public class MedicationMenu extends TileMenu {
         });
         this.addTile(backSettingsTile);
         this.addTile(headerTile);
-        EntityTile recordDoseTile = new EntityTile(new SimpleBooleanProperty(true), 1, 1);
-        EntityTile viewScheduleTile = new EntityTile(new SimpleBooleanProperty(true), 1, 1);
-        EntityTile showMedicationsTile = new EntityTile(new SimpleBooleanProperty(true), 1, 1);
+        DashboardTile recordDoseTile = new DashboardTile(new SimpleBooleanProperty(true), 1, 1);
+        DashboardTile viewScheduleTile = new DashboardTile(new SimpleBooleanProperty(true), 1, 1);
+        DashboardTile showMedicationsTile = new DashboardTile(new SimpleBooleanProperty(true), 1, 1);
         recordDoseTile.addTitle("Record a Dose");
+        recordDoseTile.setBackgroundImage(mediPi.utils.getImageView(MediPi.ELEMENTNAMESPACESTEM + "Medication" + ".recordDoseImage", null, null, false));
         showMedicationsTile.addTitle("Show Medications");
+        showMedicationsTile.setBackgroundImage(mediPi.utils.getImageView(MediPi.ELEMENTNAMESPACESTEM + "Medication" + ".showMedicationsImage", null, null, false));
         viewScheduleTile.addTitle("View Schedule");
+        viewScheduleTile.setBackgroundImage(mediPi.utils.getImageView(MediPi.ELEMENTNAMESPACESTEM + "Medication" + ".viewScheduleImage", null, null, false));
         recordDoseTile.setOnTileClick((MouseEvent event) -> {
             this.setOverlayWindow(new RecordDoseMenu(mediPi, this));
             this.showOverlayWindow();

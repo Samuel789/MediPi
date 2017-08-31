@@ -60,7 +60,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import org.medipi.AlertBanner;
-import org.medipi.DashboardTile;
+import org.medipi.ui.DashboardTile;
 import org.medipi.MediPi;
 import org.medipi.MediPiMessageBox;
 import org.medipi.MediPiProperties;

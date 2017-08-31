@@ -38,7 +38,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.medipi.utilities.ConfigurationStringTokeniser;
-import org.medipi.DashboardTile;
+import org.medipi.ui.DashboardTile;
 import org.medipi.MediPi;
 import org.medipi.MediPiProperties;
 import org.medipi.model.DeviceDataDO;
