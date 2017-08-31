@@ -229,6 +229,10 @@ th.clinical-value {
     padding: 10px;
 }
 
+.warning-row {
+    background-color: #FFC5C5;
+}
+
 #medication-info-section {
 
 }

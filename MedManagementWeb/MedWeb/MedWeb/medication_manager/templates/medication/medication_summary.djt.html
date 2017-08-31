@@ -1,0 +1,189 @@
+{% extends 'medication/patient_template.djt.html' %}
+{% load display_utils %}
+
+{% block main-pane %}
+    <div class="title">
+        <h3>Patient Medications: {{ active_patient.name }}</h3>
+    </div>
+    <div class="container widecontainer">
+
+        {% if active_patient.status.value == 1 %}
+            <div class="alert alert-danger">
+                <strong>Warning!</strong> This patient is not registered with the Concentrator.
+            </div>
+        {% else %}
+            {% if active_patient.schedules|length > 0 %}
+                <div class="top-floater-warning floater-warning" id="out-of-view-warning" hidden>Some medications out of view</div>
+                <div id='timeline'></div>
+                <h2>Current Schedules</h2>
+                <div id="med-tables">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Medication</th>
+                        <th>Full Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Last 7 Days</th>
+                        <th>Streak</th>
+                        <th>Alternate Name</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for schedule in active_patient.schedules|present %}
+                        {% if schedule|has_warning %}
+                        <tr class="warning-row">
+                        {% else %}
+                        <tr>
+                        {% endif %}
+                            <td>Active</td>
+                            <td>{{ schedule.medication.short_name }}</td>
+                            <td>{{ schedule.medication.full_name }}</td>
+                            <td>{{ schedule.start_date|date:"Y-m-d" }}</td>
+                            <td>{{ schedule.end_date|date:"Y-m-d" }}</td>
+                        {% if schedule.scheduled_doses|length > 0 %}
+                            <td>{{ schedule.adherence.seven_day_fraction|as_percentage }}</td>
+                            <td>{{ schedule.adherence.streak_length }}</td>
+                        {% else %}
+                            <td>Taken as needed</td>
+                            <td></td>
+                        {% endif %}
+                            <td>{% if schedule.alternate_name is None %}<i>None</i>{% else %}
+                                {{ schedule.alternate_name }}{% endif %}</td>
+                            <td>
+                                <a class="btn btn-default"
+                                   href="{{ siteurl }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
+                                <a class="btn btn-default"
+                                   href="{{ siteurl }}/patients/viewschedule?schedule_id={{ schedule.id }}">Remove</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
+                <h2>Upcoming Schedules</h2>
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Medication</th>
+                        <th>Full Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Alternate Name</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for schedule in active_patient.schedules|future %}
+                        <tr>
+                            <td>{% if schedule.medication|being_taken:active_patient.schedules %}Modification{% else %}Not yet active{% endif %}</td>
+                            <td>{{ schedule.medication.short_name }}</td>
+                            <td>{{ schedule.medication.full_name }}</td>
+                            <td>{{ schedule.start_date|date:"Y-m-d" }}</td>
+                            <td>{{ schedule.end_date|date:"Y-m-d" }}</td>
+                            <td>{% if schedule.alternate_name is None %}<i>None</i>{% else %}
+                                {{ schedule.alternate_name }}{% endif %}</td>
+                            <td>
+                                <a class="btn btn-default"
+                                   href="{{ siteurl }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
+                                <a class="btn btn-default"
+                                   href="{{ siteurl }}/patients/viewschedule?schedule_id={{ schedule.id }}">Cancel</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <strong>Info!</strong> No medications have been assigned to this patient. Click the Add Medication
+                    button to assign a new medication.
+                </div>
+
+            {% endif %}
+            <a class="button btn btn-primary"
+               href="{{ site_url }}/patients/assignmedication?patient_uuid={{ active_patient.uuid }}">Add Medication</a>
+        {% endif %}
+    </div>
+    {% comment %}{% load static %}
+    <script src='{% static "js/moment.min.js" %}'></script>
+<script src='{% static "js/fullcalendar.js" %}'></script>
+
+<script>
+    $(document).ready(function() {
+        $('#calendar').fullCalendar({
+            // put your options and callbacks here
+        })
+
+    });
+</script>{% endcomment %}
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages': ['timeline']});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var container = document.getElementById('timeline');
+            var chart = new google.visualization.Timeline(container);
+            var dataTable = new google.visualization.DataTable();
+
+            dataTable.addColumn({type: 'string', id: 'Name'});
+            dataTable.addColumn({type: 'string', id: 'Value'});
+            dataTable.addColumn({type: 'date', id: 'Start'});
+            dataTable.addColumn({type: 'date', id: 'End'});
+            dataTable.addRows([
+                {%  for dose in dose_instances %}
+                    ["{{ dose.schedule.medication.full_name }}", {{ dose.dose_value }} +" " + "{{ dose.schedule.medication.dose_unit.name }}", new Date("{{ dose.start_datetime|date:"Y-m-d H:i" }}"), new Date("{{ dose.end_datetime|date:"Y-m-d H:i" }}")],
+                {% endfor %}
+            ]);
+            chart.draw(dataTable, {
+                                   colors: [{%  for dose in dose_instances %}"{{ dose.color }}",{% endfor %}],
+                                   title: "This week",
+                                    hAxis: {
+                                    format: 'yyyy-M-d',
+                                    gridlines: {count: 15}
+                                  }});
+        }
+    </script>
+
+    <script>
+    function isScrolledIntoView(elem)
+        {
+            var docViewTop = $(window).scrollTop();
+            var docViewBottom = docViewTop + $(window).height();
+
+            var elemTop = $(elem).offset().top;
+            var elemBottom = elemTop + elem.height();
+
+            return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+        }
+        var medTables = $("#med-tables");
+        var outOfViewWarning = $("#out-of-view-warning");
+    function updateScrollWarning() {
+        if(isScrolledIntoView(medTables)){
+        outOfViewWarning.prop("hidden", true)
+    } else {
+        outOfViewWarning.prop("hidden", false)
+    }
+    }
+$(window).scroll(function(){
+    updateScrollWarning()
+  });
+$(window).resize(function() {
+    updateScrollWarning()
+});
+$(window).ready(function() {
+    updateScrollWarning()
+});
+    </script>
+
+
+{% endblock %}

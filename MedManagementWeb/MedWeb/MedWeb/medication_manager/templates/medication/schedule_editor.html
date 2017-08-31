@@ -1,0 +1,448 @@
+{% extends 'medication/patient_template.djt.html' %}
+
+{% block main-pane %}
+    <div class="title">
+        {% if mode == "modify" %}
+            <h3>Modify Medication Schedule: {{ active_patient.name }}</h3>
+            <h4>{{ active_schedule.medication.full_name }}</h4>
+        {% elif mode == "create" %}
+            <h3>Create Medication Schedule: {{ active_patient.name }}</h3>
+            <h4>{{ active_medication.full_name }}</h4>
+        {% endif %}
+
+    </div>
+    <div class="container">
+    <p>Schedule start date:
+            {% if enable_start_date_change %}
+                <input type="text" id="start-date-picker">
+        {% else %}
+                <span type="text" id="start-date-picker"></span>
+        {% endif %}</p>
+        <p>Purpose statement: <input type="text" id="purpose-statement-field" style="width:600px"></p>
+        <p>Alternate name (patient-set): <input type="text" disabled id="alternate-name-field" placeholder="None"></p>
+        <div class="option-pane" id="asneeded_pane">
+            <div class="radio">
+                <label><input type="radio" name="optradio" id="asneeded-radio" onchange="optradio_onchange()">Medication
+                    is to be taken as needed</label>
+                <p>Schedule end date: <input type="text" id="end-date-picker"></p>
+            </div>
+        </div>
+        <div class="option-pane" id="scheduled-pane">
+            <div class="radio">
+                <label><input type="radio" name="optradio" id="scheduled-radio" onchange="optradio_onchange()">Schedule
+                    doses for this medication</label>
+            </div>
+            <div class="button-row">
+                <a class="btn btn-default" id="add-dose-button" onclick="create_dose()">Add Dose</a>
+                <a class="btn btn-default" disabled id="edit-dose-button" onclick="edit_dose()">Edit Dose</a>
+                <a class="btn btn-default" disabled id="remove-dose-button" onclick="remove_dose()">Remove Dose</a>
+            </div>
+            <div id="doses">
+            </div>
+
+        </div>
+        <a class="btn btn-lg btn-primary" id="save-button" onclick="upload()">Save</a>
+
+    </div>
+    </div>
+    <!--Edit dose modal dialog-->
+    <div class="modal fade" id="dose-editor-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Edit Dose</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="panel-group">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">Dose</div>
+                                <div class="panel-text">Take <input type="number" id="dose-value-input"
+                                                                    placeholder="Dose Value">{{ active_medication.dose_unit }}<br/>
+                                    between <input type="time" id="start-time-input" placeholder="Start Time"> and
+                                    <input type="time" id="end-time-input" placeholder="End Time"><br/>
+                                    Default reminder time: <input type="time" id="reminder-time-input"
+                                                                  placeholder="Default Reminder Time"><br/>
+                                    Starting on day: <input type="number" id="start-day-input" min="0"
+                                                            onchange="recalculate_clarifiers()"
+                                                            placeholder="Start Day"> (<span
+                                            id="start-day-clarifier"></span>)
+                                </div>
+                            </div>
+                            <div class="panel panel-info">
+                                <div class="panel-heading">Repeat Information</div>
+                                <div class="option-pane" id="asneeded_pane">
+                                    <div class="radio">
+                                        <label><input type="radio" name="optradio" id="oneday-radio"
+                                                      onchange="optradio_onchange()">One day only (do not
+                                            repeat)</label>
+                                    </div>
+                                </div>
+                                <div class="option-pane" id="scheduled-pane">
+                                    <div class="radio">
+                                        <label><input type="radio" name="optradio" id="repeat-radio"
+                                                      onchange="optradio_onchange()">Repeat every <input type="number"
+                                                                                                         id="repeat-interval-input" min="0"
+                                                                                                         placeholder="Repeat Interval">
+                                            days<br/>
+                                            up to (and not including) day <input type="number" id="end-day-input" min="0"
+                                                                                 onchange="recalculate_clarifiers()"
+                                                                                 placeholder="End Day"> (<span
+                                                    id="end-day-clarifier"></span>). </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" onclick="close_model()">Discard Changes</button>
+                    <button type="button" class="btn btn-primary" onclick="save_dose()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.read
+        var asneeded_radio = document.getElementById("asneeded-radio");
+        var scheduled_radio = document.getElementById("scheduled-radio");
+        var asneeded_pane = document.getElementById("asneeded-pane");
+        var scheduled_pane = document.getElementById("scheduled-pane");
+        var add_dose_button = document.getElementById("add-dose-button");
+        var alternate_name_field = document.getElementById("alternate-name-field");
+        var purpose_statement_field = document.getElementById("purpose-statement-field");
+        var edit_dose_button = document.getElementById("edit-dose-button");
+        var remove_dose_button = document.getElementById("remove-dose-button");
+        var start_date_picker = $("#start-date-picker");
+        var end_date_picker = $("#end-date-picker");
+        var modinp_start_day = document.getElementById("start-day-input");
+        var modinp_end_day = document.getElementById("end-day-input");
+        var modinp_start_time = document.getElementById("start-time-input");
+        var modinp_end_time = document.getElementById("end-time-input");
+        var modinp_dose_value = document.getElementById("dose-value-input");
+        var modinp_reminder_time = document.getElementById("reminder-time-input");
+        var modinp_repeat_interval = document.getElementById("repeat-interval-input");
+        var modinp_start_day_clarifier = document.getElementById("start-day-clarifier");
+        var modinp_end_day_clarifier = document.getElementById("end-day-clarifier");
+        var modinp_oneday_radio = document.getElementById("oneday-radio");
+        var doses_list = document.getElementById("doses");
+        var patient_uuid = "{{ active_patient.uuid }}";
+        var new_doses_count = 0;
+        var existing_doses = {};
+        var schedule_end_day;
+        var dose_date_panels = [];
+        var schedule = {};
+        var dose_editing = null;
+        const None = null;
+        {% if mode == "modify" %}
+            var schedule_start_day = new Date("{{ active_schedule.start_date|date:"Y-m-d" }}");
+            {% for dose in active_schedule.scheduled_doses %}
+                existing_doses[{{ dose.id|safe }}] = {
+                    id: {{dose.id|safe}},
+                    dose_value: {{dose.dose_value|safe}},
+                    start_day: {{dose.start_day|safe}},
+                    end_day: {{dose.end_day|safe}},
+                    repeat_interval: {{dose.repeat_interval|safe}},
+                    start_time: "{{dose.start_time|time:"H:i"}}",
+                    end_time: "{{dose.end_time|time:"H:i"}}",
+                    default_reminder_time: "{{dose.default_reminder_time|time:"H:i"}}"
+                };
+            {% endfor %}
+            schedule["id"] = {{ active_schedule.id|safe }};
+            schedule["purpose_statement"] = "{{ active_schedule.purpose_statement|safe }}";
+            schedule["alternate_name"] = "{{ active_schedule.alternate_name|safe }}";
+        {% else %}
+            var schedule_start_day = new Date();
+            schedule_start_day.setDate(schedule_start_day.getDate() + 1);
+            schedule["id"] = null;
+            schedule["purpose_statement"] = "";
+            schedule["alternate_name"] = "";
+        {% endif %}
+        {% if enable_start_date_change %}
+            start_date_picker.datepicker({
+            date: schedule_start_day,
+            minDate: function () {
+                minDate = new Date();
+                minDate.setDate(Math.min(schedule_start_day.getDate(), new Date().getDate() + 1));
+                return minDate
+            }(),
+            dateFormat: "yy-mm-dd",
+            buttonText: "Select date",
+            onSelect: function (fieldText) {
+                schedule_start_day = start_date_picker.datepicker("getDate");
+                schedule_start_day.setSeconds(3601);
+                schedule_end_day = new Date(Math.max(schedule_start_day, schedule_end_day));
+                end_date_picker.datepicker("setDate", schedule_end_day);
+                end_date_picker.datepicker("option", "minDate", schedule_start_day);
+            }
+        });
+            start_date_picker.datepicker('setDate', schedule_start_day);
+        {% else %}
+            start_date_picker.html(schedule_start_day.toISOString().substring(0, 10));
+        {% endif %}
+        {% load static %}
+        schedule_start_day.setSeconds(3601);
+        schedule_end_day = new Date(schedule_start_day);
+        end_date_picker.datepicker({
+            date: schedule_start_day,
+            minDate: schedule_start_day,
+            dateFormat: "yy-mm-dd",
+            buttonText: "Select date",
+            onSelect: function (fieldText) {
+                schedule_end_day = start_end_picker.datepicker("getDate");
+                schedule_end_day.setSeconds(3601);
+            }
+        });
+        end_date_picker.datepicker('setDate', schedule_start_day);
+        scheduled_radio.checked = true;
+        alternate_name_field.value = schedule["alternate_name"];
+        purpose_statement_field.value = schedule["purpose_statement"];
+        var selected_dose = null;
+        var asNeeded;
+        repopulate_doses();
+        optradio_onchange();
+        function optradio_onchange() {
+            if (asneeded_radio.checked) {
+                asNeeded = true;
+                $(scheduled_pane).find('* ').not('#scheduled-radio').attr('disabled', true);
+                $(asneeded_pane).find('* ').attr('disabled', false);
+                end_date_picker.prop("disabled", false);
+            } else {
+                asNeeded = false;
+                $(scheduled_pane).find('* ').attr('disabled', false);
+                $(asneeded_pane).find('* ').not('#asneeded-radio').attr('disabled', true);
+                end_date_picker.prop("disabled", true);
+                if (selected_dose === null) {
+                    edit_dose_button.setAttribute("disabled", true);
+                    remove_dose_button.setAttribute("disabled", true);
+                }
+            }
+        }
+        function change_selected_dose(schedule_element) {
+            $(doses_list).find('* ').removeClass("active");
+            if (schedule_element === null) {
+                edit_dose_button.setAttribute("disabled", true);
+                remove_dose_button.setAttribute("disabled", true);
+            }
+            else {
+                if (schedule_element.getAttribute("disabled")) {
+                    return;
+                }
+                edit_dose_button.removeAttribute("disabled");
+                remove_dose_button.removeAttribute("disabled");
+                selected_dose = Number(schedule_element.getAttribute("dose_id"));
+                $(schedule_element).addClass("active");
+            }
+        }
+        function repopulate_doses() {
+            dose_date_panels = [];
+            doses_list.innerHTML = "";
+            for (var dose_id in existing_doses) {
+                dose = existing_doses[dose_id];
+                var dose_entry = document.createElement("a");
+                var panel_header = document.createElement("div");
+                var dose_list_group = document.createElement("div");
+                if (dose.start_day === null) {
+                    panel_header_text = "UNKNOWN"
+                } else {
+                    if (dose.repeat_interval === 1) {
+                        var panel_header_text = "Every day from Day " + dose.start_day;
+                        if (dose.end_day === null || dose.repeat_interval === null) {
+                            panel_header_text += " onwards indefinitely";
+                        }
+                        else {
+                            panel_header_text += " to Day " + dose.end_day
+                        }
+                    } else if (dose.repeat_interval === 0 || dose.repeat_interval === null) {
+                        var panel_header_text = "Day " + dose.start_day + " only";
+                    } else {
+                        var panel_header_text = "Every " + dose.repeat_interval + " days from Day " + dose.start_day;
+                        if (dose.end_day === null || dose.repeat_interval === null) {
+                            panel_header_text += " onwards indefinitely";
+                        }
+                        else {
+                            panel_header_text += " to Day " + dose.end_day
+                        }
+                    }
+                }
+                var panel = dose_date_panels[panel_header_text];
+                if (panel === undefined) {
+                    panel = document.createElement("div");
+                    panel_header.setAttribute("class", "panel-heading");
+                    panel_header.innerHTML = panel_header_text;
+
+                    panel.setAttribute("class", "panel panel-default");
+                    panel.appendChild(panel_header);
+                    doses_list.appendChild(panel);
+                    dose_date_panels[panel_header_text] = panel;
+                }
+                dose_list_group.setAttribute("class", "list-group");
+                dose_entry.setAttribute("class", "list-group-item");
+                dose_entry.setAttribute("dose_id", dose.id);
+                dose_entry.setAttribute("onclick", "change_selected_dose(this)");
+                dose_entry.innerHTML = "<h4 class=\"list-group-item-heading\">" + dose.start_time + " - " + dose.end_time + "</h4><p class=\"list-group-item-text\">" + dose.dose_value + " " + "{{ active_medication.dose_unit|safe }}" + "</p>";
+                dose_list_group.appendChild(dose_entry);
+                panel.appendChild(dose_list_group);
+            }
+        }
+        function edit_dose() {
+            populate_modal_dialogue(existing_doses[selected_dose]);
+            $('#dose-editor-modal').modal({backdrop: 'static', keyboard: false});
+        }
+        function create_dose() {
+            populate_modal_dialogue(null);
+            $('#dose-editor-modal').modal({backdrop: 'static', keyboard: false});
+        }
+        function remove_dose() {
+            confirmed = confirm("Are you sure you wish to delete the selected dose?\nNote, this change will not be saved until you click the Save button.");
+            if (confirmed) {
+                delete existing_doses[selected_dose];
+                repopulate_doses();
+                change_selected_dose(null);
+                window.onbeforeunload = function () {
+                    return true;
+                };
+            }
+        }
+        function populate_modal_dialogue(dose) {
+            if (dose !== null) {
+                dose_editing = dose;
+                modinp_dose_value.value = dose.dose_value;
+                modinp_start_time.value = dose.start_time;
+                modinp_end_time.value = dose.end_time;
+                modinp_start_day.value = Number(dose.start_day);
+                modinp_end_day.value = Number(dose.end_day);
+                modinp_repeat_interval.value = Number(dose.repeat_interval);
+                modinp_reminder_time.value = dose.default_reminder_time;
+            } else {
+                dose_editing = null;
+                modinp_dose_value.value = 0;
+                modinp_start_time.value = "";
+                modinp_end_time.value = "";
+                modinp_start_day.value = 0;
+                modinp_end_day.value = "";
+                modinp_repeat_interval.value = 1;
+                modinp_reminder_time.value = "";
+            }
+            recalculate_clarifiers();
+        }
+        function recalculate_clarifiers() {
+            var start_date = new Date(schedule_start_day);
+            var end_date = new Date(schedule_start_day);
+            start_date.setDate(start_date.getDate() + Number(modinp_start_day.value));
+            if (Number(modinp_end_day.value) === Number(modinp_start_day.value)) {
+                modinp_end_day_clarifier.innerHTML = "Repeat Indefinitely";
+            } else {
+                end_date.setDate(end_date.getDate() + Number(modinp_end_day.value));
+                modinp_end_day_clarifier.innerHTML = end_date.toISOString().substring(0, 10);
+            }
+            modinp_start_day_clarifier.innerHTML = start_date.toISOString().substring(0, 10);
+
+        }
+        function save_dose() {
+            var end_day;
+            if (Number(modinp_start_day.value) === Number(modinp_end_day.value)) {
+                end_day = null;
+            } else {
+                end_day = Number(modinp_end_day.value);
+            }
+            var end_day;
+            if (modinp_end_day.value == "" || Number(modinp_end_day.value) == Number(modinp_start_day.value) ) {
+                end_day = null;
+            } else {
+                end_day = Number(modinp_end_day.value)
+            }
+            var repeat_interval;
+            if (modinp_oneday_radio.checked) {
+                end_day = null;
+                repeat_interval = null;
+            } else {
+                repeat_interval = Number(modinp_repeat_interval.value);
+            }
+            var start_day = Number(modinp_start_day.value);
+            if (end_day!= null && end_day < start_day) {
+                alert("End day cannot be before start day.");
+                return;
+            }
+            dose = {
+                'dose_value': Number(modinp_dose_value.value),
+                'start_time': modinp_start_time.value,
+                'end_time': modinp_end_time.value,
+                'start_day': start_day,
+                'end_day': end_day,
+                'repeat_interval': repeat_interval,
+                'default_reminder_time': modinp_reminder_time.value
+            };
+            if (dose_editing === null) {
+                new_doses_count++;
+                dose.id = -new_doses_count;
+                existing_doses[dose.id] = dose;
+            } else {
+                Object.assign(dose_editing, dose);
+            }
+            window.onbeforeunload = function () {
+                return true;
+            };
+            repopulate_doses();
+            close_model();
+
+        }
+        function close_model() {
+            dose_editing = null;
+            $('#dose-editor-modal').modal('hide');
+        }
+        function upload() {
+            if (Object.values(existing_doses).length === 0 && !asNeeded) {
+                alert("Cannot save a schedule with no scheduled doses, unless the schedule is set to \"take as needed\"");
+                return;
+            }
+            var doses;
+            if (asNeeded) {
+                doses = "[]"
+            } else {
+                doses = JSON.stringify(Object.values(existing_doses));
+            }
+            var promise = $.post({
+                url: "{{ siteurl }}/patients/api/add_patient_schedule",
+                data: {
+                    schedule: JSON.stringify(resolveScheduleData()),
+                    doses: doses,
+                    patient_uuid: patient_uuid,
+                    medication_id: {{ active_medication.id }},
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                timeout: 5000
+            });
+            promise.done(function (data) {
+                window.onbeforeunload = null;
+                window.location.replace("{{ siteurl }}/patients/viewpatient?patient_uuid=" + patient_uuid)
+            });
+            promise.fail(function (error) {
+                alert("fail")
+            });
+        }
+
+        function resolveScheduleData() {
+            data = jQuery.extend({}, schedule);
+            data["start_date"] = schedule_start_day;
+            if (asNeeded) {
+                data["end_date"] = (schedule_start_day === schedule_end_day) ? None : schedule_end_day
+            } else {
+                var end_days = [];
+                for (dose_id in existing_doses) {
+                    end_days.push(existing_doses[dose_id].end_day)
+                }
+                if (end_days.indexOf(0) === -1) {
+                    data["end_date"] = new Date(schedule_start_day + Number(Math.max(end_days)));
+                } else {
+                    data["end_date"] = None;
+                }
+            }
+            return data
+        }
+
+    </script>
+{% endblock %}

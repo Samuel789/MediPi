@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
-from MedWeb.medication.api import *
-from MedWeb.medication.views import *
+from MedWeb.medication_manager.api import *
+from MedWeb.medication_manager.views import *
 
 urlpatterns = [
     url(r'^$', browse_patients, name='browse_patients'),

@@ -2,6 +2,8 @@ import datetime
 
 from django import template
 
+from MedWeb.clinical_judgements import warnings
+
 register = template.Library()
 
 
@@ -54,3 +56,7 @@ def being_taken(medication, patient_schedules):
         if schedule.medication == medication:
             return True
     return False
+
+@register.filter
+def has_warning(schedule):
+    return warnings.has_warning(schedule)

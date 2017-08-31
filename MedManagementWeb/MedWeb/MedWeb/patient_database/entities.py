@@ -20,5 +20,5 @@ class Patient:
         self.dob = dob
         self.nhs_no = nhs_no
         self.status = 1
-        self.warnings = []
+        self.warnings = 0
         self.name = first_name + " " + last_name

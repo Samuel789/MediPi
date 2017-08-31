@@ -7,6 +7,7 @@ import requests
 
 from MedWeb import settings
 from MedWeb.clinical_database.clinical_database import medications
+from MedWeb.clinical_judgements.warnings import count_warnings
 from MedWeb.concentrator_interface import entities
 from MedWeb.concentrator_interface.entities import Schedule, ScheduledDose
 from MedWeb.patient_database.entities import Status
@@ -79,6 +80,8 @@ def update_from_concentrator():
         _update_patient_data(concentrator_data["registered_patient_uuids"],
                              concentrator_data["patient_adherence_objects"])
         _update_schedule_data(concentrator_data["schedules"])
+        for patient in patients.values():
+            patient.warnings = count_warnings(patient)
     except(Exception) as e:
         print("SYNC FAILED - RESTORING BACKUP DATA")
         schedules.clear()

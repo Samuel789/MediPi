@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'MedWeb.home',
-    'MedWeb.medication',
+    'MedWeb.medication_manager',
 ]
 
 SECTIONS = [Section("patients", "Medication Management", "patients"),

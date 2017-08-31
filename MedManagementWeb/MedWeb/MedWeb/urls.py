@@ -25,5 +25,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', about_view, name="About"),
     url(r'^about/', about_view, name="About"),
-    url(r'^patients/', include('MedWeb.medication.urls'))
+    url(r'^patients/', include('MedWeb.medication_manager.urls'))
 ]
