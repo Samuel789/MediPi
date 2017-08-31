@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.4
--- Dumped by pg_dump version 9.6.4
+-- Dumped from database version 9.6.3
+-- Dumped by pg_dump version 9.6.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -707,8 +707,6 @@ SELECT pg_catalog.setval('adherence_schedule_id_seq', 1, false);
 -- Data for Name: alert; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY alert (alert_id, data_id, patient_uuid, alert_time, alert_text, transmit_success_date, retry_attempts) FROM stdin;
-\.
 
 
 --
@@ -722,8 +720,6 @@ SELECT pg_catalog.setval('alert_alert_id_seq', 1, false);
 -- Data for Name: all_hardware_downloadable; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY all_hardware_downloadable (downloadable_uuid, version, version_author, version_date, script_location, signature) FROM stdin;
-\.
 
 
 --
@@ -737,8 +733,6 @@ SELECT pg_catalog.setval('all_hardware_downloadable_id_seq', 1, false);
 -- Data for Name: all_hardware_downloaded; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY all_hardware_downloaded (all_hardware_downloaded_id, downloaded_date, downloadable_uuid, hardware_name) FROM stdin;
-\.
 
 
 --
@@ -766,10 +760,8 @@ SELECT pg_catalog.setval('device_data_data_id_seq', 1, false);
 -- Data for Name: dose_unit; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY dose_unit (dose_unit_id, name) FROM stdin;
-0	tablets
-1	capsules
-\.
+INSERT INTO dose_unit VALUES (0, 'tablets');
+INSERT INTO dose_unit VALUES (1, 'capsules');
 
 
 --
@@ -783,33 +775,27 @@ SELECT pg_catalog.setval('dose_unit_id_seq', 1, false);
 -- Data for Name: hardware; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY hardware (hardware_name, mac_address, current_software_version, patient_uuid) FROM stdin;
-9b636f94-e1c2-4773-a5ca-3858ba176e9c	b8:27:eb:27:09:93	1	d9bc2478-062e-4b87-9060-4984f26b74be
-\.
+INSERT INTO hardware VALUES ('9b636f94-e1c2-4773-a5ca-3858ba176e9c', 'b8:27:eb:27:09:93', '1', 'd9bc2478-062e-4b87-9060-4984f26b74be');
 
 
 --
 -- Data for Name: hardware_downloadable; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY hardware_downloadable (downloadable_uuid, hardware_name, version, version_author, version_date, downloaded_date, script_location, signature) FROM stdin;
-\.
 
 
 --
 -- Data for Name: medication; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY medication (medication_id, unique_name, display_name, advisory_stmt, icon_name, dose_unit) FROM stdin;
-8077011000001100	Mycophenolic acid 360mg gastro-resistant tablets	Mycophenolic acid	Avoid excessive exposure to UV light including sunlight.	/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png	0
-317544000	Docusate 100mg capsules	Docusate	Avoid excessive exposure to UV light including sunlight.	/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png	1
-327096008	Tacrolimus 1mg capsules	Tacrolimus	Avoid excessive exposure to UV light including sunlight.	/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png	1
-418349006	Prednisone 1mg tablets	Prednisone		/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png	0
-408155001	Sirolimus 2mg tablets	Sirolimus		/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png	0
-8791311000001100	Azathioprine 10mg capsules	Azathioprine		/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png	1
-324430000	Trimethoprim 100mg tablets	Trimethoprim		/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png	0
-324357002	Co-trimoxazole 80mg/400mg tablets	Co-trimoxazole		/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png	0
-\.
+INSERT INTO medication VALUES (8077011000001100, 'Mycophenolic acid 360mg gastro-resistant tablets', 'Mycophenolic acid', 'Avoid excessive exposure to UV light including sunlight.', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
+INSERT INTO medication VALUES (317544000, 'Docusate 100mg capsules', 'Docusate', 'Avoid excessive exposure to UV light including sunlight.', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 1);
+INSERT INTO medication VALUES (327096008, 'Tacrolimus 1mg capsules', 'Tacrolimus', 'Avoid excessive exposure to UV light including sunlight.', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 1);
+INSERT INTO medication VALUES (418349006, 'Prednisone 1mg tablets', 'Prednisone', '', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
+INSERT INTO medication VALUES (408155001, 'Sirolimus 2mg tablets', 'Sirolimus', '', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
+INSERT INTO medication VALUES (8791311000001100, 'Azathioprine 10mg capsules', 'Azathioprine', '', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 1);
+INSERT INTO medication VALUES (324430000, 'Trimethoprim 100mg tablets', 'Trimethoprim', '', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
+INSERT INTO medication VALUES (324357002, 'Co-trimoxazole 80mg/400mg tablets', 'Co-trimoxazole', '', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
 
 
 --
@@ -851,45 +837,35 @@ SELECT pg_catalog.setval('messages_message_id_seq', 1, false);
 -- Data for Name: patient; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY patient (patient_uuid, patient_group_uuid) FROM stdin;
-d9bc2478-062e-4b87-9060-4984f26b74be	MedWeb
-\.
+INSERT INTO patient VALUES ('d9bc2478-062e-4b87-9060-4984f26b74be', 'MedWeb');
 
 
 --
 -- Data for Name: patient_adherence; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY patient_adherence (patient_uuid, seven_day_fraction, streak_length) FROM stdin;
-d9bc2478-062e-4b87-9060-4984f26b74be	0.800000000000000044	0
-\.
+INSERT INTO patient_adherence VALUES ('d9bc2478-062e-4b87-9060-4984f26b74be', 0.83333333333333337, 0);
 
 
 --
 -- Data for Name: patient_certificate; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY patient_certificate (patient_uuid, certificate_location) FROM stdin;
-d9bc2478-062e-4b87-9060-4984f26b74be	/home/sam/Git/MediPi/MediPiConcentrator/config/downloadables/patient/d9bc2478-062e-4b87-9060-4984f26b74be/d9bc2478-062e-4b87-9060-4984f26b74be.crt
-\.
+INSERT INTO patient_certificate VALUES ('d9bc2478-062e-4b87-9060-4984f26b74be', '/home/sam/Git/MediPi/MediPiConcentrator/config/downloadables/patient/d9bc2478-062e-4b87-9060-4984f26b74be/d9bc2478-062e-4b87-9060-4984f26b74be.crt');
 
 
 --
 -- Data for Name: patient_downloadable; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY patient_downloadable (downloadable_uuid, patient_uuid, version, version_author, version_date, downloaded_date, script_location, signature) FROM stdin;
-\.
 
 
 --
 -- Data for Name: patient_group; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY patient_group (patient_group_uuid, patient_group_name) FROM stdin;
-01	Group 1
-MedWeb	MedWeb
-\.
+INSERT INTO patient_group VALUES ('01', 'Group 1');
+INSERT INTO patient_group VALUES ('MedWeb', 'MedWeb');
 
 
 --
@@ -903,34 +879,31 @@ SELECT pg_catalog.setval('patient_hardware_downloadable_id_seq', 1, false);
 -- Data for Name: recorded_dose; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY recorded_dose (recorded_dose_uuid, value, schedule_id, day_taken, time_taken) FROM stdin;
-11	2	15	0	12:00:00
-12	2	15	1	12:00:00
-10	3	15	0	17:00:00
-14	3	15	1	17:00:00
-18	2	15	3	12:00:00
-20	3	15	3	17:00:00
-22	3	15	4	17:00:00
-23	2	15	4	12:00:00
-15	3	15	2	17:00:00
-21	2	15	2	12:00:00
-5	2	11	0	15:00:00
-7	2	11	2	15:00:00
-6	2	11	3	15:00:00
-9	2	11	4	15:00:00
-24	2	4	0	17:00:00
-25	2	4	1	17:00:00
-26	2	4	2	17:00:00
-27	2	15	4	17:00:00
-\.
+INSERT INTO recorded_dose VALUES ('11', 2, 15, 0, '12:00:00');
+INSERT INTO recorded_dose VALUES ('12', 2, 15, 1, '12:00:00');
+INSERT INTO recorded_dose VALUES ('10', 3, 15, 0, '17:00:00');
+INSERT INTO recorded_dose VALUES ('14', 3, 15, 1, '17:00:00');
+INSERT INTO recorded_dose VALUES ('18', 2, 15, 3, '12:00:00');
+INSERT INTO recorded_dose VALUES ('20', 3, 15, 3, '17:00:00');
+INSERT INTO recorded_dose VALUES ('22', 3, 15, 4, '17:00:00');
+INSERT INTO recorded_dose VALUES ('23', 2, 15, 4, '12:00:00');
+INSERT INTO recorded_dose VALUES ('15', 3, 15, 2, '17:00:00');
+INSERT INTO recorded_dose VALUES ('21', 2, 15, 2, '12:00:00');
+INSERT INTO recorded_dose VALUES ('5', 2, 11, 0, '15:00:00');
+INSERT INTO recorded_dose VALUES ('7', 2, 11, 2, '15:00:00');
+INSERT INTO recorded_dose VALUES ('6', 2, 11, 3, '15:00:00');
+INSERT INTO recorded_dose VALUES ('9', 2, 11, 4, '15:00:00');
+INSERT INTO recorded_dose VALUES ('24', 2, 4, 0, '17:00:00');
+INSERT INTO recorded_dose VALUES ('25', 2, 4, 1, '17:00:00');
+INSERT INTO recorded_dose VALUES ('26', 2, 4, 2, '17:00:00');
+INSERT INTO recorded_dose VALUES ('27', 2, 15, 4, '17:00:00');
+INSERT INTO recorded_dose VALUES ('5e510c33-369b-4409-904c-335e20366c0e', 2, 15, 5, '11:24:50');
 
 
 --
 -- Data for Name: recording_device_attribute; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY recording_device_attribute (attribute_id, type_id, attribute_name, attribute_units, attribute_type) FROM stdin;
-\.
 
 
 --
@@ -944,8 +917,6 @@ SELECT pg_catalog.setval('recording_device_attribute_attribute_id_seq', 1, false
 -- Data for Name: recording_device_data; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY recording_device_data (data_id, attribute_id, data_value, patient_uuid, data_value_time, downloaded_time, schedule_effective_time, schedule_expiry_time) FROM stdin;
-\.
 
 
 --
@@ -959,8 +930,6 @@ SELECT pg_catalog.setval('recording_device_data_data_id_seq', 1, false);
 -- Data for Name: recording_device_type; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY recording_device_type (type_id, type, make, model, display_name) FROM stdin;
-\.
 
 
 --
@@ -974,38 +943,32 @@ SELECT pg_catalog.setval('recording_device_type_type_id_seq', 1, false);
 -- Data for Name: schedule; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY schedule (schedule_id, assigned_start_date, assigned_end_date, alternate_name, purpose_statement, medication_id, patient_uuid, device_start_date, device_end_date) FROM stdin;
-13	2017-08-20	2017-08-28	Imuran	To reduce constipation	317544000	d9bc2478-062e-4b87-9060-4984f26b74be	\N	\N
-4	2017-08-20	2017-08-28	Trimopan	To prevent infection	324430000	d9bc2478-062e-4b87-9060-4984f26b74be	\N	\N
-11	2017-08-20	2017-08-28		To prevent rejection	327096008	d9bc2478-062e-4b87-9060-4984f26b74be	\N	\N
-15	2017-08-20	2017-08-28		To prevent rejection	8791311000001100	d9bc2478-062e-4b87-9060-4984f26b74be	\N	\N
-5	2017-08-20	2017-08-28	Bactrim	To prevent rejection	324357002	d9bc2478-062e-4b87-9060-4984f26b74be	\N	\N
-\.
+INSERT INTO schedule VALUES (13, '2017-08-20', '2017-09-14', 'Imuran', 'To reduce constipation', 317544000, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
+INSERT INTO schedule VALUES (4, '2017-08-20', '2017-09-14', 'Trimopan', 'To prevent infection', 324430000, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
+INSERT INTO schedule VALUES (5, '2017-08-20', '2017-09-14', 'Bactrim', 'To prevent rejection', 324357002, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
+INSERT INTO schedule VALUES (11, '2017-08-20', '2017-09-14', '', 'To prevent rejection', 327096008, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
+INSERT INTO schedule VALUES (15, '2017-08-20', '2017-09-14', '', 'To prevent rejection', 8791311000001100, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
 
 
 --
 -- Data for Name: schedule_adherence; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY schedule_adherence (schedule_id, seven_day_fraction, streak_length) FROM stdin;
-13	\N	5
-11	0.800000000000000044	3
-15	0.900000000000000022	0
-4	0.599999999999999978	0
-5	\N	5
-\.
+INSERT INTO schedule_adherence VALUES (13, NULL, 6);
+INSERT INTO schedule_adherence VALUES (4, 0.66666666666666663, 0);
+INSERT INTO schedule_adherence VALUES (5, NULL, 6);
+INSERT INTO schedule_adherence VALUES (11, 0.83333333333333337, 0);
+INSERT INTO schedule_adherence VALUES (15, 0.91666666666666663, 0);
 
 
 --
 -- Data for Name: scheduled_dose; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-COPY scheduled_dose (scheduled_dose_id, schedule_id, value, start_day, repeat_interval, end_day, window_start_time, window_end_time, default_reminder_time, reminder_time, device_start_date, device_end_date) FROM stdin;
-13	11	2	0	1	\N	14:00:00	16:00:00	15:00:00	15:00:00	\N	\N
-7	4	2	0	1	\N	16:00:00	18:00:00	17:00:00	17:00:00	\N	\N
-5	15	3	0	1	\N	16:00:00	18:00:00	17:00:00	17:00:00	\N	\N
-6	15	2	0	1	\N	11:00:00	14:00:00	11:20:00	11:20:00	\N	\N
-\.
+INSERT INTO scheduled_dose VALUES (13, 11, 2, 0, 1, 20, '14:00:00', '16:00:00', '15:00:00', '15:00:00', NULL, NULL);
+INSERT INTO scheduled_dose VALUES (5, 15, 3, 0, 1, 20, '16:00:00', '18:00:00', '17:00:00', '17:00:00', NULL, NULL);
+INSERT INTO scheduled_dose VALUES (14, 16, 2, 0, 2, 20, '14:00:00', '18:00:00', '15:00:00', '15:00:00', NULL, NULL);
+INSERT INTO scheduled_dose VALUES (23, 16, 2, 0, 1, 20, '15:00:00', '17:00:00', '16:00:00', '16:00:00', NULL, NULL);
 
 
 --
