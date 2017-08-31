@@ -24,16 +24,18 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import org.medipi.devices.Element;
 
 import java.util.ArrayList;
 
 /**
  * Class to encapsulate a Dashboard Component node which is placed in the
- * dashboard. This class creates and handles the dashboard EntityTile and its
+ * dashboard. This class creates and handles the dashboard DashboardTile and its
  * contents, allowing the tile to be clicked and the Element to be called.
  * Overlays can be added to the tile so that dynamically changing data can be
  * displayed or an alert when actions are required in the related Element.
@@ -41,7 +43,7 @@ import java.util.ArrayList;
  *
  * @author rick@robinsonhq.com
  */
-public class EntityTile extends Tile {
+public class DashboardTile extends Tile {
 
     private StackPane contentStack = new StackPane();
     private ImageView backgroundImage;
@@ -51,7 +53,7 @@ public class EntityTile extends Tile {
     /**
      * Constructor
      */
-    public EntityTile(BooleanProperty bprop, int widthUnits, int heightUnits) {
+    public DashboardTile(BooleanProperty bprop, int widthUnits, int heightUnits) {
         super(bprop, widthUnits, heightUnits);
         content.setId("mainwindow-dashboard-component");
         content.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY)));
@@ -73,16 +75,22 @@ public class EntityTile extends Tile {
         content.setCenter(contentStack);
     }
 
-    protected void setBackgroundImage(ImageView image) {
+    public DashboardTile(Element elem, BooleanProperty bprop) {
+        this(bprop, 1, 1);
+        this.setBackgroundImage(elem.getImage());
+        this.setOnTileClick((MouseEvent event) -> {
+            elem.callDeviceWindow();
+        });
+    }
+
+    public void setBackgroundImage(ImageView image) {
         backgroundImage = image;
-        backgroundImage.setFitHeight(80);
-        backgroundImage.setFitWidth(80);
         contentStack.getChildren().add(backgroundImage);
 
     }
 
     /**
-     * Method to add a title to the EntityTile
+     * Method to add a title to the DashboardTile
      *
      * @param title title name
      */
@@ -99,7 +107,7 @@ public class EntityTile extends Tile {
     }
 
     /**
-     * Method to add overlayed text to the EntityTile.
+     * Method to add overlayed text to the DashboardTile.
      * <p>
      * Every successive addition of this overlay will add another line of text
      * on top of the tile - watch out that it doesn't exceed the limits of the
@@ -150,7 +158,7 @@ public class EntityTile extends Tile {
     }
 
     /**
-     * Method to add an overlayed Image to the EntityTile.
+     * Method to add an overlayed Image to the DashboardTile.
      * <p>
      * To add an image on top of the background image
      *
@@ -182,7 +190,7 @@ public class EntityTile extends Tile {
     }
 
     /**
-     * Method to add a Colour to the EntityTile.
+     * Method to add a Colour to the DashboardTile.
      * <p>
      * To paint the tile a background colour on tile
      *
@@ -197,9 +205,9 @@ public class EntityTile extends Tile {
     }
 
     /**
-     * Method to return the Dashboard EntityTile
+     * Method to return the Dashboard DashboardTile
      *
-     * @return Dashboard EntityTile content back to the main MediPi class
+     * @return Dashboard DashboardTile content back to the main MediPi class
      */
     @Override
     public BorderPane getNode(int unitWidth, int unitHeight, int availableWidthUnits) {
@@ -214,7 +222,9 @@ public class EntityTile extends Tile {
         content.setPrefSize(width, height);
         content.setMaxSize(width, height);
         content.setMinSize(width, height);
-
+        int imageSize = (int) (Math.min(width, height)*0.6);
+        backgroundImage.setFitHeight(imageSize);
+        backgroundImage.setFitWidth(imageSize);
 
         return content;
     }

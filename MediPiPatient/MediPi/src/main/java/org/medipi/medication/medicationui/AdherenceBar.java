@@ -12,7 +12,7 @@ import org.medipi.medication.ScheduleAdherence;
 
 public class AdherenceBar extends Group {
     static final double YELLOWTHRESHOLD = 0.90;
-    static final double REDTHRESHOLD = 0.75;
+    static final double REDTHRESHOLD = 0.8;
     static final double MINVISIBLE = 0.05;
     static final double MINSTREAKLENGTH = 2;
     ProgressBar progressBar;

@@ -35,7 +35,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import org.medipi.DashboardTile;
+import org.medipi.ui.DashboardTile;
 import org.medipi.MediPi;
 
 /**

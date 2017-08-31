@@ -59,7 +59,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
-import org.medipi.DashboardTile;
+import org.medipi.ui.DashboardTile;
 import org.medipi.MediPi;
 import org.medipi.MediPiMessageBox;
 import org.medipi.MediPiProperties;
