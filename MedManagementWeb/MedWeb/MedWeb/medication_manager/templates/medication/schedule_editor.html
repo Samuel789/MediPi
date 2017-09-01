@@ -406,7 +406,7 @@
                 doses = JSON.stringify(Object.values(existing_doses));
             }
             var promise = $.post({
-                url: "{{ siteurl }}/patients/api/add_patient_schedule",
+                url: "{{ site_url }}/patients/api/add_patient_schedule",
                 data: {
                     schedule: JSON.stringify(resolveScheduleData()),
                     doses: doses,
@@ -418,7 +418,7 @@
             });
             promise.done(function (data) {
                 window.onbeforeunload = null;
-                window.location.replace("{{ siteurl }}/patients/viewpatient?patient_uuid=" + patient_uuid)
+                window.location.replace("{{ site_url }}/patients/viewpatient?patient_uuid=" + patient_uuid)
             });
             promise.fail(function (error) {
                 alert("fail")

@@ -22,7 +22,6 @@ def browse_patients(request):
     template = get_template("medication/browse_patients.djt.html")
     output = template.render({"title": settings.SITE_NAME,
                               "version": settings.version_string,
-                              "siteurl": settings.SITE_URL,
                               "sections": settings.SECTIONS,
                               "sidebar_menu_urls": sidebar_menu_urls,
                               "active_section": "patients",
@@ -57,7 +56,6 @@ def patient_summary(request):
 
     output = template.render({"title": settings.SITE_NAME,
                               "version": settings.version_string,
-                              "siteurl": settings.SITE_URL,
                               "sections": settings.SECTIONS,
                               "sidebar_menu_entries": sidebar_menu_entries,
                               "sidebar_menu_urls": sidebar_menu_urls,
@@ -77,7 +75,6 @@ def assign_medication(request):
     print(active_medications)
     output = template.render({"title": settings.SITE_NAME,
                               "version": settings.version_string,
-                              "siteurl": settings.SITE_URL,
                               "sections": settings.SECTIONS,
                               "sidebar_menu_entries": sidebar_menu_entries,
                               "sidebar_menu_urls": sidebar_menu_urls,
@@ -102,7 +99,6 @@ def create_new_schedule(request):
     template = get_template("medication/schedule_editor.html")
     output = template.render({"title": settings.SITE_NAME,
                               "version": settings.version_string,
-                              "siteurl": settings.SITE_URL,
                               "sections": settings.SECTIONS,
                               "active_section": "patients",
                               "sidebar_menu_entries": sidebar_menu_entries,
@@ -125,7 +121,6 @@ def modify_schedule(request):
     template = get_template("medication/schedule_editor.html")
     output = template.render({"title": settings.SITE_NAME,
                               "version": settings.version_string,
-                              "siteurl": settings.SITE_URL,
                               "active_section": "patients",
                               "sections": settings.SECTIONS,
                               "sidebar_menu_entries": sidebar_menu_entries,

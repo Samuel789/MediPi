@@ -73,7 +73,7 @@
                 return;
             }
             var promise = $.post({
-                url: "{{ siteurl }}/patients/api/get_medication_information",
+                url: "{{ site_url }}/patients/api/get_medication_information",
                 data: {
                     id: medication_id,
                     csrfmiddlewaretoken: '{{ csrf_token }}'
@@ -104,7 +104,7 @@
             medicaton_info_section.innerHTML += "<p>Full Name:<br/><span class=\"clinical-value\">" + medication.full_name + "</span></p>";
             medicaton_info_section.innerHTML += "<p>Dose Unit:<br/><span class=\"clinical-value\">" + medication.dose_unit + "</span></p>";
             medicaton_info_section.innerHTML += "<p>ID:<br/><span class=\"clinical-value\">" + medication.id + "</span></p>";
-            continue_button.setAttribute("href", "{{ siteurl }}/patients/addschedule?patient_uuid={{ active_patient.uuid }}&mid=" + medication.id);
+            continue_button.setAttribute("href", "{{ site_url }}/patients/addschedule?patient_uuid={{ active_patient.uuid }}&mid=" + medication.id);
             continue_button.classList.remove("disabled");
         }
         function hide_medication_details() {

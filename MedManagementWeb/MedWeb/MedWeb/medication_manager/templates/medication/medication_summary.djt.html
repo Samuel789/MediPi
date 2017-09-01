@@ -55,9 +55,9 @@
                                 {{ schedule.alternate_name }}{% endif %}</td>
                             <td>
                                 <a class="btn btn-default"
-                                   href="{{ siteurl }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
+                                   href="{{ site_url }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
                                 <a class="btn btn-default"
-                                   href="{{ siteurl }}/patients/viewschedule?schedule_id={{ schedule.id }}">Remove</a>
+                                   href="{{ site_url }}/patients/viewschedule?schedule_id={{ schedule.id }}">Remove</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -92,9 +92,9 @@
                                 {{ schedule.alternate_name }}{% endif %}</td>
                             <td>
                                 <a class="btn btn-default"
-                                   href="{{ siteurl }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
+                                   href="{{ site_url }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
                                 <a class="btn btn-default"
-                                   href="{{ siteurl }}/patients/viewschedule?schedule_id={{ schedule.id }}">Cancel</a>
+                                   href="{{ site_url }}/patients/viewschedule?schedule_id={{ schedule.id }}">Cancel</a>
                             </td>
                         </tr>
                     {% endfor %}

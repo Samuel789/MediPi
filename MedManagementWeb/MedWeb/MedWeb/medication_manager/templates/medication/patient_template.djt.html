@@ -56,7 +56,7 @@
                     <ul class="nav nav-pills nav-stacked" style="max-width: 300px;">
                         {% for entry in sidebar_menu_entries %}
                             <li {% if entry == active_sidebar_entry %}class="active"{% endif %}><a
-                                    href="{{ siteurl }}/patients{{ sidebar_menu_urls|get_dict_value:entry }}?patient_uuid={{ active_patient.uuid }}">{{ entry }}</a>
+                                    href="{{ site_url }}/patients{{ sidebar_menu_urls|get_dict_value:entry }}?patient_uuid={{ active_patient.uuid }}">{{ entry }}</a>
                             </li>
                         {% endfor %}
                     </ul>
@@ -92,7 +92,7 @@
             var match = false;
             for (var i = 0; i < patients.length; i += 1) {
                 if (patients[i].name.toLowerCase().includes(text.toLowerCase())) {
-                    search_results.insertAdjacentHTML('beforeend', "<div  class=\"search-result\"><a href=\"{{ siteurl }}/patients/viewpatient?patient_uuid=" + patients[i].id + "\"> " + patients[i].name + "</a></div>");
+                    search_results.insertAdjacentHTML('beforeend', "<div  class=\"search-result\"><a href=\"{{ site_url }}/patients/viewpatient?patient_uuid=" + patients[i].id + "\"> " + patients[i].name + "</a></div>");
                     match = true;
                 }
             }
@@ -104,7 +104,7 @@
 
         function updateFromConcentrator() {
             var promise = $.post({
-                url: "{{ siteurl }}/patients/api/update",
+                url: "{{ site_url }}/patients/api/update",
                 data: {
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
