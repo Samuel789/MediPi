@@ -57,7 +57,7 @@
                                 <a class="btn btn-default"
                                    href="{{ site_url }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
                                 <a class="btn btn-default"
-                                   href="{{ site_url }}/patients/viewschedule?schedule_id={{ schedule.id }}">Remove</a>
+                                   onclick="cancelMedication({{ schedule.medication.id }})">Remove</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -94,7 +94,7 @@
                                 <a class="btn btn-default"
                                    href="{{ site_url }}/patients/modifyschedule?schedule_id={{ schedule.id }}">Modify</a>
                                 <a class="btn btn-default"
-                                   href="{{ site_url }}/patients/viewschedule?schedule_id={{ schedule.id }}">Cancel</a>
+                                   onclick="cancelMedication({{ schedule.medication.id }})">Cancel</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -183,6 +183,27 @@ $(window).resize(function() {
 $(window).ready(function() {
     updateScrollWarning()
 });
+
+function cancelMedication(medicationId) {
+    if (confirm("Note, this will stop any active or future schedules for this medication. The change will take effect tomorrow. Confirm?")) {
+        var promise = $.post({
+            url: "{{ site_url }}/patients/api/cancel_medication",
+            data: {
+                patient_uuid: "{{ active_patient.uuid }}",
+                medication_id: medicationId,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            timeout: 5000
+        });
+        promise.done(function (data) {
+            window.onbeforeunload = null;
+            window.location.replace("{{ site_url }}/patients/viewpatient?patient_uuid=" + "{{ active_patient.uuid }}")
+        });
+        promise.fail(function (error) {
+            alert("fail")
+        });
+    }
+}
     </script>
 
 

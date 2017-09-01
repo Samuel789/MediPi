@@ -186,13 +186,14 @@
         {% load static %}
         schedule_start_day.setSeconds(3601);
         schedule_end_day = new Date(schedule_start_day);
+        schedule_end_day.setDate(schedule_start_day.getDate() + 1);
         end_date_picker.datepicker({
-            date: schedule_start_day,
-            minDate: schedule_start_day,
+            date: schedule_end_day,
+            minDate: schedule_end_day,
             dateFormat: "yy-mm-dd",
             buttonText: "Select date",
             onSelect: function (fieldText) {
-                schedule_end_day = start_end_picker.datepicker("getDate");
+                schedule_end_day = end_date_picker.datepicker("getDate");
                 schedule_end_day.setSeconds(3601);
             }
         });
@@ -429,14 +430,17 @@
             data = jQuery.extend({}, schedule);
             data["start_date"] = schedule_start_day;
             if (asNeeded) {
-                data["end_date"] = (schedule_start_day === schedule_end_day) ? None : schedule_end_day
+                data["end_date"] = (schedule_start_day === schedule_end_day) ? None : schedule_end_day;
+                alert("asNeeded" + data["end_date"])
             } else {
                 var end_days = [];
                 for (dose_id in existing_doses) {
                     end_days.push(existing_doses[dose_id].end_day)
                 }
-                if (end_days.indexOf(0) === -1) {
-                    data["end_date"] = new Date(schedule_start_day + Number(Math.max(end_days)));
+                if (end_days.indexOf(null) === -1) {
+                    var end_date = new Date(schedule_start_day);
+                    end_date.setDate(end_date.getDate() + Number(Math.max(end_days)));
+                    data["end_date"] = end_date;
                 } else {
                     data["end_date"] = None;
                 }

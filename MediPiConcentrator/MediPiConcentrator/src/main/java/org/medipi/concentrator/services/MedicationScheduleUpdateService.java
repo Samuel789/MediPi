@@ -38,7 +38,7 @@ public class MedicationScheduleUpdateService {
     private Schedule getExistingSchedule(LocalDate date, Medication medication, String patientUuid) {
         List<Schedule> existing_schedules = scheduleDAOimpl.findByMedicationAndPatient(medication, patientUuid);
         for (Schedule schedule : existing_schedules) {
-            if ((schedule.getAssignedEndDate() == null || schedule.getAssignedEndDate().toLocalDate().isAfter(date.plusDays(1)))) {
+            if ((schedule.getAssignedEndDate() == null || schedule.getAssignedEndDate().toLocalDate().isAfter(date))) {
                 return schedule;
             }
         }
@@ -52,11 +52,6 @@ public class MedicationScheduleUpdateService {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         newSchedule.setScheduleId(null);
         Schedule existing_schedule = getExistingSchedule(tomorrow, medication, newSchedule.getPatientUuid());
-        scheduleDAOimpl.save(newSchedule);
-        newSchedule.setScheduledDoses(new HashSet<>(newDoses));
-        if (newSchedule.getAssignedStartDate().toLocalDate().isBefore(tomorrow)) {
-            moveScheduleStartDate(newSchedule, tomorrow);
-        }
         if (existing_schedule != null) {
             assert (existing_schedule.getPatientUuid().equals(newSchedule.getPatientUuid()));
             existing_schedule.setAssignedEndDate(Date.valueOf(tomorrow));
@@ -65,6 +60,14 @@ public class MedicationScheduleUpdateService {
             if (existing_schedule.getAssignedEndDate().equals(existing_schedule.getAssignedStartDate())) {
                 deleteSchedule(existing_schedule);
             }
+        }
+        if (newSchedule.getAssignedStartDate().equals(newSchedule.getAssignedEndDate())) {
+            return;
+        }
+        scheduleDAOimpl.save(newSchedule);
+        newSchedule.setScheduledDoses(new HashSet<>(newDoses));
+        if (newSchedule.getAssignedStartDate().toLocalDate().isBefore(tomorrow)) {
+            moveScheduleStartDate(newSchedule, tomorrow);
         }
         for (ScheduledDose new_dose : newSchedule.getScheduledDoses()) {
             new_dose.setScheduledDoseId(null);

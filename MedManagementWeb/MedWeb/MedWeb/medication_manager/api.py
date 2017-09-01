@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timedelta
 
 from django.http import HttpResponse
 
@@ -52,6 +53,18 @@ def add_patient_schedule(request):
         doses.append(dose)
     schedule = Schedule(schedule_data["id"], schedule_data["start_date"], schedule_data["end_date"],
                         schedule_data["alternate_name"], schedule_data["purpose_statement"], patient_uuid,
+                        medication_id, None, None, None)
+    send_to_concentrator(schedule, doses)
+    return HttpResponse()
+
+
+def cancel_schedule(request):
+    patient_uuid = request.POST["patient_uuid"]
+    medication_id = request.POST["medication_id"]
+    doses = []
+    tomorrow = (datetime.today() + timedelta(days=1)).strftime("%Y-%m-%d")
+    schedule = Schedule(None, tomorrow, tomorrow,
+                        "", "", patient_uuid,
                         medication_id, None, None, None)
     send_to_concentrator(schedule, doses)
     return HttpResponse()
