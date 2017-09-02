@@ -1,6 +1,7 @@
 package org.medipi.medication.medicationui;
 
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import org.medipi.MediPi;
 import org.medipi.medication.Datastore;
@@ -51,7 +52,11 @@ public class MedicationMenu extends TileMenu {
             this.showOverlayWindow();
         });
         viewScheduleTile.setOnTileClick((MouseEvent event) -> {
-            ((MedicationManager) mediPi.getElement("Medication")).getReminderService().triggerTestReminder();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText("Feature not implemented");
+            alert.setContentText("Sorry, this feature is not yet implemented.");
+            alert.showAndWait();
         });
         showMedicationsTile.setOnTileClick((MouseEvent event) -> {
             this.setOverlayWindow(new ShowMedicationsMenu(mediPi, this));

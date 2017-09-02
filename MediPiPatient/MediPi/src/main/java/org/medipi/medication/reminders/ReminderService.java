@@ -31,30 +31,6 @@ public class ReminderService {
         return today;
     }
 
-    public void triggerTestReminder() {
-        MedicationManager medicationManager = (MedicationManager) mediPi.getElement("Medication");
-        System.out.println(medicationManager);
-        Schedule testSchedule = new Schedule();
-        ScheduledDose testDose = new ScheduledDose();
-        Medication testMedication = new Medication();
-        DoseUnit testDoseUnit = new DoseUnit();
-        testDoseUnit.setName("dose units");
-        testMedication.setFullName("Medication full name");
-        testMedication.setCautionaryText("! Cautionary Line #1\n! Cautionary Line #2");
-        testMedication.setShortName("Short Name");
-        testMedication.setDoseUnit(testDoseUnit);
-        testSchedule.setAlternateName("Medication Alternate Name");
-        testSchedule.setMedication(testMedication);
-        testSchedule.setPurposeStatement("Medication Purpose Statement");
-        testDose.setSchedule(testSchedule);
-        testDose.setWindowStartTime(Time.valueOf("12:00:00"));
-        testDose.setWindowEndTime(Time.valueOf("12:16:00"));
-        testDose.setReminderTime(Time.valueOf("15:00:00"));
-        testDose.setDoseValue(4.5);
-        MedicationReminderEvent event = new MedicationReminderEvent(testDose);
-        event.execute(mediPi);
-    }
-
     public void setEvents(Collection<ReminderEventInterface> events) {
         this.events = events;
         redetermineTodaysEvents();
@@ -127,7 +103,7 @@ class ReminderServiceAsync extends Thread {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                event.execute(reminderService.getMediPi());
+                                event.trigger(reminderService.getMediPi());
                             }
                         });
                     }

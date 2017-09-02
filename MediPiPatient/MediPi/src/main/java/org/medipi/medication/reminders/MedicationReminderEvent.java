@@ -73,7 +73,7 @@ public class MedicationReminderEvent implements ReminderEventInterface {
     }
 
     @Override
-    public void execute(MediPi mediPi) {
+    public void trigger(MediPi mediPi) {
         frozen = true;
         Stage popupWindow = new Stage();
         MedicationReminder popupContents = new MedicationReminder(this, mediPi, popupWindow);

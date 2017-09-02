@@ -17,5 +17,5 @@ public interface ReminderEventInterface {
 
     public boolean isFrozen();
 
-    public void execute(MediPi mediPi);
+    public void trigger(MediPi mediPi);
 }
