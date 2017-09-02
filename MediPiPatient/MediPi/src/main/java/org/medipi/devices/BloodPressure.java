@@ -34,12 +34,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-import org.medipi.ui.DashboardTile;
+import org.medipi.ui.MajorButtonTile;
 import org.medipi.MediPi;
 import org.medipi.MediPiMessageBox;
 import org.medipi.MediPiProperties;
@@ -403,8 +402,8 @@ public abstract class BloodPressure extends Device {
      * @return @throws Exception
      */
     @Override
-    public DashboardTile getDashboardTile() throws Exception {
-        DashboardTile dashComponent = new DashboardTile(this, showTile);
+    public MajorButtonTile getDashboardTile() throws Exception {
+        MajorButtonTile dashComponent = new MajorButtonTile(this, showTile);
         dashComponent.addTitle(getGenericDeviceDisplayName());
         dashComponent.addOverlay(lastSystolDB, "mmHg");
         dashComponent.addOverlay(lastDiastolDB, "mmHg");

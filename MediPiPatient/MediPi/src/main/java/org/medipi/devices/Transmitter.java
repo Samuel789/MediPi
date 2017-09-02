@@ -51,7 +51,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import org.medipi.ui.DashboardTile;
+import org.medipi.ui.MajorButtonTile;
 import org.medipi.MediPi;
 import org.medipi.MediPiMessageBox;
 import org.medipi.MediPiProperties;
@@ -490,8 +490,8 @@ public abstract class Transmitter extends Element {
     }
 
     @Override
-    public DashboardTile getDashboardTile() throws Exception {
-        DashboardTile dashComponent = new DashboardTile(this, showTile);
+    public MajorButtonTile getDashboardTile() throws Exception {
+        MajorButtonTile dashComponent = new MajorButtonTile(this, showTile);
         dashComponent.addTitle(NAME);
         return dashComponent;
     }

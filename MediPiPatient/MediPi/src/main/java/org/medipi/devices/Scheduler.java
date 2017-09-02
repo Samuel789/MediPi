@@ -52,7 +52,6 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -60,7 +59,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import org.medipi.AlertBanner;
-import org.medipi.ui.DashboardTile;
+import org.medipi.ui.MajorButtonTile;
 import org.medipi.MediPi;
 import org.medipi.MediPiMessageBox;
 import org.medipi.MediPiProperties;
@@ -713,8 +712,8 @@ public class Scheduler extends Device {
     }
 
     @Override
-    public DashboardTile getDashboardTile() throws Exception {
-        DashboardTile dashComponent = new DashboardTile(this, showTile);
+    public MajorButtonTile getDashboardTile() throws Exception {
+        MajorButtonTile dashComponent = new MajorButtonTile(this, showTile);
         dashComponent.addTitle(NAME);
         dashComponent.addOverlay(new SimpleObjectProperty<>(alertImage), alertBooleanProperty);
         dashComponent.addOverlay(Color.LIGHTPINK, alertBooleanProperty);

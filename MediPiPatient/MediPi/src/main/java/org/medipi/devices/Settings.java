@@ -59,7 +59,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
-import org.medipi.ui.DashboardTile;
+import org.medipi.ui.MajorButtonTile;
 import org.medipi.MediPi;
 import org.medipi.MediPiMessageBox;
 import org.medipi.MediPiProperties;
@@ -865,8 +865,8 @@ public class Settings extends Element {
      * @return @throws Exception
      */
     @Override
-    public DashboardTile getDashboardTile() throws Exception {
-        DashboardTile dashComponent = new DashboardTile(this, showTile);
+    public MajorButtonTile getDashboardTile() throws Exception {
+        MajorButtonTile dashComponent = new MajorButtonTile(this, showTile);
         dashComponent.addTitle(getSpecificDeviceDisplayName());
         return dashComponent;
     }

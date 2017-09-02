@@ -73,10 +73,6 @@ public class TileMenu extends Group {
 
     }
 
-    public static Tile getNewBufferTile(int widthUnits, int heightUnits) {
-        return new Tile(new SimpleBooleanProperty(true), widthUnits, heightUnits);
-    }
-
     public int getTargetWidth() {
         return targetWidth;
     }
@@ -167,9 +163,5 @@ public class TileMenu extends Group {
     public void scrollUp() {
         contents.setVvalue(Math.max(((position - 1) * getUnitHeight() / (dashTile.getHeight() - visibleRows * getUnitHeight())), 0));
         updateScrollPosition();
-    }
-
-    public void addBufferTile(int widthUnits, int heightUnits) {
-        addTile(getNewBufferTile(widthUnits, heightUnits));
     }
 }

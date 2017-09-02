@@ -25,7 +25,7 @@ public class MedicationMenu extends TileMenu {
         super(new WindowManager(), 3, 2.15, upperMenu);
         this.mediPi = mediPi;
         this.datastore = datastore;
-        MajorMinorTile backSettingsTile = new MajorMinorTile(new SimpleBooleanProperty(true), 1, 1);
+        DualButtonTile backSettingsTile = new DualButtonTile(new SimpleBooleanProperty(true), 1, 1);
         backSettingsTile.setMajorText("Back");
         backSettingsTile.setMinorText("< Synchronize >");
         headerTile = createAdherenceHeaderTile();
@@ -37,9 +37,9 @@ public class MedicationMenu extends TileMenu {
         });
         this.addTile(backSettingsTile);
         this.addTile(headerTile);
-        DashboardTile recordDoseTile = new DashboardTile(new SimpleBooleanProperty(true), 1, 1);
-        DashboardTile viewScheduleTile = new DashboardTile(new SimpleBooleanProperty(true), 1, 1);
-        DashboardTile showMedicationsTile = new DashboardTile(new SimpleBooleanProperty(true), 1, 1);
+        MajorButtonTile recordDoseTile = new MajorButtonTile(new SimpleBooleanProperty(true), 1, 1);
+        MajorButtonTile viewScheduleTile = new MajorButtonTile(new SimpleBooleanProperty(true), 1, 1);
+        MajorButtonTile showMedicationsTile = new MajorButtonTile(new SimpleBooleanProperty(true), 1, 1);
         recordDoseTile.addTitle("Record a Dose");
         recordDoseTile.setBackgroundImage(mediPi.utils.getImageView(MediPi.ELEMENTNAMESPACESTEM + "Medication" + ".recordDoseImage", null, null, false));
         showMedicationsTile.addTitle("Show Medications");

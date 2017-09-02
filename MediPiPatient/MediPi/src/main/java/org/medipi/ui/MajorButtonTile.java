@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
 /**
  * Class to encapsulate a Dashboard Component node which is placed in the
- * dashboard. This class creates and handles the dashboard DashboardTile and its
+ * dashboard. This class creates and handles the dashboard MajorButtonTile and its
  * contents, allowing the tile to be clicked and the Element to be called.
  * Overlays can be added to the tile so that dynamically changing data can be
  * displayed or an alert when actions are required in the related Element.
@@ -43,7 +43,7 @@ import java.util.ArrayList;
  *
  * @author rick@robinsonhq.com
  */
-public class DashboardTile extends Tile {
+public class MajorButtonTile extends Tile {
 
     private StackPane contentStack = new StackPane();
     private ImageView backgroundImage;
@@ -53,7 +53,7 @@ public class DashboardTile extends Tile {
     /**
      * Constructor
      */
-    public DashboardTile(BooleanProperty bprop, int widthUnits, int heightUnits) {
+    public MajorButtonTile(BooleanProperty bprop, int widthUnits, int heightUnits) {
         super(bprop, widthUnits, heightUnits);
         content.setId("mainwindow-dashboard-component");
         content.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY)));
@@ -75,7 +75,7 @@ public class DashboardTile extends Tile {
         content.setCenter(contentStack);
     }
 
-    public DashboardTile(Element elem, BooleanProperty bprop) {
+    public MajorButtonTile(Element elem, BooleanProperty bprop) {
         this(bprop, 1, 1);
         this.setBackgroundImage(elem.getImage());
         this.setOnTileClick((MouseEvent event) -> {
@@ -90,7 +90,7 @@ public class DashboardTile extends Tile {
     }
 
     /**
-     * Method to add a title to the DashboardTile
+     * Method to add a title to the MajorButtonTile
      *
      * @param title title name
      */
@@ -107,7 +107,7 @@ public class DashboardTile extends Tile {
     }
 
     /**
-     * Method to add overlayed text to the DashboardTile.
+     * Method to add overlayed text to the MajorButtonTile.
      * <p>
      * Every successive addition of this overlay will add another line of text
      * on top of the tile - watch out that it doesn't exceed the limits of the
@@ -158,7 +158,7 @@ public class DashboardTile extends Tile {
     }
 
     /**
-     * Method to add an overlayed Image to the DashboardTile.
+     * Method to add an overlayed Image to the MajorButtonTile.
      * <p>
      * To add an image on top of the background image
      *
@@ -190,7 +190,7 @@ public class DashboardTile extends Tile {
     }
 
     /**
-     * Method to add a Colour to the DashboardTile.
+     * Method to add a Colour to the MajorButtonTile.
      * <p>
      * To paint the tile a background colour on tile
      *
@@ -205,9 +205,9 @@ public class DashboardTile extends Tile {
     }
 
     /**
-     * Method to return the Dashboard DashboardTile
+     * Method to return the Dashboard MajorButtonTile
      *
-     * @return Dashboard DashboardTile content back to the main MediPi class
+     * @return Dashboard MajorButtonTile content back to the main MediPi class
      */
     @Override
     public BorderPane getNode(int unitWidth, int unitHeight, int availableWidthUnits) {

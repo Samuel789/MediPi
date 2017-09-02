@@ -16,7 +16,7 @@ public class ShowMedicationsMenu extends TileMenu {
     public ShowMedicationsMenu(MediPi medipi, TileMenu upperMenu) {
         super(new WindowManager(), 3, 2.15, upperMenu);
         setPadding(new Insets(15, 0, 10, 0));
-        MajorMinorTile medTile1 = new MajorMinorTile(new SimpleBooleanProperty(true), 1, 1);
+        DualButtonTile medTile1 = new DualButtonTile(new SimpleBooleanProperty(true), 1, 1);
         medTile1.setMajorText("Back");
         this.medipi = medipi;
         medTile1.setOnMajorClick((MouseEvent event) -> {

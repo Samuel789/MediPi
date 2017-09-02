@@ -25,7 +25,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import org.medipi.ui.DashboardTile;
+import org.medipi.ui.MajorButtonTile;
 import org.medipi.MediPi;
 import org.medipi.MediPiMessageBox;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -74,7 +74,7 @@ import org.medipi.utilities.Utilities;
  * the selected message. As MediPi does not expose any inbound ports, incoming
  * messaging is achieved through periodic polling of a secure location. Any new
  * messages received are digested and the UI is updated. A new unread message
- * alerts the dashboard DashboardTile class to superimpose an notification image. All
+ * alerts the dashboard MajorButtonTile class to superimpose an notification image. All
  * messages are persisted locally to a configurable file location.
  *
  * The messages are encrypted using each patient's certificate and must be
@@ -543,8 +543,8 @@ public class Responses extends Element implements UnlockConsumer, MessageReceive
      * @return @throws Exception
      */
     @Override
-    public DashboardTile getDashboardTile() throws Exception {
-        DashboardTile dashComponent = new DashboardTile(this, showTile);
+    public MajorButtonTile getDashboardTile() throws Exception {
+        MajorButtonTile dashComponent = new MajorButtonTile(this, showTile);
         dashComponent.addTitle(NAME);
         dashComponent.addOverlay(notificationImageView, notificationBooleanProperty);
         return dashComponent;

@@ -224,7 +224,7 @@ class DoseDetailsScreen extends TileMenu {
 
         addTile(doseButton);
         addTile(timeButton);
-        addBufferTile(1, 1);
+        addTile(new BufferTile(new SimpleBooleanProperty(true)));
         addTile(saveButton);
 
         saveButton.setOnButtonClick((ActionEvent) -> {

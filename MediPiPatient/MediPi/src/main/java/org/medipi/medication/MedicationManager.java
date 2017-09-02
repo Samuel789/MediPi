@@ -1,7 +1,7 @@
 package org.medipi.medication;
 
 import javafx.scene.Node;
-import org.medipi.ui.DashboardTile;
+import org.medipi.ui.MajorButtonTile;
 import org.medipi.devices.Element;
 import org.medipi.medication.medicationui.MedicationMenu;
 import org.medipi.medication.reminders.ReminderEventInterface;
@@ -96,8 +96,8 @@ public class MedicationManager extends Element {
         menu.setVisible(true);
     }
 
-    public DashboardTile getDashboardTile() {
-        DashboardTile dashComponent = new DashboardTile(this, showTile);
+    public MajorButtonTile getDashboardTile() {
+        MajorButtonTile dashComponent = new MajorButtonTile(this, showTile);
         dashComponent.addTitle(getSpecificDeviceDisplayName());
         return dashComponent;
     }

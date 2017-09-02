@@ -25,7 +25,7 @@ import javafx.scene.layout.BorderPane;
 
 /**
  * Class to encapsulate a Dashboard Component node which is placed in the
- * dashboard. This class creates and handles the dashboard DashboardTile and its
+ * dashboard. This class creates and handles the dashboard MajorButtonTile and its
  * contents, allowing the tile to be clicked and the Element to be called.
  * Overlays can be added to the tile so that dynamically changing data can be
  * displayed or an alert when actions are required in the related Element.
@@ -33,13 +33,13 @@ import javafx.scene.layout.BorderPane;
  *
  * @author rick@robinsonhq.com
  */
-public class MajorMinorTile extends Tile {
+public class DualButtonTile extends Tile {
 
     Button majorButton = new Button();
     Button minorButton = new Button();
     int buttonPadding = 25;
 
-    public MajorMinorTile(BooleanProperty bprop, int widthUnits, int heightUnits) {
+    public DualButtonTile(BooleanProperty bprop, int widthUnits, int heightUnits) {
         super(bprop, widthUnits, heightUnits);
         content.setTop(majorButton);
         content.setBottom(minorButton);
@@ -50,9 +50,9 @@ public class MajorMinorTile extends Tile {
     }
 
     /**
-     * Method to return the Dashboard DashboardTile
+     * Method to return the Dashboard MajorButtonTile
      *
-     * @return Dashboard DashboardTile content back to the main MediPi class
+     * @return Dashboard MajorButtonTile content back to the main MediPi class
      */
     @Override
     public BorderPane getNode(int unitWidth, int unitHeight, int availableWidthUnits) {

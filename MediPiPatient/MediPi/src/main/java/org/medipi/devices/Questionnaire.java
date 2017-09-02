@@ -32,13 +32,12 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.medipi.ui.MajorButtonTile;
 import org.medipi.utilities.ConfigurationStringTokeniser;
-import org.medipi.ui.DashboardTile;
 import org.medipi.MediPi;
 import org.medipi.MediPiProperties;
 import org.medipi.model.DeviceDataDO;
@@ -502,8 +501,8 @@ public class Questionnaire extends Device {
     }
 
     @Override
-    public DashboardTile getDashboardTile() throws Exception {
-        DashboardTile dashComponent = new DashboardTile(this, showTile);
+    public MajorButtonTile getDashboardTile() throws Exception {
+        MajorButtonTile dashComponent = new MajorButtonTile(this, showTile);
         dashComponent.addTitle(getSpecificDeviceDisplayName());
         dashComponent.addOverlay(Color.LIGHTGREEN, hasDataProperty());
         return dashComponent;
