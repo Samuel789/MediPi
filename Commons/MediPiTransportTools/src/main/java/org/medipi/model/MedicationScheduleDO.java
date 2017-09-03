@@ -1,7 +1,7 @@
 package org.medipi.model;
 
-import org.medipi.medication.Schedule;
-import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.model.Schedule;
+import org.medipi.medication.model.ScheduledDose;
 
 import java.util.List;
 

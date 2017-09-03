@@ -3,7 +3,7 @@
         "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="org.medipi.medication.Medication" table="medication">
+    <class name="org.medipi.medication.model.Medication" table="medication">
         <id name="medicationId" type="long">
             <column name="medication_id"/>
         </id>
@@ -17,7 +17,7 @@
         <property name="cautionaryText" type="java.lang.String">
             <column name="advisory_stmt"/>
         </property>
-        <many-to-one lazy="false" name="doseUnit" class="org.medipi.medication.DoseUnit" column="dose_unit"
+        <many-to-one lazy="false" name="doseUnit" class="org.medipi.medication.model.DoseUnit" column="dose_unit"
                      cascade="all" not-null="true"/>
 
     </class>

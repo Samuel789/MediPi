@@ -15,7 +15,7 @@
  */
 package org.medipi.concentrator.dao;
 
-import org.medipi.medication.Medication;
+import org.medipi.medication.model.Medication;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

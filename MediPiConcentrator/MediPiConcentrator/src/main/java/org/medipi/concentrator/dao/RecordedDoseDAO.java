@@ -1,6 +1,6 @@
 package org.medipi.concentrator.dao;
 
-import org.medipi.medication.RecordedDose;
+import org.medipi.medication.model.RecordedDose;
 
 import java.util.List;
 

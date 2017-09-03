@@ -15,7 +15,9 @@
  */
 package org.medipi.model;
 
-import org.medipi.medication.*;
+import org.medipi.medication.model.Medication;
+import org.medipi.medication.model.PatientAdherence;
+import org.medipi.medication.model.Schedule;
 
 import java.io.Serializable;
 import java.util.Date;

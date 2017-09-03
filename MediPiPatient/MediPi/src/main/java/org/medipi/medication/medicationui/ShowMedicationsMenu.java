@@ -5,7 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
 import org.medipi.MediPi;
 import org.medipi.medication.MedicationManager;
-import org.medipi.medication.Schedule;
+import org.medipi.medication.model.Schedule;
 import org.medipi.ui.*;
 
 

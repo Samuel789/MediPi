@@ -15,7 +15,7 @@
  */
 package org.medipi.model;
 
-import org.medipi.medication.*;
+import org.medipi.medication.model.*;
 
 import java.io.Serializable;
 import java.util.Date;

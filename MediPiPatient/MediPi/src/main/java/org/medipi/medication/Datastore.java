@@ -1,11 +1,14 @@
 package org.medipi.medication;
 
 import org.medipi.MediPi;
+import org.medipi.medication.model.PatientAdherence;
+import org.medipi.medication.model.RecordedDose;
+import org.medipi.medication.model.Schedule;
+import org.medipi.medication.model.ScheduledDose;
 import org.medipi.medication.reminders.MedicationReminderEvent;
 import org.medipi.medication.reminders.ReminderEventInterface;
 import org.medipi.medication.reminders.ReminderService;
 
-import java.sql.Date;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;

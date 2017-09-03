@@ -2,8 +2,8 @@ package org.medipi.concentrator.logic;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.medipi.medication.Schedule;
-import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.model.Schedule;
+import org.medipi.medication.model.ScheduledDose;
 
 import java.sql.Date;
 import java.time.LocalDate;

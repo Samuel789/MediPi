@@ -15,13 +15,12 @@
  */
 package org.medipi.model;
 
-import org.medipi.medication.*;
+import org.medipi.medication.model.RecordedDose;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Dictionary;
-import java.util.List;
 import java.util.Set;
 
 /**

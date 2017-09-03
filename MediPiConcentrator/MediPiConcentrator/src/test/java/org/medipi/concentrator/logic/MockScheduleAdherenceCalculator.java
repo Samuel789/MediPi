@@ -1,7 +1,7 @@
 package org.medipi.concentrator.logic;
 
-import org.medipi.medication.DoseInstance;
-import org.medipi.medication.Schedule;
+import org.medipi.medication.model.DoseInstance;
+import org.medipi.medication.model.Schedule;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

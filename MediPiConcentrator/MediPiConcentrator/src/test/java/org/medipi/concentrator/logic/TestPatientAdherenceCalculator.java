@@ -2,14 +2,13 @@ package org.medipi.concentrator.logic;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.medipi.medication.RecordedDose;
-import org.medipi.medication.Schedule;
-import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.model.RecordedDose;
+import org.medipi.medication.model.Schedule;
+import org.medipi.medication.model.ScheduledDose;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;

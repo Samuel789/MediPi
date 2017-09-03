@@ -1,4 +1,4 @@
-package org.medipi.medication;
+package org.medipi.medication.model;
 
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;

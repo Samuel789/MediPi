@@ -15,7 +15,7 @@
  */
 package org.medipi.concentrator.dao;
 
-import org.medipi.medication.ScheduleAdherence;
+import org.medipi.medication.model.ScheduleAdherence;
 import org.springframework.stereotype.Repository;
 
 /**

@@ -6,7 +6,7 @@ import javafx.scene.input.MouseEvent;
 import org.medipi.MediPi;
 import org.medipi.medication.Datastore;
 import org.medipi.medication.MedicationManager;
-import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.model.ScheduledDose;
 import org.medipi.ui.*;
 
 

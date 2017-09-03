@@ -15,11 +15,8 @@
  */
 package org.medipi.concentrator.dao;
 
-import org.medipi.medication.PatientAdherence;
-import org.medipi.medication.Schedule;
+import org.medipi.medication.model.PatientAdherence;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Data Access Object for Hardware

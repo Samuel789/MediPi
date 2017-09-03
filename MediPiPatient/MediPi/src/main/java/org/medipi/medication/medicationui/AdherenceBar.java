@@ -7,8 +7,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.medipi.medication.PatientAdherence;
-import org.medipi.medication.ScheduleAdherence;
+import org.medipi.medication.model.PatientAdherence;
+import org.medipi.medication.model.ScheduleAdherence;
 
 public class AdherenceBar extends Group {
     static final double YELLOWTHRESHOLD = 0.90;

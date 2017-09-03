@@ -1,6 +1,7 @@
 package org.medipi.medication;
 
 import javafx.scene.Node;
+import org.medipi.medication.model.ScheduledDose;
 import org.medipi.ui.MajorButtonTile;
 import org.medipi.devices.Element;
 import org.medipi.medication.medicationui.MedicationMenu;

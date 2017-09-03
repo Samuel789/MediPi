@@ -3,7 +3,7 @@
         "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="org.medipi.medication.Schedule" table="schedule">
+    <class name="org.medipi.medication.model.Schedule" table="schedule">
         <id name="scheduleId" type="int">
             <column name="schedule_id"/>
             <generator class="increment"/>
@@ -20,7 +20,7 @@
         <property name="purposeStatement" type="java.lang.String" not-null="true">
             <column name="purpose_statement"/>
         </property>
-        <many-to-one lazy="false" name="medication" class="org.medipi.medication.Medication" column="medication_id"
+        <many-to-one lazy="false" name="medication" class="org.medipi.medication.model.Medication" column="medication_id"
                      not-null="true"/>
         <property name="patientUuid" type="java.lang.String" not-null="true">
             <column name="patient_uuid"/>
@@ -30,16 +30,16 @@
             <key>
                 <column name="schedule_id" not-null="true"/>
             </key>
-            <one-to-many class="org.medipi.medication.RecordedDose"/>
+            <one-to-many class="org.medipi.medication.model.RecordedDose"/>
         </set>
         <set name="scheduledDoses" table="scheduled_dose"
              inverse="true" lazy="false">
             <key>
                 <column name="schedule_id" not-null="true"/>
             </key>
-            <one-to-many class="org.medipi.medication.ScheduledDose"/>
+            <one-to-many class="org.medipi.medication.model.ScheduledDose"/>
         </set>
-        <one-to-one name="scheduleAdherence" class="org.medipi.medication.ScheduleAdherence"
+        <one-to-one name="scheduleAdherence" class="org.medipi.medication.model.ScheduleAdherence"
         ></one-to-one>
     </class>
 

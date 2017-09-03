@@ -3,7 +3,7 @@
         "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="org.medipi.medication.ScheduledDose" table="scheduled_dose">
+    <class name="org.medipi.medication.model.ScheduledDose" table="scheduled_dose">
         <id name="scheduledDoseId" type="int">
             <column name="scheduled_dose_id"/>
             <generator class="increment"/>

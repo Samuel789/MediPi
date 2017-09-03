@@ -1,4 +1,4 @@
-package org.medipi.medication;
+package org.medipi.medication.model;
 
 /**
  * Created by sam on 02/08/17.

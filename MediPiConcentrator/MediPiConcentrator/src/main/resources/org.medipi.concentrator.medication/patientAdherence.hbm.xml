@@ -3,7 +3,7 @@
         "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="org.medipi.medication.PatientAdherence" table="patient_adherence">
+    <class name="org.medipi.medication.model.PatientAdherence" table="patient_adherence">
         <id name="patientUuid" type="java.lang.String">
             <column name="patient_uuid"/>
         </id>

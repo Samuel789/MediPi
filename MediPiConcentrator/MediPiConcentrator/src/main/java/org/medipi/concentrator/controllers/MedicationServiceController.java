@@ -18,7 +18,7 @@ package org.medipi.concentrator.controllers;
 import org.medipi.concentrator.logging.MediPiLogger;
 import org.medipi.concentrator.services.MedicationDownloadService;
 import org.medipi.concentrator.services.MedicationScheduleUpdateService;
-import org.medipi.medication.DoseInstance;
+import org.medipi.medication.model.DoseInstance;
 import org.medipi.model.MedWebDO;
 import org.medipi.model.MedicationPatientDO;
 import org.medipi.model.MedicationScheduleDO;

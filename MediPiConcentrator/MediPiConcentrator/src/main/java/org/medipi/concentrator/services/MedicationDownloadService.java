@@ -7,7 +7,7 @@ import org.medipi.concentrator.logic.PatientAdherenceCalculator;
 import org.medipi.concentrator.logic.ScheduleAdherenceCalculator;
 import org.medipi.concentrator.logic.ScheduleAdherenceCalculatorInterface;
 import org.medipi.concentrator.utilities.Utilities;
-import org.medipi.medication.*;
+import org.medipi.medication.model.*;
 import org.medipi.model.MedWebDO;
 import org.medipi.model.MedicationPatientDO;
 import org.medipi.model.UnpackedDoseDO;

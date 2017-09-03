@@ -15,7 +15,7 @@
  */
 package org.medipi.concentrator.dao;
 
-import org.medipi.medication.DoseUnit;
+import org.medipi.medication.model.DoseUnit;
 
 import java.util.List;
 

@@ -12,15 +12,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.medipi.MediPi;
-import org.medipi.medication.Medication;
+import org.medipi.medication.model.Medication;
 import org.medipi.medication.MedicationManager;
-import org.medipi.medication.Schedule;
-import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.model.Schedule;
+import org.medipi.medication.model.ScheduledDose;
 import org.medipi.medication.reminders.MedicationReminderEvent;
 import org.medipi.medication.reminders.ReminderService;
 import org.medipi.medication.reminders.SnoozeNotAllowedException;
 
-import java.awt.*;
 import java.io.File;
 
 public class MedicationReminder extends Group {

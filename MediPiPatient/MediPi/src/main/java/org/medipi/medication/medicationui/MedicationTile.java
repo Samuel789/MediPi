@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.medipi.medication.Schedule;
+import org.medipi.medication.model.Schedule;
 import org.medipi.ui.Tile;
 
 import java.util.HashMap;

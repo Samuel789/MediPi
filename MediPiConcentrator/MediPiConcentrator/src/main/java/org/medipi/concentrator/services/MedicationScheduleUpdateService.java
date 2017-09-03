@@ -1,20 +1,17 @@
 package org.medipi.concentrator.services;
 
 import org.medipi.concentrator.dao.MedicationDAOImpl;
-import org.medipi.concentrator.dao.PatientDAOImpl;
 import org.medipi.concentrator.dao.ScheduleDAOImpl;
 import org.medipi.concentrator.dao.ScheduledDoseDAOImpl;
-import org.medipi.medication.Medication;
-import org.medipi.medication.Schedule;
-import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.model.Medication;
+import org.medipi.medication.model.Schedule;
+import org.medipi.medication.model.ScheduledDose;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 

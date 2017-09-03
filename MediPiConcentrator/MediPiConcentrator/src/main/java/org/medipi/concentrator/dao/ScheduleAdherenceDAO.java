@@ -1,6 +1,6 @@
 package org.medipi.concentrator.dao;
 
-import org.medipi.medication.ScheduleAdherence;
+import org.medipi.medication.model.ScheduleAdherence;
 
 public interface ScheduleAdherenceDAO extends GenericDAO<ScheduleAdherence> {
 }

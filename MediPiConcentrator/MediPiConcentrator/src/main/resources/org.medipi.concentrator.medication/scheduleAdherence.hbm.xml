@@ -3,7 +3,7 @@
         "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="org.medipi.medication.ScheduleAdherence" table="schedule_adherence">
+    <class name="org.medipi.medication.model.ScheduleAdherence" table="schedule_adherence">
         <id name="scheduleId" type="int">
             <column name="schedule_id"/>
         </id>

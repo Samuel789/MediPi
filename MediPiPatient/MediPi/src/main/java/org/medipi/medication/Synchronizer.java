@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.medipi.MediPi;
 import org.medipi.MediPiMessageBox;
 import org.medipi.logging.MediPiLogger;
+import org.medipi.medication.model.Schedule;
 import org.medipi.messaging.rest.RESTfulMessagingEngine;
 import org.medipi.messaging.vpn.VPNServiceManager;
 import org.medipi.model.MedicationPatientDO;

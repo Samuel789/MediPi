@@ -1,9 +1,9 @@
 package org.medipi.concentrator.logic;
 
 import org.junit.*;
-import org.medipi.medication.RecordedDose;
-import org.medipi.medication.Schedule;
-import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.model.RecordedDose;
+import org.medipi.medication.model.Schedule;
+import org.medipi.medication.model.ScheduledDose;
 
 import java.sql.Date;
 import java.sql.Time;

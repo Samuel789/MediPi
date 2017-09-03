@@ -1,7 +1,7 @@
 package org.medipi.concentrator.logic;
 
-import org.medipi.medication.DoseInstance;
-import org.medipi.medication.ScheduledDose;
+import org.medipi.medication.model.DoseInstance;
+import org.medipi.medication.model.ScheduledDose;
 
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;

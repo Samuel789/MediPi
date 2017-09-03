@@ -1,7 +1,7 @@
 package org.medipi.concentrator.dao;
 
-import org.medipi.medication.Medication;
-import org.medipi.medication.Schedule;
+import org.medipi.medication.model.Medication;
+import org.medipi.medication.model.Schedule;
 
 import java.util.List;
 
