@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.medipi.MediPi;
 import org.medipi.medication.model.ScheduledDose;
-import org.medipi.medication.medicationui.MedicationReminder;
+import org.medipi.medication.ui.MedicationReminder;
 
 import java.sql.Date;
 import java.time.LocalDate;

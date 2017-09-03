@@ -1,4 +1,4 @@
-package org.medipi.medication.medicationui;
+package org.medipi.medication.ui;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;

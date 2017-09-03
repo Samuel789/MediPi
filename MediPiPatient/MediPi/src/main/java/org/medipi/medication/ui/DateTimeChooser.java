@@ -1,4 +1,4 @@
-package org.medipi.medication.medicationui;
+package org.medipi.medication.ui;
 
 /**
  * Created by sam on 02/08/17.

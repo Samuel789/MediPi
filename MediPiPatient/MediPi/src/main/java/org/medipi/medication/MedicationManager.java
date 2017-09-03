@@ -4,7 +4,7 @@ import javafx.scene.Node;
 import org.medipi.medication.model.ScheduledDose;
 import org.medipi.ui.MajorButtonTile;
 import org.medipi.devices.Element;
-import org.medipi.medication.medicationui.MedicationMenu;
+import org.medipi.medication.ui.MedicationMenu;
 import org.medipi.medication.reminders.ReminderEventInterface;
 import org.medipi.medication.reminders.ReminderService;
 
