@@ -35,7 +35,7 @@ public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorI
 
 
     public ScheduleAdherenceCalculator(Schedule schedule, LocalDate queryStartDate, LocalDate queryEndDate, boolean calculatingStreak) {
-        LocalDate scheduleStart = schedule.getAssignedStartDate().toLocalDate();
+        LocalDate scheduleStart = schedule.getStartDate().toLocalDate();
         if (queryEndDate.isBefore(queryStartDate)) {
             throw new IllegalArgumentException("Query end date cannot be before start date");
         }
@@ -43,7 +43,7 @@ public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorI
             if (queryEndDate.isBefore(scheduleStart)) {
                 queryStartDate = queryEndDate;
             } else {
-                queryStartDate = schedule.getAssignedStartDate().toLocalDate();
+                queryStartDate = schedule.getStartDate().toLocalDate();
             }
         }
         Integer queryStartDay;

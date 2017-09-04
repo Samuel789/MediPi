@@ -8,10 +8,10 @@
             <column name="schedule_id"/>
             <generator class="increment"/>
         </id>
-        <property name="assignedStartDate" type="date" not-null="true">
+        <property name="startDate" type="date" not-null="true">
             <column name="assigned_start_date"/>
         </property>
-        <property name="assignedEndDate" type="date" not-null="true">
+        <property name="endDate" type="date" not-null="true">
             <column name="assigned_end_date"/>
         </property>
         <property name="alternateName" type="java.lang.String" not-null="true">
@@ -53,7 +53,7 @@
         <![CDATA[SELECT s FROM Schedule s WHERE s.patientUuid = :uuid AND s.medication = :medication]]>
     </query>
     <query name="Schedule.findAll">
-        <![CDATA[SELECT s FROM Schedule s ORDER BY assignedStartDate]]>
+        <![CDATA[SELECT s FROM Schedule s ORDER BY startDate]]>
     </query>
 
 </hibernate-mapping>

@@ -21,8 +21,8 @@ public class TestScheduleUtilities {
     @Before
     public void beforeTests() {
         testSchedule = new Schedule();
-        testSchedule.setAssignedStartDate(Date.valueOf("2017-08-01"));
-        testSchedule.setAssignedEndDate(Date.valueOf("2017-08-24"));
+        testSchedule.setStartDate(Date.valueOf("2017-08-01"));
+        testSchedule.setEndDate(Date.valueOf("2017-08-24"));
 
         testDose1 = new ScheduledDose();
         testDose2 = new ScheduledDose();
@@ -99,7 +99,7 @@ public class TestScheduleUtilities {
 
     @Test
     public void truncatedInfiniteSchedule2_optimizeEndDate_unchanged() {
-        testSchedule.setAssignedEndDate(Date.valueOf("2017-08-16"));
+        testSchedule.setEndDate(Date.valueOf("2017-08-16"));
         assert ScheduleUtilities.getOptimizedEndDate(testSchedule).equals(Date.valueOf("2017-08-16"));
     }
 
@@ -116,14 +116,14 @@ public class TestScheduleUtilities {
 
     @Test
     public void boundedInfiniteSchedule2_getUnboundedEndDate_null() {
-        testSchedule.setAssignedEndDate(Date.valueOf("2017-08-16"));
+        testSchedule.setEndDate(Date.valueOf("2017-08-16"));
         assert ScheduleUtilities.getOptimizedUnboundedEndDate(testSchedule) == null;
     }
 
     @Test
     public void infiniteAsNeededSchedule_optimizeEndDate_null() {
         testSchedule.setScheduledDoses(new HashSet<>());
-        testSchedule.setAssignedEndDate(null);
+        testSchedule.setEndDate(null);
         assert ScheduleUtilities.getOptimizedEndDate(testSchedule) == null;
     }
 
@@ -227,31 +227,31 @@ public class TestScheduleUtilities {
     public void moveToEndDay_move_doseRemoved() {
         ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,19));
         assert(testSchedule.getScheduledDoses().contains(testDose1) == false);
-        assert testSchedule.getAssignedStartDate().equals(Date.valueOf("2017-8-19"));
+        assert testSchedule.getStartDate().equals(Date.valueOf("2017-8-19"));
     }
     @Test
     public void moveGreaterThanEndDay_move_doseRemoved(){
         ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,20));
-        assert testSchedule.getAssignedStartDate().equals(Date.valueOf("2017-8-20"));
+        assert testSchedule.getStartDate().equals(Date.valueOf("2017-8-20"));
         assert(testSchedule.getScheduledDoses().contains(testDose1) == false);
     }
     @Test
     public void moveLessThanEndDay_move_doseRemoved(){
         ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,18));
-        assert testSchedule.getAssignedStartDate().equals(Date.valueOf("2017-8-18"));
+        assert testSchedule.getStartDate().equals(Date.valueOf("2017-8-18"));
         assert(testSchedule.getScheduledDoses().contains(testDose1) == false);
     }
     @Test
     public void moveToDayAfterLastDose_move_doseRemoved(){
         ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,17));
-        assert testSchedule.getAssignedStartDate().equals(Date.valueOf("2017-8-17"));
+        assert testSchedule.getStartDate().equals(Date.valueOf("2017-8-17"));
         assert(testSchedule.getScheduledDoses().contains(testDose1) == false);
     }
     @Test
     public void moveToLastDose_move_correctResult() throws DoseOutOfBoundsException{
         ScheduleUtilities.moveScheduleStartDate(testSchedule, LocalDate.of(2017,8,16));
         assert testSchedule.getScheduledDoses().contains(testDose1);
-        assert testSchedule.getAssignedStartDate().equals(Date.valueOf("2017-8-16"));
+        assert testSchedule.getStartDate().equals(Date.valueOf("2017-8-16"));
         assert testDose1.getStartDay() == 0;
         assert testDose1.getRepeatInterval() == 5;
         assert testDose1.getEndDay() == 3;

@@ -61,8 +61,8 @@ public class Datastore {
         activeSchedules = new ArrayList<>();
         // Add every scheduled dose to reminder service
         for (Schedule schedule : patientSchedules) {
-            if (!schedule.getAssignedStartDate().toLocalDate().isAfter(LocalDate.now())) {
-                if (schedule.getAssignedEndDate() == null || schedule.getAssignedEndDate().toLocalDate().isAfter(LocalDate.now())) {
+            if (!schedule.getStartDate().toLocalDate().isAfter(LocalDate.now())) {
+                if (schedule.getEndDate() == null || schedule.getEndDate().toLocalDate().isAfter(LocalDate.now())) {
                     activeSchedules.add(schedule);
                 }
             }
@@ -76,7 +76,7 @@ public class Datastore {
         // Check if any doses have already been taken today
         for (Schedule schedule : patientSchedules) {
             HashSet<RecordedDose> todayTakenDoses = new HashSet<>();
-            int dayOfSchedule = (int) schedule.getAssignedStartDate().toLocalDate().until(today, ChronoUnit.DAYS);
+            int dayOfSchedule = (int) schedule.getStartDate().toLocalDate().until(today, ChronoUnit.DAYS);
             for (RecordedDose takenDose : schedule.getRecordedDoses()) {
                 int takenDay = takenDose.getDayTaken();
                 if (takenDay == dayOfSchedule) {

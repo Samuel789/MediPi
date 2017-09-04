@@ -35,7 +35,7 @@ public class MedicationScheduleUpdateService {
     private Schedule getExistingSchedule(LocalDate date, Medication medication, String patientUuid) {
         List<Schedule> existing_schedules = scheduleDAOimpl.findByMedicationAndPatient(medication, patientUuid);
         for (Schedule schedule : existing_schedules) {
-            if ((schedule.getAssignedEndDate() == null || schedule.getAssignedEndDate().toLocalDate().isAfter(date))) {
+            if ((schedule.getEndDate() == null || schedule.getEndDate().toLocalDate().isAfter(date))) {
                 return schedule;
             }
         }
@@ -51,19 +51,19 @@ public class MedicationScheduleUpdateService {
         Schedule existing_schedule = getExistingSchedule(tomorrow, medication, newSchedule.getPatientUuid());
         if (existing_schedule != null) {
             assert (existing_schedule.getPatientUuid().equals(newSchedule.getPatientUuid()));
-            existing_schedule.setAssignedEndDate(Date.valueOf(tomorrow));
+            existing_schedule.setEndDate(Date.valueOf(tomorrow));
 
             // Clean up previous schedule changes from today (which were never able to come into effect)
-            if (existing_schedule.getAssignedEndDate().equals(existing_schedule.getAssignedStartDate())) {
+            if (existing_schedule.getEndDate().equals(existing_schedule.getStartDate())) {
                 deleteSchedule(existing_schedule);
             }
         }
-        if (newSchedule.getAssignedStartDate().equals(newSchedule.getAssignedEndDate())) {
+        if (newSchedule.getStartDate().equals(newSchedule.getEndDate())) {
             return;
         }
         scheduleDAOimpl.save(newSchedule);
         newSchedule.setScheduledDoses(new HashSet<>(newDoses));
-        if (newSchedule.getAssignedStartDate().toLocalDate().isBefore(tomorrow)) {
+        if (newSchedule.getStartDate().toLocalDate().isBefore(tomorrow)) {
             moveScheduleStartDate(newSchedule, tomorrow);
         }
         for (ScheduledDose new_dose : newSchedule.getScheduledDoses()) {
@@ -71,7 +71,7 @@ public class MedicationScheduleUpdateService {
             new_dose.setScheduleId(newSchedule.getScheduleId());
             scheduledDoseDAOimpl.save(new_dose);
         }
-        newSchedule.setAssignedEndDate(getOptimizedEndDate(newSchedule));
+        newSchedule.setEndDate(getOptimizedEndDate(newSchedule));
         scheduleDAOimpl.update(newSchedule);
     }
 

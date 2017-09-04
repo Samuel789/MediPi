@@ -60,7 +60,7 @@ public class MedicationDownloadService {
         try {
             medicationInfo.setSchedules(scheduleDAOimpl.findAll());
             for (Schedule schedule : medicationInfo.getSchedules()) {
-                System.out.println(schedule.getAssignedStartDate());
+                System.out.println(schedule.getStartDate());
             }
             medicationInfo.setPatientAdherence(patientAdherenceDAOimpl.findByPatientUuid(patientUuid));
 
@@ -171,8 +171,8 @@ public class MedicationDownloadService {
         LocalDate endDate = LocalDate.parse(endDateString);
         List<DoseInstance> doseInstances = new ArrayList<>();
         for (Schedule schedule : scheduleDAOimpl.findByPatientUuid(patientUuid)) {
-            int startDay = Math.max(0, (int) schedule.getAssignedStartDate().toLocalDate().until(startDate, ChronoUnit.DAYS));
-            int endDay = Math.max(0, (int) schedule.getAssignedStartDate().toLocalDate().until(endDate, ChronoUnit.DAYS));
+            int startDay = Math.max(0, (int) schedule.getStartDate().toLocalDate().until(startDate, ChronoUnit.DAYS));
+            int endDay = Math.max(0, (int) schedule.getStartDate().toLocalDate().until(endDate, ChronoUnit.DAYS));
             for (ScheduledDose dose : schedule.getScheduledDoses()) {
                 dose.setSchedule(schedule);
             }

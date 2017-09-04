@@ -11,10 +11,6 @@ public class Medication implements Serializable {
     private DoseUnit doseUnit;
 
     public Medication() {
-        doseUnit = new DoseUnit();
-        shortName = "TestShortName";
-        fullName = "TestFullName";
-        cautionaryText = "! Item 1\n ! Item 2";
     }
 
     public long getMedicationId() {

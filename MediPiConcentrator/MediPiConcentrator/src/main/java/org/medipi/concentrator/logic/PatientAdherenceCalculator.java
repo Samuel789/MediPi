@@ -129,7 +129,7 @@ public class PatientAdherenceCalculator {
         LocalDate earliestStart = LocalDate.now();
         HashSet<LocalDate> errantDays = new HashSet<>();
         for (Schedule schedule : schedules) {
-            LocalDate scheduleStart = schedule.getAssignedStartDate().toLocalDate();
+            LocalDate scheduleStart = schedule.getStartDate().toLocalDate();
             if (scheduleStart.isBefore(earliestStart)) earliestStart = scheduleStart;
             ScheduleAdherenceCalculatorInterface scheduleAdherenceCalculatorInterface = new ScheduleAdherenceCalculator(schedule, queryStartDate, queryEndDate, calculatingStreak);
             scheduleAdherenceCalculatorInterface.setQueryEndDateTime(queryEndDate, penultimateDayEndTime);

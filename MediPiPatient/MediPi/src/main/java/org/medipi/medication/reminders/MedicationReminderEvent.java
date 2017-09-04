@@ -89,13 +89,13 @@ public class MedicationReminderEvent implements ReminderEventInterface {
 
     @Override
     public boolean activeOnDay(LocalDate date) {
-        LocalDate scheduleStartDate = dose.getSchedule().getAssignedStartDate().toLocalDate();
+        LocalDate scheduleStartDate = dose.getSchedule().getStartDate().toLocalDate();
         long dayOfSchedule = scheduleStartDate.until(date, DAYS);
         // Check that date lies within schedule boundaries
         if (dayOfSchedule < 0) {
             return false;
         }
-        Date scheduleEndDateSql = dose.getSchedule().getAssignedEndDate();
+        Date scheduleEndDateSql = dose.getSchedule().getEndDate();
         if (scheduleEndDateSql != null) {
             LocalDate scheduleEndDate = scheduleEndDateSql.toLocalDate();
             long scheduleEndDay = scheduleStartDate.until(scheduleEndDate, DAYS);

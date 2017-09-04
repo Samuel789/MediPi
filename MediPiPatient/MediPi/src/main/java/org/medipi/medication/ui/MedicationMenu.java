@@ -28,7 +28,7 @@ public class MedicationMenu extends TileMenu {
         this.datastore = datastore;
         DualButtonTile backSettingsTile = new DualButtonTile(new SimpleBooleanProperty(true), 1, 1);
         backSettingsTile.setMajorText("Back");
-        backSettingsTile.setMinorText("< Synchronize >");
+        backSettingsTile.setMinorText("Synchronize");
         headerTile = createAdherenceHeaderTile();
         backSettingsTile.setOnMajorClick((MouseEvent event) -> {
             mediPi.callDashboard();

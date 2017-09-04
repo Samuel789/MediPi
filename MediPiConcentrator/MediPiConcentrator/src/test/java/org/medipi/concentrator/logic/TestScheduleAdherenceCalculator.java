@@ -17,7 +17,7 @@ public class TestScheduleAdherenceCalculator {
     @Before
     public void runBeforeTestMethod() {
         schedule = new Schedule();
-        schedule.setAssignedStartDate(Date.valueOf(LocalDate.of(2017, 7, 1)));
+        schedule.setStartDate(Date.valueOf(LocalDate.of(2017, 7, 1)));
     }
 
     @Test

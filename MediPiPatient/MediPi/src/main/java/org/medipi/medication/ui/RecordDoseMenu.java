@@ -233,7 +233,7 @@ class DoseDetailsScreen extends TileMenu {
 
         saveButton.setOnButtonClick((ActionEvent) -> {
             if (getUserConfirmation()) {
-                int doseDayOfSchedule = (int) medicationSchedule.getAssignedStartDate().toLocalDate().until(LocalDate.now(), ChronoUnit.DAYS);
+                int doseDayOfSchedule = (int) medicationSchedule.getStartDate().toLocalDate().until(LocalDate.now(), ChronoUnit.DAYS);
                 medicationSchedule.getRecordedDoses().add(new RecordedDose(doseDayOfSchedule, Time.valueOf(doseTime), doseValue, medicationSchedule));
                 if (correspondingDose != null) {
                     ReminderService reminderService = ((MedicationManager) mediPi.getElement("Medication")).getReminderService();

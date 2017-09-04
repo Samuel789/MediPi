@@ -124,7 +124,7 @@ public class AdherenceBar extends Group {
     private void updateLabel() {
         if (unSynched) {
             adherenceText.setText("Sync with the Concentrator to use this feature.");
-            streakText.setText("Tap the <Synchronize> button");
+            streakText.setText("Tap the Synchronize button");
         } else if (longForm) {
             if (progress == null) {
                 adherenceText.setText("No statistics yet.");

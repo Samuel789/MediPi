@@ -26,13 +26,13 @@ public class TestScheduledDoseUnpacker {
 
     @Before
     public void setUpUnboundSchedule() {
-        unboundSchedule.setAssignedStartDate(Date.valueOf(LocalDate.of(2016, 2, 22)));
+        unboundSchedule.setStartDate(Date.valueOf(LocalDate.of(2016, 2, 22)));
     }
 
     @Before
     public void setUpBoundSchedule() {
-        boundSchedule.setAssignedStartDate(Date.valueOf(LocalDate.of(2016, 2, 22)));
-        boundSchedule.setAssignedEndDate(Date.valueOf(LocalDate.of(2016, 2, 26)));
+        boundSchedule.setStartDate(Date.valueOf(LocalDate.of(2016, 2, 22)));
+        boundSchedule.setEndDate(Date.valueOf(LocalDate.of(2016, 2, 26)));
     }
 
     @Before
@@ -264,8 +264,8 @@ public class TestScheduledDoseUnpacker {
         dose.setStartDay(0);
         dose.setEndDay(null);
         Schedule schedule = new Schedule();
-        schedule.setAssignedStartDate(Date.valueOf("2017-08-20"));
-        schedule.setAssignedEndDate(Date.valueOf("2017-08-30"));
+        schedule.setStartDate(Date.valueOf("2017-08-20"));
+        schedule.setEndDate(Date.valueOf("2017-08-30"));
         dose.setRepeatInterval(1);
         dose.setSchedule(schedule);
         List<DoseInstance> expectedResult = new ArrayList<>();

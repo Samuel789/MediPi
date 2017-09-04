@@ -15,23 +15,23 @@ import java.util.List;
 public class ScheduleUtilities {
 
     public static Integer toDayOfSchedule(Schedule schedule, LocalDate date) {
-        if (date.isBefore(schedule.getAssignedStartDate().toLocalDate())) {
+        if (date.isBefore(schedule.getStartDate().toLocalDate())) {
             throw new IllegalArgumentException("Date cannot be before beginning of schedule");
         }
-        return (int) schedule.getAssignedStartDate().toLocalDate().until(date, ChronoUnit.DAYS);
+        return (int) schedule.getStartDate().toLocalDate().until(date, ChronoUnit.DAYS);
     }
 
     public static LocalDate fromDayOfSchedule(Schedule schedule, int day) {
         if (day < 0) {
             throw new IllegalArgumentException("Day of schedule cannot be negative");
         }
-        return schedule.getAssignedStartDate().toLocalDate().plusDays(day);
+        return schedule.getStartDate().toLocalDate().plusDays(day);
     }
 
     public static Date getOptimizedEndDate(Schedule schedule) {
         Date optimumUnboundedEndDate = getOptimizedUnboundedEndDate(schedule);
-        if (optimumUnboundedEndDate == null || (schedule.getAssignedEndDate() != null && schedule.getAssignedEndDate().before(optimumUnboundedEndDate))) {
-            return schedule.getAssignedEndDate();
+        if (optimumUnboundedEndDate == null || (schedule.getEndDate() != null && schedule.getEndDate().before(optimumUnboundedEndDate))) {
+            return schedule.getEndDate();
         } else {
             return optimumUnboundedEndDate;
         }
@@ -53,7 +53,7 @@ public class ScheduleUtilities {
                 maxDay = Math.max(maxDay, dose.getStartDay());
             }
         }
-        return Date.valueOf(schedule.getAssignedStartDate().toLocalDate().plusDays(maxDay + 1));
+        return Date.valueOf(schedule.getStartDate().toLocalDate().plusDays(maxDay + 1));
     }
 
     public static void transposeDose(ScheduledDose dose, int days) throws DoseOutOfBoundsException {
@@ -83,12 +83,12 @@ public class ScheduleUtilities {
     }
 
     public static void moveScheduleStartDate(Schedule schedule, LocalDate newStartDate) {
-        LocalDate existingStartDate = schedule.getAssignedStartDate().toLocalDate();
+        LocalDate existingStartDate = schedule.getStartDate().toLocalDate();
         if (existingStartDate.equals(newStartDate)) {
             return;
         }
         int dateDifference = (int) existingStartDate.until(newStartDate, ChronoUnit.DAYS);
-        schedule.setAssignedStartDate(Date.valueOf(newStartDate));
+        schedule.setStartDate(Date.valueOf(newStartDate));
         List<ScheduledDose> removeList = new ArrayList<>();
         for (ScheduledDose dose : schedule.getScheduledDoses()) {
             try {

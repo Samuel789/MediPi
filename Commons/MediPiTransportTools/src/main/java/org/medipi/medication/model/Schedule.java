@@ -7,8 +7,8 @@ import java.util.Set;
 
 public class Schedule implements Serializable {
 
-    private Date assignedStartDate;
-    private Date assignedEndDate;
+    private Date startDate;
+    private Date endDate;
     private String alternateName;
     private String purposeStatement;
     private String patientUuid;
@@ -60,20 +60,20 @@ public class Schedule implements Serializable {
         this.scheduleId = scheduleId;
     }
 
-    public Date getAssignedStartDate() {
-        return assignedStartDate;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setAssignedStartDate(Date assignedStartDate) {
-        this.assignedStartDate = assignedStartDate;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getAssignedEndDate() {
-        return assignedEndDate;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setAssignedEndDate(Date assignedEndDate) {
-        this.assignedEndDate = assignedEndDate;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public String getAlternateName() {
