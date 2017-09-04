@@ -99,9 +99,31 @@ public class TestPatientAdherenceCalculator {
         assert patientAdherenceCalculator.getNumDosesMissed() == 0;
         assert patientAdherenceCalculator.getNumDosesToTake() == 0;
         assert patientAdherenceCalculator.getAdherenceFraction() == null;
-        assert patientAdherenceCalculator.getStreakLength() == null;
 
         assert patientAdherenceCalculator.getNumDosesTakenIncorrectly() == 0;
+        assert patientAdherenceCalculator.getNumDosesTakenCorrectly() == 0;
+    }
+
+    @Test
+    public void incorrectlyTakenDoseWithNoScheduledDosesGivesZeroAdherence() {
+        schedule.setScheduledDoses(Collections.emptySet());
+        Set<RecordedDose> takenDoses = new HashSet<>();
+        for (int i: new int [] {2}) {
+            RecordedDose takenDose = new RecordedDose();
+            takenDose.setDayTaken(i);
+            takenDose.setDoseValue(2);
+            takenDose.setTimeTaken(Time.valueOf("14:30:00"));
+            takenDoses.add(takenDose);
+        }
+        schedule.setRecordedDoses(takenDoses);
+        PatientAdherenceCalculator patientAdherenceCalculator = new PatientAdherenceCalculator(Collections.singletonList(schedule), LocalDate.of(2017, 7, 2), LocalDate.of(2017, 7, 12), false);
+        patientAdherenceCalculator.calculatePatientAdherence();
+        assert patientAdherenceCalculator.getNumDosesMissed() == 0;
+        assert patientAdherenceCalculator.getNumDosesToTake() == 0;
+        assert patientAdherenceCalculator.getAdherenceFraction() == 0;
+        assert patientAdherenceCalculator.getStreakLength() == null;
+
+        assert patientAdherenceCalculator.getNumDosesTakenIncorrectly() == 1;
         assert patientAdherenceCalculator.getNumDosesTakenCorrectly() == 0;
     }
 
