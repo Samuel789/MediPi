@@ -7,8 +7,8 @@ from datetime import datetime
 class Schedule:
     _json_name = "schedule"
     _json_attribute_map = {"scheduleId": "id",
-                           "assignedStartDate": "start_date",
-                           "assignedEndDate": "end_date",
+                           "startDate": "start_date",
+                           "endDate": "end_date",
                            "alternateName": "alternate_name",
                            "purposeStatement": "purpose_statement",
                            "patientUuid": "patient_uuid",
@@ -195,8 +195,6 @@ def from_dict(object_class, json_properties_dict):
     except(TypeError) as e:
         raise JSONMappingException(
             "Class '%s' is missing an attribute in its constructor: %s" % (object_class.__name__, e.args[0]))
-    if object.__class__.__name__ == "Schedule":
-        print(object.id)
     return object
 
 

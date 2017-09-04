@@ -53,7 +53,10 @@ def patient_summary(request):
         else:
             dose_instance.color = "#FF8B8E"
 
-
+    patient_schedules = list(patients[patient_uuid].schedules)
+    patient_schedules.sort(key=lambda s: s.medication.short_name)
+    patient_schedules.sort(key=lambda s: s.start_date)
+    print([schedule for schedule in patient_schedules])
     output = template.render({"title": settings.SITE_NAME,
                               "version": settings.version_string,
                               "sections": settings.SECTIONS,
@@ -62,7 +65,8 @@ def patient_summary(request):
                               "active_sidebar_entry": "Medications",
                               "active_section": "patients",
                               "active_patient": patients[patient_uuid],
-                              "dose_instances": dose_instances}, request)
+                              "dose_instances": dose_instances,
+                              "schedules": patient_schedules}, request)
     return HttpResponse(output)
 
 

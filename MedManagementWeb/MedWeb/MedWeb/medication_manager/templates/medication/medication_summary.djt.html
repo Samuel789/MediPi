@@ -12,7 +12,7 @@
                 <strong>Warning!</strong> This patient is not registered with the Concentrator.
             </div>
         {% else %}
-            {% if active_patient.schedules|length > 0 %}
+            {% if schedules|length > 0 %}
                 <div class="top-floater-warning floater-warning" id="out-of-view-warning" hidden>Some medications out of view</div>
                 <div id='timeline'></div>
                 <h2>Current Schedules</h2>
@@ -33,7 +33,7 @@
                     </thead>
                     <tbody>
 
-                    {% for schedule in active_patient.schedules|present %}
+                    {% for schedule in schedules|present %}
                         {% if schedule|has_warning %}
                         <tr class="warning-row">
                         {% else %}
@@ -81,7 +81,7 @@
                     </thead>
                     <tbody>
 
-                    {% for schedule in active_patient.schedules|future %}
+                    {% for schedule in schedules|future %}
                         <tr>
                             <td>{% if schedule.medication|being_taken:active_patient.schedules %}Modification{% else %}Not yet active{% endif %}</td>
                             <td>{{ schedule.medication.short_name }}</td>

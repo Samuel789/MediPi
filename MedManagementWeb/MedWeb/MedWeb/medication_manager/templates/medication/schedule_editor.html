@@ -430,8 +430,7 @@
             data = jQuery.extend({}, schedule);
             data["start_date"] = schedule_start_day;
             if (asNeeded) {
-                data["end_date"] = (schedule_start_day === schedule_end_day) ? None : schedule_end_day;
-                alert("asNeeded" + data["end_date"])
+                data["end_date"] = (schedule_start_day === schedule_end_day) ? None : schedule_end_day
             } else {
                 var end_days = [];
                 for (dose_id in existing_doses) {

@@ -9,10 +9,10 @@
             <generator class="increment"/>
         </id>
         <property name="startDate" type="date" not-null="true">
-            <column name="assigned_start_date"/>
+            <column name="start_date"/>
         </property>
         <property name="endDate" type="date" not-null="true">
-            <column name="assigned_end_date"/>
+            <column name="end_date"/>
         </property>
         <property name="alternateName" type="java.lang.String" not-null="true">
             <column name="alternate_name"/>
