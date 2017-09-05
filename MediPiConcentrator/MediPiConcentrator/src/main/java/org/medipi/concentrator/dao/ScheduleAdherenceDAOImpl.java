@@ -15,6 +15,7 @@
  */
 package org.medipi.concentrator.dao;
 
+import org.medipi.medication.model.Schedule;
 import org.medipi.medication.model.ScheduleAdherence;
 import org.springframework.stereotype.Repository;
 
@@ -25,4 +26,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class ScheduleAdherenceDAOImpl extends GenericDAOImpl<ScheduleAdherence> implements ScheduleAdherenceDAO {
+    @Override
+    public void deleteWithId(int scheduleId) {
+        this.getEntityManager().createNamedQuery("ScheduleAdherence.deleteWithId")
+                .setParameter("id", scheduleId)
+                .executeUpdate();
+    }
 }

@@ -36,6 +36,13 @@ public class MedicationTile extends Tile {
     Label titleLabel;
     Label purposeLabel;
     Label dueStatusLabel;
+
+    public void setUpcoming(boolean upcoming) {
+        this.upcoming = upcoming;
+        updateLayout();
+    }
+
+    boolean upcoming = false;
     AdherenceBar adherenceBar;
     DisplayType displayType = DisplayType.ADHERENCE;
     Schedule medicationSchedule;
@@ -115,11 +122,17 @@ public class MedicationTile extends Tile {
     }
 
     private void setAdherenceView() {
-        if (medicationSchedule.getScheduledDoses().size() > 0) {
-            content.setCenter(adherenceBar);
-            content.setAlignment(adherenceBar, Pos.CENTER);
+        content.getStyleClass().removeAll();
+        if (!upcoming) {
+            if (medicationSchedule.getScheduledDoses().size() > 0) {
+                content.setCenter(adherenceBar);
+                content.setAlignment(adherenceBar, Pos.CENTER);
+            } else {
+                content.setCenter(new Label("Take as needed"));
+            }
         } else {
-            // Some indication of take as needed
+            content.setCenter(new Label("Starts " + medicationSchedule.getStartDate()));
+            content.getStyleClass().add("button-upcoming");
         }
     }
 

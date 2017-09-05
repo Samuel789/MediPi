@@ -3,6 +3,7 @@ package org.medipi.concentrator.services;
 import org.medipi.concentrator.dao.MedicationDAOImpl;
 import org.medipi.concentrator.dao.ScheduleDAOImpl;
 import org.medipi.concentrator.dao.ScheduledDoseDAOImpl;
+import org.medipi.concentrator.dao.ScheduleAdherenceDAOImpl;
 import org.medipi.medication.model.Medication;
 import org.medipi.medication.model.Schedule;
 import org.medipi.medication.model.ScheduledDose;
@@ -31,6 +32,9 @@ public class MedicationScheduleUpdateService {
 
     @Autowired
     private MedicationDAOImpl medicationDAOImpl;
+
+    @Autowired
+    private ScheduleAdherenceDAOImpl scheduleAdherenceDAOImpl;
 
     private Schedule getExistingSchedule(LocalDate date, Medication medication, String patientUuid) {
         List<Schedule> existing_schedules = scheduleDAOimpl.findByMedicationAndPatient(medication, patientUuid);
@@ -75,10 +79,12 @@ public class MedicationScheduleUpdateService {
         scheduleDAOimpl.update(newSchedule);
     }
 
+    @Transactional(noRollbackFor = IllegalArgumentException.class)
     private void deleteSchedule(Schedule schedule) {
         for (ScheduledDose dose : schedule.getScheduledDoses()) {
             scheduledDoseDAOimpl.delete(dose.getScheduledDoseId());
         }
+        scheduleAdherenceDAOImpl.deleteWithId(schedule.getScheduleId());
         scheduleDAOimpl.delete(schedule.getScheduleId());
     }
 }

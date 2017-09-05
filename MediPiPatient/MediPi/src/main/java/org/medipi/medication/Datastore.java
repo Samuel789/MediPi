@@ -32,6 +32,12 @@ public class Datastore {
 
     private List<Schedule> activeSchedules;
 
+    public List<Schedule> getUpcomingSchedules() {
+        return upcomingSchedules;
+    }
+
+    private List<Schedule> upcomingSchedules;
+
     public Datastore(MediPi medipi) {
         this.medipi = medipi;
         patientSchedules = new ArrayList<>();
@@ -59,12 +65,15 @@ public class Datastore {
         ReminderService reminderService = ((MedicationManager) medipi.getElement("Medication")).getReminderService();
         HashSet<ReminderEventInterface> events = new HashSet<>();
         activeSchedules = new ArrayList<>();
+        upcomingSchedules = new ArrayList<>();
         // Add every scheduled dose to reminder service
         for (Schedule schedule : patientSchedules) {
             if (!schedule.getStartDate().toLocalDate().isAfter(LocalDate.now())) {
                 if (schedule.getEndDate() == null || schedule.getEndDate().toLocalDate().isAfter(LocalDate.now())) {
                     activeSchedules.add(schedule);
                 }
+            } else {
+                upcomingSchedules.add(schedule);
             }
             for (ScheduledDose dose : schedule.getScheduledDoses()) {
                 events.add(new MedicationReminderEvent(dose));

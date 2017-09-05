@@ -99,6 +99,7 @@ def send_to_concentrator(schedule, doses):
     json = medicationDo.as_JSON()
     requests.post(url, data=json, cert=(settings.SIGN_CERT_PATH, settings.SIGN_KEY_PATH), verify=False,
                   headers={'Content-type': 'application/json'}, timeout=7000)
+    print(json)
     update_from_concentrator()
 
 

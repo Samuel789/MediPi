@@ -358,6 +358,10 @@ Messenger
     -fx-background-color: dimgrey !important;
 }
 
+.button-upcoming {
+	-fx-background-color: rgba(250, 250, 250, 0.7) !important;
+}
+
 .mp-button {
 	-fx-background-color: white;
 	-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 5 , 5 );

@@ -14,4 +14,7 @@
             <column name="streak_length"/>
         </property>
     </class>
+    <query name="ScheduleAdherence.deleteWithId">
+        <![CDATA[DELETE FROM ScheduleAdherence WHERE scheduleId = :id]]>
+    </query>
 </hibernate-mapping>

@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
 import org.medipi.MediPi;
 import org.medipi.medication.MedicationManager;
+import org.medipi.medication.model.Medication;
 import org.medipi.medication.model.Schedule;
 import org.medipi.ui.*;
 
@@ -46,9 +47,15 @@ public class ShowMedicationsMenu extends TileMenu {
         populateMedicationTiles();
     }
 
+
     private void populateMedicationTiles() {
         for (Schedule schedule : ((MedicationManager) medipi.getElement("Medication")).getDatestore().getActiveSchedules()) {
             mainPane.addTile(new MedicationTile(new SimpleBooleanProperty(true), 1, 1, schedule));
+        }
+        for (Schedule schedule : ((MedicationManager) medipi.getElement("Medication")).getDatestore().getUpcomingSchedules()) {
+            MedicationTile tile = new MedicationTile(new SimpleBooleanProperty(true), 1, 1, schedule);
+            tile.setUpcoming(true);
+            mainPane.addTile(tile);
         }
     }
 }
