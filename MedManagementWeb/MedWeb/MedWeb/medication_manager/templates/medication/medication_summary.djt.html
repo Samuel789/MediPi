@@ -141,7 +141,7 @@
             dataTable.addColumn({type: 'date', id: 'End'});
             dataTable.addRows([
                 {%  for dose in dose_instances %}
-                    ["{{ dose.schedule.medication.full_name }}", {{ dose.dose_value }} +" " + "{{ dose.schedule.medication.dose_unit.name }}", new Date("{{ dose.start_datetime|date:"Y-m-d H:i" }}"), new Date("{{ dose.end_datetime|date:"Y-m-d H:i" }}")],
+                    ["{{ dose.schedule.medication.full_name }}", {{ dose.dose_value }} + " {{ dose.schedule.medication.dose_unit.name }} on {{ dose.start_datetime|date:"Y-m-d" }} between {{ dose.start_datetime|date:"H:i" }} and {{ dose.end_datetime|date:"H:i" }}", new Date("{{ dose.start_datetime|date:"Y-m-d H:i" }}"), new Date("{{ dose.end_datetime|date:"Y-m-d H:i" }}")],
                 {% endfor %}
             ]);
             chart.draw(dataTable, {

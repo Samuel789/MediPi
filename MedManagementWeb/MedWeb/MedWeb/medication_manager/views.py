@@ -56,6 +56,8 @@ def patient_summary(request):
     patient_schedules = list(patients[patient_uuid].schedules)
     patient_schedules.sort(key=lambda s: s.medication.short_name)
     patient_schedules.sort(key=lambda s: s.start_date)
+    dose_instances.sort(key=lambda d: d.start_datetime)
+    dose_instances.sort(key=lambda d: d.schedule.medication.full_name)
     print([schedule for schedule in patient_schedules])
     output = template.render({"title": settings.SITE_NAME,
                               "version": settings.version_string,
