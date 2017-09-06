@@ -62,31 +62,39 @@ public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorI
     }
 
     private static int[] calculate_day_adherence(List<DoseInstance> dosesToTake, List<RecordedDose> takenDoses, Time endTime) {
+
+
+        List<RecordedDose> dosesTakenInTime = new ArrayList<>(takenDoses);
+        if (endTime != null) {
+            for (RecordedDose dose : dosesTakenInTime) {
+                if (dose.getTimeTaken().after(endTime)) {
+                    dosesTakenInTime.remove(dose);
+                }
+            }
+        }
         int numDosesToTake = dosesToTake.size();
-        int numDosesTaken = takenDoses.size();
+        int numDosesTaken = dosesTakenInTime.size();
 
         int countHit = 0;
         for (DoseInstance doseToTake : dosesToTake) {
-            if (endTime != null && doseToTake.getTimeStart().after(endTime)) {
-                numDosesTaken -= 1;
-                numDosesToTake -= 1;
-                continue;
-            }
-            for (RecordedDose takenDose : takenDoses) {
-                if (takenDose.getTimeTaken().after(doseToTake.getTimeStart()) && takenDose.getTimeTaken().before(doseToTake.getTimeEnd()) && takenDose.getDoseValue() == doseToTake.getDose().getDoseValue()) {
-                    doseToTake.setTakenDose(takenDose);
-                    countHit++;
+            RecordedDose takenDose = null;
+            for (RecordedDose recordedDose : dosesTakenInTime) {
+                if (recordedDose.getTimeTaken().after(doseToTake.getTimeStart()) && recordedDose.getTimeTaken().before(doseToTake.getTimeEnd()) && recordedDose.getDoseValue() == doseToTake.getDose().getDoseValue()) {
+                    takenDose = recordedDose;
                     break;
-                } else if (endTime != null && doseToTake.getTimeEnd().after(endTime)) {
-                    numDosesTaken -= 1;
-                    numDosesToTake -= 1;
                 }
+            }
+            if (takenDose != null) {
+                doseToTake.setTakenDose(takenDose);
+                countHit++;
+            } else if (endTime != null && doseToTake.getTimeEnd().after(endTime)) {
+                numDosesToTake -= 1;
             }
         }
 
         int numLeftUntaken = numDosesToTake - countHit;
         int numIncorrectlyTaken = numDosesTaken - countHit;
-        return new int[]{countHit, numLeftUntaken, numIncorrectlyTaken};
+        return new int[]{countHit, numLeftUntaken, numIncorrectlyTaken, numDosesToTake};
     }
 
     private static boolean dayQualifiesForStreak(int dosesTakenCorrectly, int dosesLeftUntaken, int dosesIncorrectlyTaken) {
@@ -250,11 +258,14 @@ public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorI
         int numDosesTakenCorrectly = 0;
         int numDosesMissed = 0;
         int numDosesTakenIncorrectly = 0;
+        int numDosesToTake = 0;
+        ArrayList<DoseInstance> doseInstances = new ArrayList<>();
         if (schedule.getScheduledDoses().size() == 0) {
             this.numDosesTakenCorrectly = 0;
             this.numDosesMissed = 0;
             this.numDosesTakenIncorrectly = 0;
             this.numDosesToTake = 0;
+            this.doseInstances = doseInstances;
             return;
         }
         Integer lastErrantDay = null;
@@ -266,9 +277,7 @@ public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorI
         } else {
             actualStartDay = queryStartDay;
         }
-        ArrayList<DoseInstance> doseInstances = new ArrayList<>();
         schedule.getScheduledDoses().forEach(dose -> doseInstances.addAll(ScheduledDoseUnpacker.unpack(dose, queryStartDay, queryEndDay)));
-        int numDosesToTake = doseInstances.size();
         doseInstances.sort(Comparator.comparingInt(DoseInstance::getDay));
         ArrayList<RecordedDose> recordedDoses = new ArrayList<>(schedule.getRecordedDoses());
         recordedDoses.sort(Comparator.comparingInt(RecordedDose::getDayTaken));
@@ -303,6 +312,7 @@ public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorI
                 numDosesTakenCorrectly += adherenceResults[0];
                 numDosesMissed += adherenceResults[1];
                 numDosesTakenIncorrectly += adherenceResults[2];
+                numDosesToTake += adherenceResults[3];
             }
             day += 1;
         }

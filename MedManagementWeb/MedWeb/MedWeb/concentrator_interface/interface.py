@@ -126,8 +126,9 @@ class MedicationScheduleDO:
         for dose in dose_data:
             dose["windowStartTime"] = dateparser.parse(dose["windowStartTime"]).strftime("%H:%M:%S")
             dose["windowEndTime"] = dateparser.parse(dose["windowEndTime"]).strftime("%H:%M:%S")
-            dose["reminderTime"] = dateparser.parse(dose["reminderTime"]).strftime("%H:%M:%S")
             dose["defaultReminderTime"] = dateparser.parse(dose["defaultReminderTime"]).strftime("%H:%M:%S")
+            dose["reminderTime"] = dateparser.parse(dose["reminderTime"]).strftime("%H:%M:%S") if dose["reminderTime"] is None else dose["defaultReminderTime"]
+
         self.doses = json.dumps(dose_data)
 
     def as_JSON(self):
