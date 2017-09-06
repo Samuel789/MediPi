@@ -250,6 +250,13 @@ public class ScheduleAdherenceCalculator implements ScheduleAdherenceCalculatorI
         int numDosesTakenCorrectly = 0;
         int numDosesMissed = 0;
         int numDosesTakenIncorrectly = 0;
+        if (schedule.getScheduledDoses().size() == 0) {
+            this.numDosesTakenCorrectly = 0;
+            this.numDosesMissed = 0;
+            this.numDosesTakenIncorrectly = 0;
+            this.numDosesToTake = 0;
+            return;
+        }
         Integer lastErrantDay = null;
         Integer streakLength = null;
         int actualStartDay;
