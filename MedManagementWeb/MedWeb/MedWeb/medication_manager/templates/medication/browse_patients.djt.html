@@ -8,20 +8,20 @@
     {% for patient in patients %}
         <a href="{{ site_url }}/patients/viewpatient?patient_uuid={{ patient.uuid }}">
             <div class="patient-summary-box">
-                <p class="patient-summary-widebox">{{ patient|patient_display_name }}</p>
-                <p class="patient-summary-widebox">{{ patient.dob }}</p>
-                <div class="patient-summary-largebox">
+                <p class="patient-summary-widebox" {% if patient.warnings > 0 %} style="background-color: red; color: white"{% endif %}>{{ patient|patient_display_name }}</p>
+                <p class="patient-summary-widebox" {% if patient.warnings > 0 %} style="background-color: red; color: white"{% endif %}>{{ patient.dob }}</p>
+                <div class="patient-summary-largebox" style="background-color: #FFC5C5">
                     <span class="patient-summary-adherencerate">{{ patient.adherence.seven_day_fraction|as_percentage }}</span>
                     <br/>
                     <span class="patient-summary-adherencetext">Adherence</span>
                 </div>
-                <div class="patient-summary-smallbox">
+                <div class="patient-summary-smallbox" style="background-color: lightgrey">
                     Meds: {{ patient.schedules|length }}
                 </div>
-                <div class="patient-summary-smallbox">
+                <div class="patient-summary-smallbox" style="background-color: lightgrey">
                     Streak: {{ patient.adherence.streak_length }}
                 </div>
-                <p class="patient-summary-widebox">{{ patient.warnings }} Warnings</p>
+                <p class="patient-summary-widebox" {% if patient.warnings > 0 %} style="background-color: red; color: white"{% endif %}>{{ patient.warnings }} Warnings</p>
             </div>
         </a>
     {% endfor %}

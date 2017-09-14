@@ -11,8 +11,8 @@ import org.medipi.medication.model.PatientAdherence;
 import org.medipi.medication.model.ScheduleAdherence;
 
 public class AdherenceBar extends Group {
-    static final double YELLOWTHRESHOLD = 0.95;
-    static final double REDTHRESHOLD = 0.85;
+    static final double YELLOWTHRESHOLD = 0.9;
+    static final double REDTHRESHOLD = 0.8;
     static final double MINVISIBLE = 0.05;
     static final double MINSTREAKLENGTH = 2;
     ProgressBar progressBar;
