@@ -982,7 +982,6 @@ INSERT INTO recorded_dose VALUES ('40', 2, 6, 2, '11:00:00');
 INSERT INTO recorded_dose VALUES ('42', 2, 7, 2, '11:00:00');
 INSERT INTO recorded_dose VALUES ('44', 2, 8, 3, '14:00:00');
 INSERT INTO recorded_dose VALUES ('45', 2, 6, 3, '11:00:00');
-INSERT INTO recorded_dose VALUES ('46', 2, 2, 3, '14:30:00');
 INSERT INTO recorded_dose VALUES ('49', 2, 7, 0, '17:00:00');
 INSERT INTO recorded_dose VALUES ('50', 2, 7, 2, '17:00:00');
 INSERT INTO recorded_dose VALUES ('51', 2, 7, 3, '17:00:00');
