@@ -14,26 +14,113 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
-DROP DATABASE medipidb2;
+SET search_path = public, pg_catalog;
+
+ALTER TABLE ONLY public.recording_device_attribute DROP CONSTRAINT recording_device_type_recording_device_attribute_fk;
+ALTER TABLE ONLY public.alert DROP CONSTRAINT recording_device_data_alert_fk;
+ALTER TABLE ONLY public.recording_device_data DROP CONSTRAINT recording_device_attribute_recording_device_data_fk;
+ALTER TABLE ONLY public.recording_device_data DROP CONSTRAINT patient_recording_device_data_fk;
+ALTER TABLE ONLY public.patient_downloadable DROP CONSTRAINT patient_patient_downloadable_fk;
+ALTER TABLE ONLY public.patient_certificate DROP CONSTRAINT patient_patient_certificates_fk;
+ALTER TABLE ONLY public.hardware DROP CONSTRAINT patient_hardware_fk;
+ALTER TABLE ONLY public.patient DROP CONSTRAINT patient_group_patient_fk;
+ALTER TABLE ONLY public.alert DROP CONSTRAINT patient_alert_fk;
+ALTER TABLE ONLY public.patient_adherence DROP CONSTRAINT patient_adherence_patient_patient_uuid_fk;
+ALTER TABLE ONLY public.schedule DROP CONSTRAINT medication_schedule_patient_patient_uuid_fk;
+ALTER TABLE ONLY public.medication DROP CONSTRAINT medication_dose_unit_id_fk;
+ALTER TABLE ONLY public.hardware_downloadable DROP CONSTRAINT hardware_hardware_downloadable_fk;
+ALTER TABLE ONLY public.all_hardware_downloaded DROP CONSTRAINT hardware_all_hardware_downloaded_fk;
+ALTER TABLE ONLY public.all_hardware_downloaded DROP CONSTRAINT all_hardware_downloadable_all_hardware_downloaded_fk;
+ALTER TABLE ONLY public.schedule_adherence DROP CONSTRAINT adherence_schedule_schedule_id_fk;
+DROP INDEX public.schedule_id_uindex;
+DROP INDEX public.patient_adherence_patient_uuid_uindex;
+DROP INDEX public.medication_unique_name_uindex;
+DROP INDEX public.medication_scheduled_dose_id_uindex;
+DROP INDEX public.medication_recorded_dose_id_uindex;
+DROP INDEX public.medication_id_uindex;
+DROP INDEX public.dose_unit_name_uindex;
+DROP INDEX public.dose_unit_id_uindex;
+DROP INDEX public.adherence_schedule_id_uindex;
+ALTER TABLE ONLY public.schedule DROP CONSTRAINT schedule_pkey;
+ALTER TABLE ONLY public.recording_device_type DROP CONSTRAINT recording_device_type_pkey;
+ALTER TABLE ONLY public.recording_device_data DROP CONSTRAINT recording_device_data_pkey;
+ALTER TABLE ONLY public.recording_device_attribute DROP CONSTRAINT recording_device_attribute_pkey;
+ALTER TABLE ONLY public.patient DROP CONSTRAINT patient_id_pk;
+ALTER TABLE ONLY public.patient_group DROP CONSTRAINT patient_group_pk;
+ALTER TABLE ONLY public.patient_downloadable DROP CONSTRAINT patient_downloadable_pk;
+ALTER TABLE ONLY public.patient_certificate DROP CONSTRAINT patient_certificate_pk;
+ALTER TABLE ONLY public.patient_adherence DROP CONSTRAINT patient_adherence_pkey;
+ALTER TABLE ONLY public.scheduled_dose DROP CONSTRAINT medication_scheduled_dose_pkey;
+ALTER TABLE ONLY public.recorded_dose DROP CONSTRAINT medication_recorded_dose_pkey;
+ALTER TABLE ONLY public.medication DROP CONSTRAINT medication_pkey;
+ALTER TABLE ONLY public.hardware DROP CONSTRAINT hardware_pkey;
+ALTER TABLE ONLY public.hardware_downloadable DROP CONSTRAINT hardware_downloadable_pkey;
+ALTER TABLE ONLY public.dose_unit DROP CONSTRAINT dose_unit_pkey;
+ALTER TABLE ONLY public.all_hardware_downloaded DROP CONSTRAINT all_hardware_downloaded_pkey;
+ALTER TABLE ONLY public.all_hardware_downloadable DROP CONSTRAINT all_hardware_downloadable_pkey;
+ALTER TABLE ONLY public.alert DROP CONSTRAINT alert_pk;
+ALTER TABLE ONLY public.schedule_adherence DROP CONSTRAINT adherence_pkey;
+ALTER TABLE public.scheduled_dose ALTER COLUMN scheduled_dose_id DROP DEFAULT;
+ALTER TABLE public.schedule_adherence ALTER COLUMN schedule_id DROP DEFAULT;
+ALTER TABLE public.schedule ALTER COLUMN schedule_id DROP DEFAULT;
+ALTER TABLE public.recording_device_data ALTER COLUMN data_id DROP DEFAULT;
+ALTER TABLE public.recorded_dose ALTER COLUMN recorded_dose_uuid DROP DEFAULT;
+ALTER TABLE public.medication ALTER COLUMN medication_id DROP DEFAULT;
+ALTER TABLE public.dose_unit ALTER COLUMN dose_unit_id DROP DEFAULT;
+ALTER TABLE public.all_hardware_downloaded ALTER COLUMN all_hardware_downloaded_id DROP DEFAULT;
+ALTER TABLE public.alert ALTER COLUMN alert_id DROP DEFAULT;
+DROP TABLE public.recording_device_type;
+DROP SEQUENCE public.recording_device_type_type_id_seq;
+DROP SEQUENCE public.recording_device_data_data_id_seq;
+DROP TABLE public.recording_device_data;
+DROP TABLE public.recording_device_attribute;
+DROP SEQUENCE public.recording_device_attribute_attribute_id_seq;
+DROP SEQUENCE public.patient_hardware_downloadable_id_seq;
+DROP TABLE public.patient_group;
+DROP TABLE public.patient_downloadable;
+DROP TABLE public.patient_certificate;
+DROP TABLE public.patient_adherence;
+DROP TABLE public.patient;
+DROP SEQUENCE public.messages_message_id_seq;
+DROP SEQUENCE public.medication_scheduled_dose_id_seq;
+DROP TABLE public.scheduled_dose;
+DROP SEQUENCE public.medication_schedule_id_seq;
+DROP TABLE public.schedule;
+DROP SEQUENCE public.medication_recorded_dose_id_seq;
+DROP TABLE public.recorded_dose;
+DROP SEQUENCE public.medication_id_seq;
+DROP TABLE public.medication;
+DROP TABLE public.hardware_downloadable;
+DROP TABLE public.hardware;
+DROP SEQUENCE public.dose_unit_id_seq;
+DROP TABLE public.dose_unit;
+DROP SEQUENCE public.device_data_data_id_seq;
+DROP SEQUENCE public.all_hardware_downloaded_id_seq;
+DROP SEQUENCE public.all_hardware_downloaded_all_hardware_downloaded_id_seq;
+DROP TABLE public.all_hardware_downloaded;
+DROP SEQUENCE public.all_hardware_downloadable_id_seq;
+DROP TABLE public.all_hardware_downloadable;
+DROP SEQUENCE public.alert_alert_id_seq;
+DROP TABLE public.alert;
+DROP SEQUENCE public.adherence_schedule_id_seq;
+DROP TABLE public.schedule_adherence;
+DROP EXTENSION plpgsql;
+DROP SCHEMA public;
 --
--- Name: medipidb2; Type: DATABASE; Schema: -; Owner: postgres
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
-CREATE DATABASE medipidb2 WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_GB.UTF-8' LC_CTYPE = 'en_GB.UTF-8';
+CREATE SCHEMA public;
 
 
-ALTER DATABASE medipidb2 OWNER TO postgres;
+ALTER SCHEMA public OWNER TO postgres;
 
-\connect medipidb2
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
 
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-SET row_security = off;
+COMMENT ON SCHEMA public IS 'standard public schema';
+
 
 --
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
@@ -364,8 +451,8 @@ ALTER SEQUENCE medication_recorded_dose_id_seq OWNED BY recorded_dose.recorded_d
 
 CREATE TABLE schedule (
     schedule_id integer NOT NULL,
-    assigned_start_date date NOT NULL,
-    assigned_end_date date,
+    start_date date NOT NULL,
+    end_date date,
     alternate_name character varying,
     purpose_statement character varying NOT NULL,
     medication_id bigint NOT NULL,
@@ -791,11 +878,11 @@ INSERT INTO hardware VALUES ('9b636f94-e1c2-4773-a5ca-3858ba176e9c', 'b8:27:eb:2
 INSERT INTO medication VALUES (8077011000001100, 'Mycophenolic acid 360mg gastro-resistant tablets', 'Mycophenolic acid', 'Avoid excessive exposure to UV light including sunlight.', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
 INSERT INTO medication VALUES (317544000, 'Docusate 100mg capsules', 'Docusate', 'Avoid excessive exposure to UV light including sunlight.', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 1);
 INSERT INTO medication VALUES (327096008, 'Tacrolimus 1mg capsules', 'Tacrolimus', 'Avoid excessive exposure to UV light including sunlight.', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 1);
-INSERT INTO medication VALUES (418349006, 'Prednisone 1mg tablets', 'Prednisone', '', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
-INSERT INTO medication VALUES (408155001, 'Sirolimus 2mg tablets', 'Sirolimus', '', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
-INSERT INTO medication VALUES (8791311000001100, 'Azathioprine 10mg capsules', 'Azathioprine', '', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 1);
-INSERT INTO medication VALUES (324430000, 'Trimethoprim 100mg tablets', 'Trimethoprim', '', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
-INSERT INTO medication VALUES (324357002, 'Co-trimoxazole 80mg/400mg tablets', 'Co-trimoxazole', '', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
+INSERT INTO medication VALUES (418349006, 'Prednisone 1mg tablets', 'Prednisone', 'Avoid excessive exposure to UV light including sunlight.', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
+INSERT INTO medication VALUES (408155001, 'Sirolimus 2mg tablets', 'Sirolimus', 'Avoid excessive exposure to UV light including sunlight.', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
+INSERT INTO medication VALUES (324430000, 'Trimethoprim 100mg tablets', 'Trimethoprim', 'Avoid excessive exposure to UV light including sunlight.', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
+INSERT INTO medication VALUES (324357002, 'Co-trimoxazole 80mg/400mg tablets', 'Co-trimoxazole', 'Avoid excessive exposure to UV light including sunlight.', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 0);
+INSERT INTO medication VALUES (8791311000001100, 'Azathioprine 10mg capsules', 'Azathioprine', '! Take with food. Swallow with a glass of water.', '/home/sam/Git/MediPi/MediPiConcentrator/config/icons/capsule.png', 1);
 
 
 --
@@ -809,7 +896,7 @@ SELECT pg_catalog.setval('medication_id_seq', 3, true);
 -- Name: medication_recorded_dose_id_seq; Type: SEQUENCE SET; Schema: public; Owner: medipiconc
 --
 
-SELECT pg_catalog.setval('medication_recorded_dose_id_seq', 27, true);
+SELECT pg_catalog.setval('medication_recorded_dose_id_seq', 102, true);
 
 
 --
@@ -823,7 +910,7 @@ SELECT pg_catalog.setval('medication_schedule_id_seq', 5, true);
 -- Name: medication_scheduled_dose_id_seq; Type: SEQUENCE SET; Schema: public; Owner: medipiconc
 --
 
-SELECT pg_catalog.setval('medication_scheduled_dose_id_seq', 7, true);
+SELECT pg_catalog.setval('medication_scheduled_dose_id_seq', 8, true);
 
 
 --
@@ -844,7 +931,7 @@ INSERT INTO patient VALUES ('d9bc2478-062e-4b87-9060-4984f26b74be', 'MedWeb');
 -- Data for Name: patient_adherence; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-INSERT INTO patient_adherence VALUES ('d9bc2478-062e-4b87-9060-4984f26b74be', 0.83333333333333337, 0);
+INSERT INTO patient_adherence VALUES ('d9bc2478-062e-4b87-9060-4984f26b74be', 0.875, 0);
 
 
 --
@@ -879,25 +966,78 @@ SELECT pg_catalog.setval('patient_hardware_downloadable_id_seq', 1, false);
 -- Data for Name: recorded_dose; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-INSERT INTO recorded_dose VALUES ('11', 2, 15, 0, '12:00:00');
-INSERT INTO recorded_dose VALUES ('12', 2, 15, 1, '12:00:00');
-INSERT INTO recorded_dose VALUES ('10', 3, 15, 0, '17:00:00');
-INSERT INTO recorded_dose VALUES ('14', 3, 15, 1, '17:00:00');
-INSERT INTO recorded_dose VALUES ('18', 2, 15, 3, '12:00:00');
-INSERT INTO recorded_dose VALUES ('20', 3, 15, 3, '17:00:00');
-INSERT INTO recorded_dose VALUES ('22', 3, 15, 4, '17:00:00');
-INSERT INTO recorded_dose VALUES ('23', 2, 15, 4, '12:00:00');
-INSERT INTO recorded_dose VALUES ('15', 3, 15, 2, '17:00:00');
-INSERT INTO recorded_dose VALUES ('21', 2, 15, 2, '12:00:00');
-INSERT INTO recorded_dose VALUES ('5', 2, 11, 0, '15:00:00');
-INSERT INTO recorded_dose VALUES ('7', 2, 11, 2, '15:00:00');
-INSERT INTO recorded_dose VALUES ('6', 2, 11, 3, '15:00:00');
-INSERT INTO recorded_dose VALUES ('9', 2, 11, 4, '15:00:00');
-INSERT INTO recorded_dose VALUES ('24', 2, 4, 0, '17:00:00');
-INSERT INTO recorded_dose VALUES ('25', 2, 4, 1, '17:00:00');
-INSERT INTO recorded_dose VALUES ('26', 2, 4, 2, '17:00:00');
-INSERT INTO recorded_dose VALUES ('27', 2, 15, 4, '17:00:00');
-INSERT INTO recorded_dose VALUES ('5e510c33-369b-4409-904c-335e20366c0e', 2, 15, 5, '11:24:50');
+INSERT INTO recorded_dose VALUES ('29', 2, 4, 0, '14:00:00');
+INSERT INTO recorded_dose VALUES ('31', 2, 8, 0, '14:00:00');
+INSERT INTO recorded_dose VALUES ('30', 2, 6, 0, '11:00:00');
+INSERT INTO recorded_dose VALUES ('28', 2, 2, 0, '14:30:00');
+INSERT INTO recorded_dose VALUES ('32', 2, 7, 0, '11:00:00');
+INSERT INTO recorded_dose VALUES ('33', 2, 4, 1, '14:00:00');
+INSERT INTO recorded_dose VALUES ('34', 2, 8, 1, '14:00:00');
+INSERT INTO recorded_dose VALUES ('35', 2, 6, 1, '11:00:00');
+INSERT INTO recorded_dose VALUES ('36', 2, 2, 1, '14:30:00');
+INSERT INTO recorded_dose VALUES ('37', 2, 7, 1, '11:00:00');
+INSERT INTO recorded_dose VALUES ('38', 2, 4, 2, '14:00:00');
+INSERT INTO recorded_dose VALUES ('39', 2, 8, 2, '14:00:00');
+INSERT INTO recorded_dose VALUES ('40', 2, 6, 2, '11:00:00');
+INSERT INTO recorded_dose VALUES ('42', 2, 7, 2, '11:00:00');
+INSERT INTO recorded_dose VALUES ('44', 2, 8, 3, '14:00:00');
+INSERT INTO recorded_dose VALUES ('45', 2, 6, 3, '11:00:00');
+INSERT INTO recorded_dose VALUES ('46', 2, 2, 3, '14:30:00');
+INSERT INTO recorded_dose VALUES ('49', 2, 7, 0, '17:00:00');
+INSERT INTO recorded_dose VALUES ('50', 2, 7, 2, '17:00:00');
+INSERT INTO recorded_dose VALUES ('51', 2, 7, 3, '17:00:00');
+INSERT INTO recorded_dose VALUES ('53', 2, 8, 5, '14:00:00');
+INSERT INTO recorded_dose VALUES ('54', 2, 7, 4, '17:00:00');
+INSERT INTO recorded_dose VALUES ('55', 2, 7, 5, '17:00:00');
+INSERT INTO recorded_dose VALUES ('56', 2, 6, 4, '11:00:00');
+INSERT INTO recorded_dose VALUES ('57', 2, 6, 5, '11:00:00');
+INSERT INTO recorded_dose VALUES ('59', 2, 4, 5, '14:00:00');
+INSERT INTO recorded_dose VALUES ('61', 2, 2, 5, '14:30:00');
+INSERT INTO recorded_dose VALUES ('62', 2, 7, 4, '11:00:00');
+INSERT INTO recorded_dose VALUES ('63', 2, 7, 5, '11:00:00');
+INSERT INTO recorded_dose VALUES ('64', 2, 7, 3, '11:00:00');
+INSERT INTO recorded_dose VALUES ('f070c0a3-1e1c-4ad4-abd9-2249e72c47a3', 2, 7, 6, '11:03:14');
+INSERT INTO recorded_dose VALUES ('a2eef40c-d4ab-4120-9378-d33bd25526be', 2, 4, 6, '14:00:56');
+INSERT INTO recorded_dose VALUES ('c312e519-30df-4c14-8c63-3b3004064a84', 2, 6, 7, '21:54:04');
+INSERT INTO recorded_dose VALUES ('9458d323-b36c-41f3-8f8f-2be19a707ad9', 2, 13, 0, '21:51:07');
+INSERT INTO recorded_dose VALUES ('65', 2, 7, 8, '17:00:00');
+INSERT INTO recorded_dose VALUES ('66', 2, 6, 8, '11:00:00');
+INSERT INTO recorded_dose VALUES ('67', 2, 4, 8, '14:00:00');
+INSERT INTO recorded_dose VALUES ('68', 2, 2, 8, '14:30:00');
+INSERT INTO recorded_dose VALUES ('69', 2, 7, 8, '11:00:00');
+INSERT INTO recorded_dose VALUES ('70', 2, 2, 6, '14:30:00');
+INSERT INTO recorded_dose VALUES ('71', 2, 8, 7, '13:44:20');
+INSERT INTO recorded_dose VALUES ('72', 2, 8, 8, '13:44:20');
+INSERT INTO recorded_dose VALUES ('73', 2, 8, 4, '13:44:20');
+INSERT INTO recorded_dose VALUES ('74', 2, 13, 1, '21:51:07');
+INSERT INTO recorded_dose VALUES ('75', 2, 13, 2, '21:51:07');
+INSERT INTO recorded_dose VALUES ('76', 2, 13, 3, '21:51:07');
+INSERT INTO recorded_dose VALUES ('77', 2, 13, 4, '21:51:07');
+INSERT INTO recorded_dose VALUES ('78', 2, 13, 5, '21:51:07');
+INSERT INTO recorded_dose VALUES ('79', 2, 13, 6, '21:51:07');
+INSERT INTO recorded_dose VALUES ('81', 2, 13, 0, '12:51:07');
+INSERT INTO recorded_dose VALUES ('82', 2, 13, 1, '12:51:07');
+INSERT INTO recorded_dose VALUES ('83', 2, 13, 2, '12:51:07');
+INSERT INTO recorded_dose VALUES ('84', 2, 13, 3, '12:51:07');
+INSERT INTO recorded_dose VALUES ('85', 2, 13, 4, '12:51:07');
+INSERT INTO recorded_dose VALUES ('86', 2, 13, 5, '12:51:07');
+INSERT INTO recorded_dose VALUES ('87', 2, 13, 6, '12:51:07');
+INSERT INTO recorded_dose VALUES ('80', 2, 13, 7, '12:51:07');
+INSERT INTO recorded_dose VALUES ('88', 2, 13, 7, '21:51:07');
+INSERT INTO recorded_dose VALUES ('96', 1, 15, 7, '12:00:00');
+INSERT INTO recorded_dose VALUES ('95', 1, 15, 6, '12:00:00');
+INSERT INTO recorded_dose VALUES ('93', 1, 15, 5, '12:00:00');
+INSERT INTO recorded_dose VALUES ('94', 1, 15, 4, '12:00:00');
+INSERT INTO recorded_dose VALUES ('92', 1, 15, 3, '12:00:00');
+INSERT INTO recorded_dose VALUES ('91', 1, 15, 2, '12:00:00');
+INSERT INTO recorded_dose VALUES ('90', 1, 15, 1, '12:00:00');
+INSERT INTO recorded_dose VALUES ('89', 1, 15, 0, '12:00:00');
+INSERT INTO recorded_dose VALUES ('97', 2, 4, 7, '14:00:00');
+INSERT INTO recorded_dose VALUES ('98', 1, 15, 8, '12:00:00');
+INSERT INTO recorded_dose VALUES ('99', 2, 2, 2, '14:30:00');
+INSERT INTO recorded_dose VALUES ('100', 2, 2, 7, '14:30:00');
+INSERT INTO recorded_dose VALUES ('101', 2, 2, 4, '14:30:00');
+INSERT INTO recorded_dose VALUES ('102', 1, 15, 9, '12:00:00');
 
 
 --
@@ -943,32 +1083,33 @@ SELECT pg_catalog.setval('recording_device_type_type_id_seq', 1, false);
 -- Data for Name: schedule; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-INSERT INTO schedule VALUES (13, '2017-08-20', '2017-09-14', 'Imuran', 'To reduce constipation', 317544000, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
-INSERT INTO schedule VALUES (4, '2017-08-20', '2017-09-14', 'Trimopan', 'To prevent infection', 324430000, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
-INSERT INTO schedule VALUES (5, '2017-08-20', '2017-09-14', 'Bactrim', 'To prevent rejection', 324357002, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
-INSERT INTO schedule VALUES (11, '2017-08-20', '2017-09-14', '', 'To prevent rejection', 327096008, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
-INSERT INTO schedule VALUES (15, '2017-08-20', '2017-09-14', '', 'To prevent rejection', 8791311000001100, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
+INSERT INTO schedule VALUES (8, '2017-09-05', NULL, '', 'To prevent rejection', 8791311000001100, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
+INSERT INTO schedule VALUES (12, '2017-09-05', '2017-09-30', 'Colace', 'To reduce constipation', 317544000, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
+INSERT INTO schedule VALUES (15, '2017-09-05', NULL, '', 'To prevent rejection', 408155001, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
+INSERT INTO schedule VALUES (13, '2017-09-05', NULL, '', 'To prevent rejection', 8077011000001100, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
+INSERT INTO schedule VALUES (2, '2017-09-05', NULL, 'Bactrim', 'To prevent infection', 324357002, 'd9bc2478-062e-4b87-9060-4984f26b74be', NULL, NULL);
 
 
 --
 -- Data for Name: schedule_adherence; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-INSERT INTO schedule_adherence VALUES (13, NULL, 6);
-INSERT INTO schedule_adherence VALUES (4, 0.66666666666666663, 0);
-INSERT INTO schedule_adherence VALUES (5, NULL, 6);
-INSERT INTO schedule_adherence VALUES (11, 0.83333333333333337, 0);
-INSERT INTO schedule_adherence VALUES (15, 0.91666666666666663, 0);
+INSERT INTO schedule_adherence VALUES (12, NULL, NULL);
+INSERT INTO schedule_adherence VALUES (8, 0.83333333333333337, 3);
+INSERT INTO schedule_adherence VALUES (13, 0.769230769230769273, 0);
+INSERT INTO schedule_adherence VALUES (2, 1, 7);
+INSERT INTO schedule_adherence VALUES (15, 1, 7);
 
 
 --
 -- Data for Name: scheduled_dose; Type: TABLE DATA; Schema: public; Owner: medipiconc
 --
 
-INSERT INTO scheduled_dose VALUES (13, 11, 2, 0, 1, 20, '14:00:00', '16:00:00', '15:00:00', '15:00:00', NULL, NULL);
-INSERT INTO scheduled_dose VALUES (5, 15, 3, 0, 1, 20, '16:00:00', '18:00:00', '17:00:00', '17:00:00', NULL, NULL);
-INSERT INTO scheduled_dose VALUES (14, 16, 2, 0, 2, 20, '14:00:00', '18:00:00', '15:00:00', '15:00:00', NULL, NULL);
-INSERT INTO scheduled_dose VALUES (23, 16, 2, 0, 1, 20, '15:00:00', '17:00:00', '16:00:00', '16:00:00', NULL, NULL);
+INSERT INTO scheduled_dose VALUES (17, 15, 1, 0, 1, 20, '10:00:00', '14:00:00', '10:00:00', '10:00:00', NULL, NULL);
+INSERT INTO scheduled_dose VALUES (9, 13, 2, 0, 1, NULL, '11:00:00', '12:55:00', '15:00:00', '15:00:00', NULL, NULL);
+INSERT INTO scheduled_dose VALUES (8, 8, 2, 0, 1, NULL, '12:00:00', '19:00:00', '13:00:00', '13:00:00', NULL, NULL);
+INSERT INTO scheduled_dose VALUES (2, 2, 2, 0, 1, NULL, '14:00:00', '19:00:00', '14:01:00', '18:00:00', NULL, NULL);
+INSERT INTO scheduled_dose VALUES (10, 13, 2, 0, 1, NULL, '19:00:00', '23:00:00', '18:00:00', '18:00:00', NULL, NULL);
 
 
 --
