@@ -41,7 +41,7 @@ public class MedicationReminder extends Group {
         titleLabel.getStyleClass().add("title-text");
         Label reminderLabel = new Label("It's time to take " + schedule.determineDisplayName());
         reminderLabel.getStyleClass().add("heading-text");
-        Label doseLabel = new Label("Dose: " + dose.getDoseValue() + " " + medication.getDoseUnit().getName());
+        Label doseLabel = new Label("Dose: " + formatNumber(dose.getDoseValue()) + " " + medication.getDoseUnit().getName());
         doseLabel.getStyleClass().add("heading-text");
         doseLabel.setPadding(new Insets(5));
         Label fullNameLabel = new Label("(" + medication.getFullName() + ")");
@@ -127,5 +127,12 @@ public class MedicationReminder extends Group {
             System.out.println("Couldn't load icon");
         }
         iconFullNameVBox.getChildren().add(fullNameLabel);
+    }
+
+    private static String formatNumber(double d) {
+        if (d == (long) d)
+            return String.format("%d", (long) d);
+        else
+            return String.format("%s", d);
     }
 }

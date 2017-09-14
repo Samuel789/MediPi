@@ -10,7 +10,7 @@
             <div class="patient-summary-box">
                 <p class="patient-summary-widebox" {% if patient.warnings > 0 %} style="background-color: red; color: white"{% endif %}>{{ patient|patient_display_name }}</p>
                 <p class="patient-summary-widebox" {% if patient.warnings > 0 %} style="background-color: red; color: white"{% endif %}>{{ patient.dob }}</p>
-                <div class="patient-summary-largebox" style="background-color: #FFC5C5">
+                <div class="patient-summary-largebox" style="background-color: #FAFEA8">
                     <span class="patient-summary-adherencerate">{{ patient.adherence.seven_day_fraction|as_percentage }}</span>
                     <br/>
                     <span class="patient-summary-adherencetext">Adherence</span>
