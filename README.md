@@ -13,3 +13,7 @@ The MediPi Medication Management Project aims to develop an open-source teleheal
 ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/systemStructure.jpg)
 
 The system uses the same security protocols as the original MediPi project, including two-layer encryption with both patient- and device-specific certificates.
+
+## About this Project
+
+This proof-of-concept system was developed by Sam Chase as an MSc project at the University of York.
