@@ -12,7 +12,7 @@ The MediPi Medication Management Project aims to develop an open-source teleheal
 
 ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/systemStructure.jpg)
 
-The system uses the same security protocols as the original MediPi project, including two-layer encryption with both patient- and device-specific certificates.
+The system uses the same security protocols as the existing MediPi functions, including two-layer encryption with both patient- and device-specific certificates. More information is available on the [MediPi project home page](http://rprobinson.github.io/MediPi/).
 
 ## About this Project
 
