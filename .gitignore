@@ -10,4 +10,5 @@ MedManagementWeb/MedWeb/MedWeb/static
 *.log
 *.idea/*
 *.pyc
-
+MediPiConcentrator/MediPiConcentrator/config/*.properties
+MediPiPatient/MediPi/config/*.properties
