@@ -2,6 +2,8 @@ from MedWeb.clinical_database.dose_units import dose_unit_data
 from MedWeb.clinical_database.entities import Medication, DoseUnit
 from MedWeb.clinical_database.medication_data import medication_data
 
+"""Build medication database from medication_data and dose_units files"""
+
 medications = {}
 dose_units = {}
 

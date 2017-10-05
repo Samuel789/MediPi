@@ -13,6 +13,7 @@ from MedWeb.concentrator_interface.entities import Schedule, ScheduledDose
 from MedWeb.patient_database.entities import Status
 from MedWeb.patient_database.patient_database import patients
 
+"""Functions to interface with the MediPi Concentrator and rebuild the medication schedule database."""
 
 class SyncStatus(Enum):
     not_yet_synched = -1
@@ -74,6 +75,7 @@ def _update_schedule_data(schedule_list):
 
 
 def update_from_concentrator():
+    """Replace existing schedule data with a new update from the Concentrator"""
     try:
         _reset_existing_data()
         concentrator_data = _download_concentrator_data()
@@ -94,6 +96,7 @@ def update_from_concentrator():
 
 
 def send_to_concentrator(schedule, doses):
+    """Send a new or updated medication schedule to the Concentrator, then update local database"""
     url = settings.MEDIPI_CONCENTRATOR_ADDRESS + 'medication/clinician/addSchedule'
     medicationDo = MedicationScheduleDO(schedule, doses)
     json = medicationDo.as_JSON()
@@ -104,6 +107,7 @@ def send_to_concentrator(schedule, doses):
 
 
 def get_patient_dose_instances(patient_uuid, start_date, end_date):
+    """Request a list of dose instances within a time range for a specified patient from the Concentrator"""
     url = settings.MEDIPI_CONCENTRATOR_ADDRESS + 'medication/clinician/unpackPatientSchedules'
     data = json.loads(
         requests.get(url, params={"patientUuid": patient_uuid, "startDate": start_date, "endDate": end_date},

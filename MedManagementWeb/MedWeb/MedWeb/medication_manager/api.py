@@ -6,10 +6,10 @@ from django.http import HttpResponse
 from MedWeb.clinical_database.clinical_database import medications
 from MedWeb.concentrator_interface.entities import Schedule, from_dict, ScheduledDose
 from MedWeb.concentrator_interface.interface import schedules, send_to_concentrator, update_from_concentrator
-from MedWeb.patient_database.patient_database import patients
 
 
 def get_medication_details(request):
+    """Client API request to provide expanded medication information given a medication_id"""
     medication_id = request.POST.get("id")
     medication = medications[int(medication_id)]
     return HttpResponse(json.dumps({"full_name": medication.full_name, "short_name": medication.short_name,
@@ -17,31 +17,18 @@ def get_medication_details(request):
                                     "dose_unit": medication.dose_unit.name}))
 
 
-def patch_schedule(request):
-    data = request.POST
-    schedule_id = data["schedule_id"]
-    scheduled_doses = [from_dict(ScheduledDose.__class__, dose_data) for dose_data in data["doses"]]
-    for dose in scheduled_doses:
-        validate_scheduled_dose(dose)
-    schedules[schedule_id].scheduled_doses += scheduled_doses
-
-
-def put_schedule(request):
-    data = request.POST
-    schedule = from_dict(Schedule.__class__, data["schedule"])
-    validate_schedule(schedule)
-    patients[schedule.id].schedules.append(schedule)
-
-
 def validate_schedule():
+    # TODO - server-side validation of schedule data
     pass
 
 
 def validate_scheduled_dose(dose):
+    # TODO - server-side validation of schedule data
     pass
 
 
 def add_patient_schedule(request):
+    """Client API request to add or replace a patient schedule"""
     schedule_data = json.loads(request.POST["schedule"])
     patient_uuid = request.POST["patient_uuid"]
     medication_id = request.POST["medication_id"]
@@ -59,6 +46,7 @@ def add_patient_schedule(request):
 
 
 def cancel_schedule(request):
+    """Client API request to cancel the active schedule of a particular medication_id"""
     patient_uuid = request.POST["patient_uuid"]
     medication_id = request.POST["medication_id"]
     doses = []
@@ -71,12 +59,10 @@ def cancel_schedule(request):
 
 
 def update(request):
+    """Client API request to update the local database from the Concentrator. Client should trigger a page refresh once
+        an OK response is received."""
     update_from_concentrator()
     return HttpResponse()
-
-
-def error_response(exception):
-    return HttpResponse(exception.message)
 
 
 class RequestProcessingException(Exception):
