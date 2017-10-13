@@ -2,7 +2,7 @@
 ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/medipi.png)
 ## Introduction
 
-The MediPi Medication Management Project aims to develop an open-source telehealth solution to the problem of low medication adherence, helping patients to take their medication correctly and clinicians to monitor progress. It extends the software of the MediPi patient unit (http://rprobinson.github.io/MediPi/) to enable patients to view their scheduled doses, receive reminders when it is time to take their medications and record doses which have been taken. This information is then transmitted to the Concentrator, which additionally calculates several motivational adherence metrics including a streak length which are returned to the patient unit. An API enables control of a patient's medication regimen and monitoring of adherence by clinicians, demonstrated by MedWeb, a mock clinical system for medication management included in this project.
+The MediPi Medication Management Project aims to develop an open-source telehealth solution to the problem of low medication adherence, helping patients with chronic conditions to take their medication correctly and clinicians to monitor progress. It extends the software of the MediPi patient unit (http://rprobinson.github.io/MediPi/) to enable patients to view their scheduled doses, receive reminders when it is time to take their medications and record doses which have been taken. This information is then transmitted to the Concentrator, which additionally calculates several motivational adherence metrics including a streak length which are returned to the patient unit. An API enables control of a patient's medication regimen and monitoring of adherence by clinicians, demonstrated by MedWeb, a mock clinical system for medication management included in this project.
 
 ## System Overview
 
@@ -21,7 +21,7 @@ The medication management system appears as a tile on the MediPi dashboard, alon
 
 ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MainMenu.png)
 
-Medication menu
+The mediation menu allows access to the three main user functions: recording a dose, looking up medication information and viewing their medication calendar (currently labeled View Schedule).
 
 ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MedicationMenu.png)
 
@@ -35,7 +35,11 @@ The patient can view medications assigned to them, and are presented with each m
 
 ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/ShowMedications.png)
 
-The view schedule functionality is not yet implemented.
+The medication calendar functionality is not yet implemented.
+
+Medication reminders are displayed between a scheduled dose's reminder time and the end of its adherence window. The delay button is disabled if it would push the reminder past the end of the scheduled dose's adherence window.
+
+![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/Reminder.png)
 
 ### Mock Clinical System (MedWeb)
 
