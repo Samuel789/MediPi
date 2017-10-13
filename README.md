@@ -17,44 +17,45 @@ The system uses the same security protocols as the existing MediPi functions, in
 ## Screenshots and Feature Tour
 
 ### Patient Unit
+The medication management system appears as a tile on the MediPi dashboard, alongside the MediPi's existing functionality.
+
 ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MainMenu.png)
 
-The medication management system appears as a tile on the MediPi dashboard, alongside the MediPi's existing functionality.
+Medication menu
 
 ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MedicationMenu.png)
 
-Medication menu
+The two steps of the Record a Dose process. A patient can record a dose of any assigned medication taken at any time during the day. A colour scheme distinguishes those which should be taken right now (green) from those when are to be taken as needed (white) and are not due (red).
 
 ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/RecordDose.png)
 
 ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/DoseDetails.png)
 
-The two steps of the Record a Dose process. A patient can record a dose of any assigned medication taken at any time during the day. A colour scheme distinguishes those which should be taken right now (green) from those when are to be taken as needed (white) and are not due (red).
+The patient can view medications assigned to them, and are presented with each medication's 'purpose statement' and adherence information. Tapping a medication displays additional information, such as cautionary and advisory text, the medication's full name, an icon if assigned, and an explanation of the adherence statistics.
 
 ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/ShowMedications.png)
-
-The patient can view medications assigned to them, and are presented with each medication's 'purpose statement' and adherence information. Tapping a medication displays additional information, such as cautionary and advisory text, the medication's full name, an icon if assigned, and an explanation of the adherence statistics.
 
 The view schedule functionality is not yet implemented.
 
 ### Mock Clinical System (MedWeb)
 
-![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MedWebPatientChooser.png)
-
 The Patient Browser shows a summary of all patients with MediPi devices assigned to the system. Patients with warnings are highlighted in red. Warnings occur when the adherence rate over the previous seven days falls below 80%.
 
-![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MedWebPatientSummary.png)
+![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MedWebPatientChooser.png)
 
 The Patient Summary screen displays the selected patient's assigned and upcoming medication schedules. A schedule represents a collection of doses for a medication as understood at a particular time. Modifying a set of doses truncates the existing schedule and creates a new one starting the next day with the updated regimen. This ensures medication and adherence history is never lost.
 
-![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MedWebAddMed.png)
+![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MedWebPatientSummary.png)
 
 Medications can be assigned to a patient by searching for their name or dn+d/SNOMED id. Currently a mock database containing a small sample of medications is used, in place of a connection to the dn+d database.
 
- ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MedWebDoseEditor.png)
-  ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MedWebDoseConfig.png)
+![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MedWebAddMed.png)
 
 Complex combinations of repeating doses can be created within a medication schedule. Clinicians can also assign a purpose statement to motivate adherence.
+
+ ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MedWebDoseEditor.png)
+
+ ![Element image](https://raw.githubusercontent.com/Samuel789/MediPi/master/Images/MedWebDoseConfig.png)
 
 ## About this Project
 
